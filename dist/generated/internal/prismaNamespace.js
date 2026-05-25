@@ -36,12 +36,12 @@ export const Sql = runtime.Sql;
 export const Decimal = runtime.Decimal;
 export const getExtensionContext = runtime.Extensions.getExtensionContext;
 /**
- * Prisma Client JS version: 7.4.2
- * Query Engine version: 94a226be1cf2967af2541cca5529f0f7ba866919
+ * Prisma Client JS version: 7.8.0
+ * Query Engine version: 3c6e192761c0362d496ed980de936e2f3cebcd3a
  */
 export const prismaVersion = {
-    client: "7.4.2",
-    engine: "94a226be1cf2967af2541cca5529f0f7ba866919"
+    client: "7.8.0",
+    engine: "3c6e192761c0362d496ed980de936e2f3cebcd3a"
 };
 export const NullTypes = {
     DbNull: runtime.NullTypes.DbNull,
@@ -70,7 +70,11 @@ export const ModelName = {
     User: 'User',
     Session: 'Session',
     Account: 'Account',
-    Verification: 'Verification'
+    Verification: 'Verification',
+    Admin: 'Admin',
+    Employee: 'Employee',
+    TutorProfile: 'TutorProfile',
+    Class: 'Class'
 };
 /**
  * Enums
@@ -85,6 +89,11 @@ export const UserScalarFieldEnum = {
     id: 'id',
     name: 'name',
     email: 'email',
+    role: 'role',
+    status: 'status',
+    needPasswordChange: 'needPasswordChange',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt',
     emailVerified: 'emailVerified',
     image: 'image',
     createdAt: 'createdAt',
@@ -122,6 +131,58 @@ export const VerificationScalarFieldEnum = {
     expiresAt: 'expiresAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
+};
+export const AdminScalarFieldEnum = {
+    id: 'id',
+    name: 'name',
+    email: 'email',
+    profilePhoto: 'profilePhoto',
+    contactNumber: 'contactNumber',
+    isDeleted: 'isDeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    userId: 'userId'
+};
+export const EmployeeScalarFieldEnum = {
+    id: 'id',
+    userId: 'userId',
+    email: 'email',
+    phone: 'phone',
+    fullName: 'fullName',
+    picture: 'picture',
+    nid: 'nid',
+    fatherName: 'fatherName',
+    motherName: 'motherName',
+    emergencyContactNumber: 'emergencyContactNumber',
+    monthlySalary: 'monthlySalary',
+    experience: 'experience',
+    authoritySign: 'authoritySign',
+    gender: 'gender',
+    bloodGroup: 'bloodGroup',
+    religion: 'religion',
+    employeeRole: 'employeeRole',
+    isdeleted: 'isdeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt'
+};
+export const TutorProfileScalarFieldEnum = {
+    id: 'id',
+    classId: 'classId',
+    employeeId: 'employeeId',
+    fullNameBangla: 'fullNameBangla',
+    dateOfBirth: 'dateOfBirth',
+    birthRegistrationNumber: 'birthRegistrationNumber'
+};
+export const ClassScalarFieldEnum = {
+    id: 'id',
+    name: 'name',
+    monthlyTutionFee: 'monthlyTutionFee',
+    isDeleted: 'isDeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt'
 };
 export const SortOrder = {
     asc: 'asc',

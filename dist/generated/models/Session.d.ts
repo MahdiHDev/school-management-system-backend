@@ -147,7 +147,7 @@ export type SessionGroupByOutputType = {
     _min: SessionMinAggregateOutputType | null;
     _max: SessionMaxAggregateOutputType | null;
 };
-type GetSessionGroupByPayload<T extends SessionGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<SessionGroupByOutputType, T['by']> & {
+export type GetSessionGroupByPayload<T extends SessionGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<SessionGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof SessionGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], SessionGroupByOutputType[P]> : Prisma.GetScalarType<T[P], SessionGroupByOutputType[P]>;
 }>>;
 export type SessionWhereInput = {
@@ -1067,6 +1067,11 @@ export type SessionFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
      * Skip the first `n` Sessions.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Sessions.
+     */
     distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[];
 };
 /**
@@ -1273,5 +1278,4 @@ export type SessionDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
      */
     include?: Prisma.SessionInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Session.d.ts.map

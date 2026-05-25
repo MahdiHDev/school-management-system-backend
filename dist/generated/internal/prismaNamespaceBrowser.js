@@ -42,7 +42,11 @@ export const ModelName = {
     User: 'User',
     Session: 'Session',
     Account: 'Account',
-    Verification: 'Verification'
+    Verification: 'Verification',
+    Admin: 'Admin',
+    Employee: 'Employee',
+    TutorProfile: 'TutorProfile',
+    Class: 'Class'
 };
 /*
  * Enums
@@ -57,6 +61,11 @@ export const UserScalarFieldEnum = {
     id: 'id',
     name: 'name',
     email: 'email',
+    role: 'role',
+    status: 'status',
+    needPasswordChange: 'needPasswordChange',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt',
     emailVerified: 'emailVerified',
     image: 'image',
     createdAt: 'createdAt',
@@ -94,6 +103,58 @@ export const VerificationScalarFieldEnum = {
     expiresAt: 'expiresAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
+};
+export const AdminScalarFieldEnum = {
+    id: 'id',
+    name: 'name',
+    email: 'email',
+    profilePhoto: 'profilePhoto',
+    contactNumber: 'contactNumber',
+    isDeleted: 'isDeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    userId: 'userId'
+};
+export const EmployeeScalarFieldEnum = {
+    id: 'id',
+    userId: 'userId',
+    email: 'email',
+    phone: 'phone',
+    fullName: 'fullName',
+    picture: 'picture',
+    nid: 'nid',
+    fatherName: 'fatherName',
+    motherName: 'motherName',
+    emergencyContactNumber: 'emergencyContactNumber',
+    monthlySalary: 'monthlySalary',
+    experience: 'experience',
+    authoritySign: 'authoritySign',
+    gender: 'gender',
+    bloodGroup: 'bloodGroup',
+    religion: 'religion',
+    employeeRole: 'employeeRole',
+    isdeleted: 'isdeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt'
+};
+export const TutorProfileScalarFieldEnum = {
+    id: 'id',
+    classId: 'classId',
+    employeeId: 'employeeId',
+    fullNameBangla: 'fullNameBangla',
+    dateOfBirth: 'dateOfBirth',
+    birthRegistrationNumber: 'birthRegistrationNumber'
+};
+export const ClassScalarFieldEnum = {
+    id: 'id',
+    name: 'name',
+    monthlyTutionFee: 'monthlyTutionFee',
+    isDeleted: 'isDeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt'
 };
 export const SortOrder = {
     asc: 'asc',

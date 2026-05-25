@@ -4,8 +4,8 @@ import cors from "cors";
 import express from "express";
 import path from "path";
 import qs from "qs";
-import { auth } from "./lib/auth.js";
-import userRouter from "./app/modules/user/user.router.js";
+import { auth } from "./app/lib/auth.js";
+import routes from "./app/routes.js";
 const app = express();
 app.set("query parser", (str) => qs.parse(str));
 app.set("view engine", "ejs");
@@ -31,12 +31,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // ========================== Connect Routes ==========================
 // app.use("/api/v1", IndexRoutes);
-app.use("/api/v1/users", userRouter);
+app.use("/api/v1", routes);
 // Basic route
 app.get("/", async (req, res) => {
     res.status(201).json({
         success: true,
-        message: "API is working",
+        message: "Welcome to GreenFare API",
     });
 });
 // ======================== Global Error Handler / Not Found Handler / Other Middleware ========================

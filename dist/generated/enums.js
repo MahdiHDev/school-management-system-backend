@@ -7,5 +7,52 @@
 *
 * 🟢 You can import this file directly.
 */
-export {};
+export const UserRole = {
+    SUPER_ADMIN: 'SUPER_ADMIN',
+    ADMIN: 'ADMIN',
+    TEACHER: 'TEACHER',
+    STUDENT: 'STUDENT',
+    ACCOUNTANT: 'ACCOUNTANT',
+    LIBRARIAN: 'LIBRARIAN'
+};
+export const Gender = {
+    MALE: 'MALE',
+    FEMALE: 'FEMALE',
+    OTHER: 'OTHER'
+};
+export const BloodGroup = {
+    A_POSITIVE: 'A_POSITIVE',
+    A_NEGATIVE: 'A_NEGATIVE',
+    B_POSITIVE: 'B_POSITIVE',
+    B_NEGATIVE: 'B_NEGATIVE',
+    AB_POSITIVE: 'AB_POSITIVE',
+    AB_NEGATIVE: 'AB_NEGATIVE',
+    O_POSITIVE: 'O_POSITIVE',
+    O_NEGATIVE: 'O_NEGATIVE'
+};
+export const Religion = {
+    ISLAM: 'ISLAM',
+    HINDUISM: 'HINDUISM',
+    CHRISTIANITY: 'CHRISTIANITY',
+    BUDDHISM: 'BUDDHISM',
+    OTHER: 'OTHER'
+};
+export const AddressType = {
+    PRESENT: 'PRESENT',
+    PERMANENT: 'PERMANENT'
+};
+export const EmployeeRole = {
+    PRINCIPAL: 'PRINCIPAL',
+    MANAGEMENT_STAFF: 'MANAGEMENT_STAFF',
+    TEACHER: 'TEACHER',
+    ACCOUNTANT: 'ACCOUNTANT',
+    STORE_MANAGER: 'STORE_MANAGER',
+    LIBRARIAN: 'LIBRARIAN',
+    OTHER: 'OTHER'
+};
+export const UserStatus = {
+    ACTIVE: 'ACTIVE',
+    BLOCKED: 'BLOCKED',
+    DELETED: 'DELETED'
+};
 //# sourceMappingURL=enums.js.map

@@ -105,6 +105,8 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
      * Read more in our [docs](https://www.prisma.io/docs/orm/prisma-client/queries/transactions).
      */
     $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: {
+        maxWait?: number;
+        timeout?: number;
         isolationLevel?: Prisma.TransactionIsolationLevel;
     }): runtime.Types.Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>;
     $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => runtime.Types.Utils.JsPromise<R>, options?: {
@@ -157,6 +159,50 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
       * ```
       */
     get verification(): Prisma.VerificationDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.admin`: Exposes CRUD operations for the **Admin** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Admins
+      * const admins = await prisma.admin.findMany()
+      * ```
+      */
+    get admin(): Prisma.AdminDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.employee`: Exposes CRUD operations for the **Employee** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Employees
+      * const employees = await prisma.employee.findMany()
+      * ```
+      */
+    get employee(): Prisma.EmployeeDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.tutorProfile`: Exposes CRUD operations for the **TutorProfile** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more TutorProfiles
+      * const tutorProfiles = await prisma.tutorProfile.findMany()
+      * ```
+      */
+    get tutorProfile(): Prisma.TutorProfileDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.class`: Exposes CRUD operations for the **Class** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Classes
+      * const classes = await prisma.class.findMany()
+      * ```
+      */
+    get class(): Prisma.ClassDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
 }

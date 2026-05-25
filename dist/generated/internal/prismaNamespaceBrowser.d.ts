@@ -12,24 +12,28 @@ export declare const NullTypes: {
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
  */
-export declare const DbNull: import("@prisma/client-runtime-utils").DbNullClass;
+export declare const DbNull: import("@prisma/client/runtime/client").DbNullClass;
 /**
  * Helper for filtering JSON entries that have JSON `null` values (not empty on the db)
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
  */
-export declare const JsonNull: import("@prisma/client-runtime-utils").JsonNullClass;
+export declare const JsonNull: import("@prisma/client/runtime/client").JsonNullClass;
 /**
  * Helper for filtering JSON entries that are `Prisma.DbNull` or `Prisma.JsonNull`
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
  */
-export declare const AnyNull: import("@prisma/client-runtime-utils").AnyNullClass;
+export declare const AnyNull: import("@prisma/client/runtime/client").AnyNullClass;
 export declare const ModelName: {
     readonly User: "User";
     readonly Session: "Session";
     readonly Account: "Account";
     readonly Verification: "Verification";
+    readonly Admin: "Admin";
+    readonly Employee: "Employee";
+    readonly TutorProfile: "TutorProfile";
+    readonly Class: "Class";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export declare const TransactionIsolationLevel: {
@@ -43,6 +47,11 @@ export declare const UserScalarFieldEnum: {
     readonly id: "id";
     readonly name: "name";
     readonly email: "email";
+    readonly role: "role";
+    readonly status: "status";
+    readonly needPasswordChange: "needPasswordChange";
+    readonly isDeleted: "isDeleted";
+    readonly deletedAt: "deletedAt";
     readonly emailVerified: "emailVerified";
     readonly image: "image";
     readonly createdAt: "createdAt";
@@ -85,6 +94,62 @@ export declare const VerificationScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum];
+export declare const AdminScalarFieldEnum: {
+    readonly id: "id";
+    readonly name: "name";
+    readonly email: "email";
+    readonly profilePhoto: "profilePhoto";
+    readonly contactNumber: "contactNumber";
+    readonly isDeleted: "isDeleted";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+    readonly deletedAt: "deletedAt";
+    readonly userId: "userId";
+};
+export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum];
+export declare const EmployeeScalarFieldEnum: {
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly email: "email";
+    readonly phone: "phone";
+    readonly fullName: "fullName";
+    readonly picture: "picture";
+    readonly nid: "nid";
+    readonly fatherName: "fatherName";
+    readonly motherName: "motherName";
+    readonly emergencyContactNumber: "emergencyContactNumber";
+    readonly monthlySalary: "monthlySalary";
+    readonly experience: "experience";
+    readonly authoritySign: "authoritySign";
+    readonly gender: "gender";
+    readonly bloodGroup: "bloodGroup";
+    readonly religion: "religion";
+    readonly employeeRole: "employeeRole";
+    readonly isdeleted: "isdeleted";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+    readonly deletedAt: "deletedAt";
+};
+export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum];
+export declare const TutorProfileScalarFieldEnum: {
+    readonly id: "id";
+    readonly classId: "classId";
+    readonly employeeId: "employeeId";
+    readonly fullNameBangla: "fullNameBangla";
+    readonly dateOfBirth: "dateOfBirth";
+    readonly birthRegistrationNumber: "birthRegistrationNumber";
+};
+export type TutorProfileScalarFieldEnum = (typeof TutorProfileScalarFieldEnum)[keyof typeof TutorProfileScalarFieldEnum];
+export declare const ClassScalarFieldEnum: {
+    readonly id: "id";
+    readonly name: "name";
+    readonly monthlyTutionFee: "monthlyTutionFee";
+    readonly isDeleted: "isDeleted";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+    readonly deletedAt: "deletedAt";
+};
+export type ClassScalarFieldEnum = (typeof ClassScalarFieldEnum)[keyof typeof ClassScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";

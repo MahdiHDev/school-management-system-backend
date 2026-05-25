@@ -133,7 +133,7 @@ export type VerificationGroupByOutputType = {
     _min: VerificationMinAggregateOutputType | null;
     _max: VerificationMaxAggregateOutputType | null;
 };
-type GetVerificationGroupByPayload<T extends VerificationGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<VerificationGroupByOutputType, T['by']> & {
+export type GetVerificationGroupByPayload<T extends VerificationGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<VerificationGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof VerificationGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], VerificationGroupByOutputType[P]> : Prisma.GetScalarType<T[P], VerificationGroupByOutputType[P]>;
 }>>;
 export type VerificationWhereInput = {
@@ -840,6 +840,11 @@ export type VerificationFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
      * Skip the first `n` Verifications.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Verifications.
+     */
     distinct?: Prisma.VerificationScalarFieldEnum | Prisma.VerificationScalarFieldEnum[];
 };
 /**
@@ -1018,5 +1023,4 @@ export type VerificationDefaultArgs<ExtArgs extends runtime.Types.Extensions.Int
      */
     omit?: Prisma.VerificationOmit<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Verification.d.ts.map

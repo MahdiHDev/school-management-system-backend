@@ -22,4 +22,24 @@ export type Account = Prisma.AccountModel;
  *
  */
 export type Verification = Prisma.VerificationModel;
+/**
+ * Model Admin
+ *
+ */
+export type Admin = Prisma.AdminModel;
+/**
+ * Model Employee
+ *
+ */
+export type Employee = Prisma.EmployeeModel;
+/**
+ * Model TutorProfile
+ *
+ */
+export type TutorProfile = Prisma.TutorProfileModel;
+/**
+ * Model Class
+ *
+ */
+export type Class = Prisma.ClassModel;
 //# sourceMappingURL=browser.d.ts.map

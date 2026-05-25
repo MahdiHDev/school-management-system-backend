@@ -182,7 +182,7 @@ export type AccountGroupByOutputType = {
     _min: AccountMinAggregateOutputType | null;
     _max: AccountMaxAggregateOutputType | null;
 };
-type GetAccountGroupByPayload<T extends AccountGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<AccountGroupByOutputType, T['by']> & {
+export type GetAccountGroupByPayload<T extends AccountGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<AccountGroupByOutputType, T['by']> & {
     [P in ((keyof T) & (keyof AccountGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], AccountGroupByOutputType[P]> : Prisma.GetScalarType<T[P], AccountGroupByOutputType[P]>;
 }>>;
 export type AccountWhereInput = {
@@ -469,9 +469,6 @@ export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     update?: Prisma.AccountUpdateWithWhereUniqueWithoutUserInput | Prisma.AccountUpdateWithWhereUniqueWithoutUserInput[];
     updateMany?: Prisma.AccountUpdateManyWithWhereWithoutUserInput | Prisma.AccountUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: Prisma.AccountScalarWhereInput | Prisma.AccountScalarWhereInput[];
-};
-export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null;
 };
 export type AccountCreateWithoutUserInput = {
     id: string;
@@ -1245,6 +1242,11 @@ export type AccountFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
      * Skip the first `n` Accounts.
      */
     skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Accounts.
+     */
     distinct?: Prisma.AccountScalarFieldEnum | Prisma.AccountScalarFieldEnum[];
 };
 /**
@@ -1451,5 +1453,4 @@ export type AccountDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
      */
     include?: Prisma.AccountInclude<ExtArgs> | null;
 };
-export {};
 //# sourceMappingURL=Account.d.ts.map

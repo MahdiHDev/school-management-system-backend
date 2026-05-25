@@ -5,7 +5,7 @@ import express, { Application, Request, Response } from "express";
 import path from "path";
 import qs from "qs";
 import { auth } from "./app/lib/auth";
-import userRouter from "./app/modules/user/user.router";
+import routes from "./app/routes";
 
 const app: Application = express();
 app.set("query parser", (str: string) => qs.parse(str));
@@ -21,12 +21,12 @@ app.set("views", path.resolve(process.cwd(), `src/app/templates`));
 
 app.use(cookieParser());
 app.use(
-    cors({
-        origin: process.env.FRONTEND_URL,
-        credentials: true,
-        // methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-        // allowedHeaders: [["Content-Type", "Authorization", "Cookie"],
-    }),
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    // methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    // allowedHeaders: [["Content-Type", "Authorization", "Cookie"],
+  }),
 );
 
 // Bettr auth hander
@@ -42,14 +42,14 @@ app.use(express.urlencoded({ extended: true }));
 
 // ========================== Connect Routes ==========================
 // app.use("/api/v1", IndexRoutes);
-app.use("/api/v1/users", userRouter);
+app.use("/api/v1", routes);
 
 // Basic route
 app.get("/", async (req: Request, res: Response) => {
-    res.status(201).json({
-        success: true,
-        message: "Welcome to GreenFare API",
-    });
+  res.status(201).json({
+    success: true,
+    message: "Welcome to GreenFare API",
+  });
 });
 
 // ======================== Global Error Handler / Not Found Handler / Other Middleware ========================

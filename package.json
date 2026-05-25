@@ -20,8 +20,11 @@
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
+    "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.4.0",
+    "@types/nodemailer": "^8.0.0",
     "@types/pg": "^8.18.0",
     "@types/qs": "^6.15.1",
     "prisma": "^7.4.2",
@@ -37,8 +40,11 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
+    "ejs": "^5.0.2",
     "express": "^5.2.1",
     "http-status": "^2.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^8.0.7",
     "pg": "^8.20.0",
     "qs": "^6.15.2"
   }
