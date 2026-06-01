@@ -1,0 +1,30 @@
+{
+  "info": {
+    "_postman_id": "0dba6565-5a0d-4ae2-92d3-6e57bae03e94",
+    "name": "School Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "41764173"
+  },
+  "item": [
+    {
+      "name": "Login [Super Admin]",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseurl}}/api/v1/booking/my-sessions",
+          "host": [
+            "{{baseurl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "booking",
+            "my-sessions"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
