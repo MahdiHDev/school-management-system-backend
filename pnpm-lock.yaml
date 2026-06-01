@@ -50,6 +50,9 @@ importers:
       qs:
         specifier: ^6.15.2
         version: 6.15.2
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@types/cookie-parser':
         specifier: ^1.4.10
