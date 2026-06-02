@@ -6,27 +6,51 @@ import { tokenUtils } from "../../utils/token";
 import { AuthService } from "./auth.service";
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
-  const payload = req.body;
-  const result = await AuthService.loginUser(payload);
-  const { accessToken, refreshToken, token, ...rest } = result;
+    const payload = req.body;
+    const result = await AuthService.loginUser(payload);
+    const { accessToken, refreshToken, token, ...rest } = result;
 
-  tokenUtils.setAccessTokenCookie(res, accessToken);
-  tokenUtils.setRefreshTokenCookie(res, refreshToken);
-  tokenUtils.setBetterAuthSessionCookie(res, token);
+    tokenUtils.setAccessTokenCookie(res, accessToken);
+    tokenUtils.setRefreshTokenCookie(res, refreshToken);
+    tokenUtils.setBetterAuthSessionCookie(res, token);
 
-  sendResponse(res, {
-    httpStatusCode: status.OK,
-    success: true,
-    message: "User Logged in successfully",
-    data: {
-      token,
-      accessToken,
-      refreshToken,
-      ...rest,
-    },
-  });
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "User Logged in successfully",
+        data: {
+            token,
+            accessToken,
+            refreshToken,
+            ...rest,
+        },
+    });
+});
+
+const changePassword = catchAsync(async (req: Request, res: Response) => {
+    const payload = req.body;
+    const betterAuthSessionToken = req.cookies["better-auth.session_token"];
+
+    const result = await AuthService.changePassword(
+        payload,
+        betterAuthSessionToken,
+    );
+
+    const { accessToken, refreshToken, token } = result;
+
+    tokenUtils.setAccessTokenCookie(res, accessToken);
+    tokenUtils.setRefreshTokenCookie(res, refreshToken);
+    tokenUtils.setBetterAuthSessionCookie(res, token as string);
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Password changed successfully",
+        data: result,
+    });
 });
 
 export const AuthController = {
-  loginUser,
+    loginUser,
+    changePassword,
 };

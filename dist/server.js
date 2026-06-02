@@ -459,8 +459,94 @@ import { Router as Router2 } from "express";
 // src/app/modules/auth/auth.routes.ts
 import { Router } from "express";
 
+// src/app/middleware/auth.ts
+import status6 from "http-status";
+
+// src/app/utils/jwt.ts
+import jwt from "jsonwebtoken";
+var createToken = (payload, secret, { expiresIn }) => {
+  const token = jwt.sign(payload, secret, { expiresIn });
+  return token;
+};
+var verifyToken = (token, secret) => {
+  try {
+    const decoded = jwt.verify(token, secret);
+    return {
+      success: true,
+      data: decoded
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+      error
+    };
+  }
+};
+var decodeToken = (token) => {
+  const decoded = jwt.decode(token);
+  return decoded;
+};
+var jwtUtils = {
+  createToken,
+  verifyToken,
+  decodeToken
+};
+
+// src/app/middleware/auth.ts
+var checkAuth = (...authRoles) => async (req, res, next) => {
+  try {
+    let token = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1] || null;
+    }
+    if (!token) {
+      token = req.cookies?.accessToken;
+    }
+    if (!token) {
+      throw new AppError_default(status6.UNAUTHORIZED, "Unauthorized access!");
+    }
+    const verifiedToken = jwtUtils.verifyToken(
+      token,
+      envVars.ACCESS_TOKEN_SECRET
+    );
+    if (!verifiedToken.success) {
+      throw new AppError_default(
+        status6.UNAUTHORIZED,
+        "Invalid access token."
+      );
+    }
+    const user = await prisma.user.findUnique({
+      where: {
+        id: verifiedToken.data.userId
+      }
+    });
+    if (!user) {
+      throw new AppError_default(status6.UNAUTHORIZED, "User not found.");
+    }
+    if (user.isDeleted) {
+      throw new AppError_default(status6.UNAUTHORIZED, "User deleted.");
+    }
+    if (user.status === "BLOCKED" || user.status === "DELETED") {
+      throw new AppError_default(status6.UNAUTHORIZED, "User inactive.");
+    }
+    if (authRoles.length && !authRoles.includes(user.role)) {
+      throw new AppError_default(status6.FORBIDDEN, "Forbidden access.");
+    }
+    req.user = {
+      userId: user.id,
+      role: user.role,
+      email: user.email
+    };
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 // src/app/modules/auth/auth.controller.ts
-import status7 from "http-status";
+import status8 from "http-status";
 
 // src/app/shared/catchAsync.ts
 var catchAsync = (fn) => {
@@ -498,37 +584,6 @@ var CookieUtils = {
   setCookie,
   getCookie,
   clearCookie
-};
-
-// src/app/utils/jwt.ts
-import jwt from "jsonwebtoken";
-var createToken = (payload, secret, { expiresIn }) => {
-  const token = jwt.sign(payload, secret, { expiresIn });
-  return token;
-};
-var verifyToken = (token, secret) => {
-  try {
-    const decoded = jwt.verify(token, secret);
-    return {
-      success: true,
-      data: decoded
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: error.message,
-      error
-    };
-  }
-};
-var decodeToken = (token) => {
-  const decoded = jwt.decode(token);
-  return decoded;
-};
-var jwtUtils = {
-  createToken,
-  verifyToken,
-  decodeToken
 };
 
 // src/app/utils/token.ts
@@ -587,7 +642,7 @@ var tokenUtils = {
 };
 
 // src/app/modules/auth/auth.service.ts
-import status6 from "http-status";
+import status7 from "http-status";
 var loginUser = async (payload) => {
   const { email, password } = payload;
   const data = await auth.api.signInEmail({
@@ -597,10 +652,10 @@ var loginUser = async (payload) => {
     }
   });
   if (data.user.status === UserStatus.BLOCKED) {
-    throw new AppError_default(status6.FORBIDDEN, "User is blocked");
+    throw new AppError_default(status7.FORBIDDEN, "User is blocked");
   }
   if (data.user.isDeleted || data.user.status === UserStatus.DELETED) {
-    throw new AppError_default(status6.NOT_FOUND, "User is deleted");
+    throw new AppError_default(status7.NOT_FOUND, "User is deleted");
   }
   const accessToken = tokenUtils.getAccessToken({
     userId: data.user.id,
@@ -626,8 +681,63 @@ var loginUser = async (payload) => {
     refreshToken
   };
 };
+var changePassword = async (payload, sessionToken) => {
+  const session = await auth.api.getSession({
+    headers: new Headers({
+      Authorization: `Bearer ${sessionToken}`
+    })
+  });
+  if (!session) {
+    throw new AppError_default(status7.UNAUTHORIZED, "Invalid Session Token");
+  }
+  const { currentPassword, newPassword } = payload;
+  const result = await auth.api.changePassword({
+    body: {
+      currentPassword,
+      newPassword,
+      revokeOtherSessions: true
+    },
+    headers: new Headers({
+      Authorization: `Bearer ${sessionToken}`
+    })
+  });
+  if (session.user.needPasswordChange) {
+    await prisma.user.update({
+      where: {
+        id: session.user.id
+      },
+      data: {
+        needPasswordChange: false
+      }
+    });
+  }
+  const accessToken = tokenUtils.getAccessToken({
+    userId: session.user.id,
+    role: session.user.role,
+    name: session.user.name,
+    email: session.user.email,
+    status: session.user.status,
+    isDeleted: session.user.isDeleted,
+    emailVerified: session.user.emailVerified
+  });
+  const refreshToken = tokenUtils.getRefreshToken({
+    userId: session.user.id,
+    role: session.user.role,
+    name: session.user.name,
+    email: session.user.email,
+    status: session.user.status,
+    isDeleted: session.user.isDeleted,
+    emailVerified: session.user.emailVerified
+  });
+  return {
+    ...result,
+    accessToken,
+    refreshToken
+  };
+};
 var AuthService = {
-  loginUser
+  loginUser,
+  changePassword
 };
 
 // src/app/modules/auth/auth.controller.ts
@@ -639,7 +749,7 @@ var loginUser2 = catchAsync(async (req, res) => {
   tokenUtils.setRefreshTokenCookie(res, refreshToken);
   tokenUtils.setBetterAuthSessionCookie(res, token);
   sendResponse(res, {
-    httpStatusCode: status7.OK,
+    httpStatusCode: status8.OK,
     success: true,
     message: "User Logged in successfully",
     data: {
@@ -650,13 +760,40 @@ var loginUser2 = catchAsync(async (req, res) => {
     }
   });
 });
+var changePassword2 = catchAsync(async (req, res) => {
+  const payload = req.body;
+  const betterAuthSessionToken = req.cookies["better-auth.session_token"];
+  const result = await AuthService.changePassword(
+    payload,
+    betterAuthSessionToken
+  );
+  const { accessToken, refreshToken, token } = result;
+  tokenUtils.setAccessTokenCookie(res, accessToken);
+  tokenUtils.setRefreshTokenCookie(res, refreshToken);
+  tokenUtils.setBetterAuthSessionCookie(res, token);
+  sendResponse(res, {
+    httpStatusCode: status8.OK,
+    success: true,
+    message: "Password changed successfully",
+    data: result
+  });
+});
 var AuthController = {
-  loginUser: loginUser2
+  loginUser: loginUser2,
+  changePassword: changePassword2
 };
 
 // src/app/modules/auth/auth.routes.ts
 var router = Router();
 router.post("/login", AuthController.loginUser);
+router.post("/test", checkAuth(UserRole.SUPER_ADMIN), (req, res) => {
+  res.json({
+    message: "Test route is working!"
+  });
+});
+router.get("/ping", (req, res) => {
+  res.send("pong");
+});
 var AuthRoutes = router;
 
 // src/app/routes/index.ts
