@@ -22,10 +22,12 @@
     "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.2.0",
     "@types/node": "^25.4.0",
     "@types/nodemailer": "^8.0.0",
     "@types/pg": "^8.18.0",
     "@types/qs": "^6.15.1",
+    "@types/streamifier": "^0.1.2",
     "prisma": "^7.4.2",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
@@ -36,6 +38,7 @@
     "@prisma/client": "^7.4.2",
     "a5-prisma": "link:",
     "better-auth": "^1.5.4",
+    "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
@@ -43,9 +46,11 @@
     "express": "^5.2.1",
     "http-status": "^2.1.0",
     "jsonwebtoken": "^9.0.3",
+    "multer": "^2.2.0",
     "nodemailer": "^8.0.7",
     "pg": "^8.20.0",
     "qs": "^6.15.2",
+    "streamifier": "^0.1.1",
     "zod": "^4.4.3"
   }
 }

@@ -1124,7 +1124,6 @@ export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof Ad
 export const EmployeeScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  email: 'email',
   phone: 'phone',
   fullName: 'fullName',
   picture: 'picture',
@@ -1139,6 +1138,8 @@ export const EmployeeScalarFieldEnum = {
   bloodGroup: 'bloodGroup',
   religion: 'religion',
   employeeRole: 'employeeRole',
+  dateOfBirth: 'dateOfBirth',
+  birthRegistrationNumber: 'birthRegistrationNumber',
   isdeleted: 'isdeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -1151,10 +1152,7 @@ export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typ
 export const TutorProfileScalarFieldEnum = {
   id: 'id',
   classId: 'classId',
-  employeeId: 'employeeId',
-  fullNameBangla: 'fullNameBangla',
-  dateOfBirth: 'dateOfBirth',
-  birthRegistrationNumber: 'birthRegistrationNumber'
+  employeeId: 'employeeId'
 } as const
 
 export type TutorProfileScalarFieldEnum = (typeof TutorProfileScalarFieldEnum)[keyof typeof TutorProfileScalarFieldEnum]

@@ -164,7 +164,6 @@ model Employee {
     id     String @id @default(uuid())
     userId String @unique
 
-    email String @unique
     phone String @unique
 
     fullName               String
@@ -177,29 +176,32 @@ model Employee {
     experience             String
     authoritySign          String
 
-    gender       Gender
-    bloodGroup   BloodGroup
-    religion     Religion
-    employeeRole EmployeeRole
+    gender                  Gender
+    bloodGroup              BloodGroup
+    religion                Religion
+    employeeRole            EmployeeRole
+    dateOfBirth             DateTime
+    birthRegistrationNumber String?      @unique
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    isdeleted Boolean   @default(false)
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
+    isdeleted     Boolean        @default(false)
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+    deletedAt     DateTime?
+    tutorProfiles TutorProfile[]
 
     @@map("employee")
 }
 
 model TutorProfile {
-    id         String @id @default(uuid())
+    id String @id @default(uuid())
+
     classId    String
     employeeId String
 
-    fullNameBangla          String
-    dateOfBirth             DateTime
-    birthRegistrationNumber String   @unique
+    class    Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+    employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 }
 
 model Class {
@@ -207,10 +209,11 @@ model Class {
     name             String
     monthlyTutionFee Float
 
-    isDeleted Boolean   @default(false)
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
+    isDeleted     Boolean        @default(false)
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+    deletedAt     DateTime?
+    tutorProfiles TutorProfile[]
 
     @@map("class")
 }
