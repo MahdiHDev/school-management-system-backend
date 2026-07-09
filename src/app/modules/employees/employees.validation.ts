@@ -18,8 +18,7 @@ export const createEmployeeSchema = z.object({
     religion: z.enum(Religion),
     employeeRole: z.enum(EmployeeRole),
 
-    mobileNumber: z.string().min(11),
-    emergencyContact: z.string().min(11),
+    emergencyContact: z.string().min(11).optional(),
     dateOfBirth: z.coerce.date(),
 
     monthlySalary: z.coerce.number(),

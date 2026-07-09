@@ -13,7 +13,6 @@ export interface EmployeePayload {
     bloodGroup: BloodGroup;
     religion: Religion;
     employeeRole: EmployeeRole;
-    mobileNumber: string;
     emergencyContact?: string;
     monthlySalary: number;
     experience: string;
