@@ -7,26 +7,65 @@ import {
 } from "../../../generated/enums";
 
 export const createEmployeeSchema = z.object({
-    fullName: z.string().min(1),
-    fatherName: z.string().min(1),
-    motherName: z.string().min(1),
-    phone: z.string().min(11),
+    fullName: z
+        .string({ error: "Full name is required" })
+        .min(1, { error: "Full name cannot be empty" }),
 
-    gender: z.enum(Gender),
+    fatherName: z
+        .string({ error: "Father's name is required" })
+        .min(1, { error: "Father's name cannot be empty" }),
 
-    bloodGroup: z.enum(BloodGroup),
-    religion: z.enum(Religion),
-    employeeRole: z.enum(EmployeeRole),
+    motherName: z
+        .string({ error: "Mother's name is required" })
+        .min(1, { error: "Mother's name cannot be empty" }),
 
-    emergencyContact: z.string().min(11).optional(),
-    dateOfBirth: z.coerce.date(),
+    phone: z
+        .string({ error: "Phone number is required" })
+        .min(11, { error: "Phone number must be at least 11 digits" }),
 
-    monthlySalary: z.coerce.number(),
+    gender: z.enum(Gender, {
+        error: "Gender must be one of: " + Object.values(Gender).join(", "),
+    }),
 
-    experience: z.string().min(1),
+    bloodGroup: z.enum(BloodGroup, {
+        error:
+            "Blood group must be one of: " +
+            Object.values(BloodGroup).join(", "),
+    }),
 
-    email: z.email(),
-    nid: z.string().min(1),
+    religion: z.enum(Religion, {
+        error: "Religion must be one of: " + Object.values(Religion).join(", "),
+    }),
+
+    employeeRole: z.enum(EmployeeRole, {
+        error:
+            "Employee role must be one of: " +
+            Object.values(EmployeeRole).join(", "),
+    }),
+
+    emergencyContact: z
+        .string()
+        .min(11, { error: "Emergency contact must be at least 11 digits" })
+        .optional(),
+
+    dateOfBirth: z.coerce.date({
+        error: "Date of birth must be a valid date",
+    }),
+
+    monthlySalary: z.coerce.number({
+        error: "Monthly salary must be a valid number",
+    }),
+
+    experience: z
+        .string({ error: "Experience is required" })
+        .min(1, { error: "Experience cannot be empty" }),
+
+    email: z.email({ error: "Please provide a valid email address" }),
+
+    nid: z
+        .string({ error: "NID is required" })
+        .min(1, { error: "NID cannot be empty" }),
+
     birthRegistrationNumber: z.string().optional(),
 });
 

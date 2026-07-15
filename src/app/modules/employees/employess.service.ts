@@ -1,5 +1,6 @@
 import { CloudinaryService } from "../../../services/cloudinary";
 import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
+import { CloudinaryFolders } from "../../config/cloudinary.folders";
 import AppError from "../../errorHelpers/AppError";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
@@ -9,6 +10,18 @@ const createEmployee = async (
     payload: EmployeePayload,
     files: Record<string, UploadFile[]>,
 ) => {
+    // Check for existing email BEFORE any uploads — fail fast, no wasted work
+    const existingUser = await prisma.user.findUnique({
+        where: { email: payload.email.toLocaleLowerCase() },
+        select: { id: true },
+    });
+
+    console.log("Hitting on Existing User Func 🚀", existingUser);
+
+    if (existingUser) {
+        throw new AppError(409, "An account with this email already exists");
+    }
+
     const pictureFile = files.picture?.[0];
     const authoritySignFile = files.authoritySign?.[0];
 
@@ -19,14 +32,20 @@ const createEmployee = async (
     const [picture, authoritySign] = await Promise.all([
         pictureFile
             ? CloudinaryService.upload(pictureFile, {
-                  folder: "employees/profile",
+                  folder: CloudinaryFolders.employee.profile,
               })
             : Promise.resolve(null),
 
         CloudinaryService.upload(authoritySignFile, {
-            folder: "employees/signature",
+            folder: CloudinaryFolders.employee.signature,
         }),
     ]);
+
+    // Track uploaded public_ids so we can roll them back if anything below fails
+    const uploadedPublicIds = [
+        picture?.public_id,
+        authoritySign?.public_id,
+    ].filter((id): id is string => !!id);
 
     const tempPassword = "Temp@12345";
     let userId: string | null = null;
@@ -46,16 +65,14 @@ const createEmployee = async (
 
         const employee = await prisma.$transaction(async (tx) => {
             await tx.user.update({
-                where: {
-                    id: userId!,
-                },
+                where: { id: userId! },
                 data: {
                     emailVerified: true,
                     needPasswordChange: true,
                 },
             });
 
-            await tx.employee.create({
+            return tx.employee.create({
                 data: {
                     userId: userId!,
                     phone: payload.phone,
@@ -88,11 +105,28 @@ const createEmployee = async (
         };
     } catch (err: any) {
         console.log("Transaction error : ", err);
-        await prisma.user.delete({
-            where: {
-                id: userId!,
-            },
-        });
+
+        // Roll back the auth user only if it was actually created
+        if (userId) {
+            await prisma.user
+                .delete({ where: { id: userId } })
+                .catch((delErr) => {
+                    console.log("Failed to rollback user:", delErr);
+                });
+        }
+
+        // Roll back uploaded Cloudinary assets so nothing gets orphaned
+        await Promise.all(
+            uploadedPublicIds.map((publicId) =>
+                CloudinaryService.delete(publicId).catch((delErr) => {
+                    console.log(
+                        `Failed to rollback Cloudinary asset ${publicId}:`,
+                        delErr,
+                    );
+                }),
+            ),
+        );
+
         throw err;
     }
 };
