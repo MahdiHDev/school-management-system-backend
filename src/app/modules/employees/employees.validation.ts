@@ -6,6 +6,42 @@ import {
     Religion,
 } from "../../../generated/enums";
 
+const presentAddressSchema = z.object({
+    village: z
+        .string({ error: "Present address village is required" })
+        .min(1, { error: "Present address village cannot be empty" }),
+
+    postOffice: z
+        .string({ error: "Present address post office is required" })
+        .min(1, { error: "Present address post office cannot be empty" }),
+
+    postCode: z
+        .string({ error: "Present address post code is required" })
+        .min(1, { error: "Present address post code cannot be empty" }),
+
+    district: z
+        .string({ error: "Present address district is required" })
+        .min(1, { error: "Present address district cannot be empty" }),
+});
+
+const permanentAddressSchema = z.object({
+    village: z
+        .string({ error: "Permanent address village is required" })
+        .min(1, { error: "Permanent address village cannot be empty" }),
+
+    postOffice: z
+        .string({ error: "Permanent address post office is required" })
+        .min(1, { error: "Permanent address post office cannot be empty" }),
+
+    postCode: z
+        .string({ error: "Permanent address post code is required" })
+        .min(1, { error: "Permanent address post code cannot be empty" }),
+
+    district: z
+        .string({ error: "Permanent address district is required" })
+        .min(1, { error: "Permanent address district cannot be empty" }),
+});
+
 export const createEmployeeSchema = z.object({
     fullName: z
         .string({ error: "Full name is required" })
@@ -67,6 +103,11 @@ export const createEmployeeSchema = z.object({
         .min(1, { error: "NID cannot be empty" }),
 
     birthRegistrationNumber: z.string().optional(),
+
+    address: z.object({
+        present: presentAddressSchema,
+        permanent: permanentAddressSchema,
+    }),
 });
 
 export type EmployeePayload = z.infer<typeof createEmployeeSchema>;

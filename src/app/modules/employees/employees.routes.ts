@@ -6,6 +6,7 @@ import { EmployeeController } from "./employees.controller";
 
 const router = Router();
 
+router.get("/", checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN));
 router.post(
     "/",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
@@ -16,6 +17,10 @@ router.post(
         },
         {
             name: "authoritySign",
+            maxCount: 1,
+        },
+        {
+            name: "employeeSign",
             maxCount: 1,
         },
     ]),

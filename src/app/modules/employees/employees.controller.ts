@@ -16,6 +16,9 @@ const createEmployee = async (req: Request, res: Response) => {
     if (!files.authoritySign?.length) {
         throw new AppError(400, "Authority Sign is required");
     }
+    if (!files.employeeSign?.length) {
+        throw new AppError(400, "Employee Sign is required");
+    }
 
     const employee = await EmployeeService.createEmployee(payload, files);
 

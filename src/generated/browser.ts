@@ -57,3 +57,8 @@ export type TutorProfile = Prisma.TutorProfileModel
  * 
  */
 export type Class = Prisma.ClassModel
+/**
+ * Model Address
+ * 
+ */
+export type Address = Prisma.AddressModel

@@ -175,6 +175,7 @@ model Employee {
     monthlySalary          Float
     experience             String
     authoritySign          String
+    EmployeeSign           String
 
     gender                  Gender
     bloodGroup              BloodGroup
@@ -190,6 +191,7 @@ model Employee {
     updatedAt     DateTime       @updatedAt
     deletedAt     DateTime?
     tutorProfiles TutorProfile[]
+    address       Address?
 
     @@map("employee")
 }
@@ -216,4 +218,30 @@ model Class {
     tutorProfiles TutorProfile[]
 
     @@map("class")
+}
+
+model Address {
+    id String @id @default(uuid())
+
+    studentId  String? @unique @map("student_id")
+    employeeId String? @unique @map("employee_id")
+
+    permanentAddressVillage    String?
+    permanentAddressPostOffice String?
+    permanentAddressPostCode   String?
+    permanentAddressDistrict   String?
+
+    presentAddressVillage    String?
+    presentAddressPostOffice String?
+    presentAddressPostCode   String?
+    presentAddressDistrict   String?
+
+    isDeleted Boolean @default(false)
+
+    // student  Student?  @relation(fields: [studentId], references: [id])
+    employee Employee? @relation(fields: [employeeId], references: [id])
+
+    createdAt DateTime  @default(now()) @map("created_at")
+    updatedAt DateTime  @updatedAt @map("updated_at")
+    deletedAt DateTime? @map("deleted_at")
 }

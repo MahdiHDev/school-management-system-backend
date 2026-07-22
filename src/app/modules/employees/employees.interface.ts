@@ -5,6 +5,13 @@ import {
     Religion,
 } from "../../../generated/enums";
 
+interface Address {
+    village: string;
+    postOffice: string;
+    postCode: string;
+    district: string;
+}
+
 export interface EmployeePayload {
     fullName: string;
     fatherName: string;
@@ -21,4 +28,8 @@ export interface EmployeePayload {
     email: string;
     nid: string;
     birthRegistrationNumber?: string | undefined;
+    address: {
+        present: Address;
+        permanent: Address;
+    };
 }

@@ -5,6 +5,7 @@ import AppError from "../../errorHelpers/AppError";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
 import { EmployeePayload } from "./employees.interface";
+import { formatEmployeeResponse } from "./employees.mapper";
 
 const createEmployee = async (
     payload: EmployeePayload,
@@ -24,12 +25,17 @@ const createEmployee = async (
 
     const pictureFile = files.picture?.[0];
     const authoritySignFile = files.authoritySign?.[0];
+    const employeeSignFile = files.employeeSign?.[0];
 
     if (!authoritySignFile) {
-        throw new AppError(400, "Missing employee upload files");
+        throw new AppError(400, "Missing Authority Sign Image");
     }
 
-    const [picture, authoritySign] = await Promise.all([
+    if (!employeeSignFile) {
+        throw new AppError(400, "Missing Employee Sign Image");
+    }
+
+    const [picture, authoritySign, employeeSign] = await Promise.all([
         pictureFile
             ? CloudinaryService.upload(pictureFile, {
                   folder: CloudinaryFolders.employee.profile,
@@ -37,7 +43,10 @@ const createEmployee = async (
             : Promise.resolve(null),
 
         CloudinaryService.upload(authoritySignFile, {
-            folder: CloudinaryFolders.employee.signature,
+            folder: CloudinaryFolders.employee.authoritySign,
+        }),
+        CloudinaryService.upload(employeeSignFile, {
+            folder: CloudinaryFolders.employee.employeeSign,
         }),
     ]);
 
@@ -45,6 +54,7 @@ const createEmployee = async (
     const uploadedPublicIds = [
         picture?.public_id,
         authoritySign?.public_id,
+        employeeSign?.public_id,
     ].filter((id): id is string => !!id);
 
     const tempPassword = "Temp@12345";
@@ -72,12 +82,13 @@ const createEmployee = async (
                 },
             });
 
-            return tx.employee.create({
+            return await tx.employee.create({
                 data: {
                     userId: userId!,
                     phone: payload.phone,
                     fullName: payload.fullName,
                     picture: picture?.secure_url ?? null,
+                    EmployeeSign: employeeSign.secure_url,
                     nid: payload.nid,
                     fatherName: payload.fatherName,
                     motherName: payload.motherName,
@@ -92,12 +103,38 @@ const createEmployee = async (
                     dateOfBirth: new Date(payload.dateOfBirth),
                     birthRegistrationNumber:
                         payload.birthRegistrationNumber ?? null,
+
+                    address: {
+                        create: {
+                            permanentAddressVillage:
+                                payload.address.permanent.village,
+                            permanentAddressPostOffice:
+                                payload.address.permanent.postOffice,
+                            permanentAddressPostCode:
+                                payload.address.permanent.postCode,
+                            permanentAddressDistrict:
+                                payload.address.permanent.district,
+
+                            presentAddressVillage:
+                                payload.address.present.village,
+                            presentAddressPostOffice:
+                                payload.address.present.postOffice,
+                            presentAddressPostCode:
+                                payload.address.present.postCode,
+                            presentAddressDistrict:
+                                payload.address.present.district,
+                        },
+                    },
+                },
+                include: {
+                    user: true,
+                    address: true,
                 },
             });
         });
 
         return {
-            employee,
+            employee: formatEmployeeResponse(employee),
             credentials: {
                 email: payload.email,
                 password: tempPassword,

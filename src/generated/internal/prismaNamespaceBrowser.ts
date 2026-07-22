@@ -58,7 +58,8 @@ export const ModelName = {
   Admin: 'Admin',
   Employee: 'Employee',
   TutorProfile: 'TutorProfile',
-  Class: 'Class'
+  Class: 'Class',
+  Address: 'Address'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -169,6 +170,7 @@ export const EmployeeScalarFieldEnum = {
   monthlySalary: 'monthlySalary',
   experience: 'experience',
   authoritySign: 'authoritySign',
+  EmployeeSign: 'EmployeeSign',
   gender: 'gender',
   bloodGroup: 'bloodGroup',
   religion: 'religion',
@@ -204,6 +206,27 @@ export const ClassScalarFieldEnum = {
 } as const
 
 export type ClassScalarFieldEnum = (typeof ClassScalarFieldEnum)[keyof typeof ClassScalarFieldEnum]
+
+
+export const AddressScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  employeeId: 'employeeId',
+  permanentAddressVillage: 'permanentAddressVillage',
+  permanentAddressPostOffice: 'permanentAddressPostOffice',
+  permanentAddressPostCode: 'permanentAddressPostCode',
+  permanentAddressDistrict: 'permanentAddressDistrict',
+  presentAddressVillage: 'presentAddressVillage',
+  presentAddressPostOffice: 'presentAddressPostOffice',
+  presentAddressPostCode: 'presentAddressPostCode',
+  presentAddressDistrict: 'presentAddressDistrict',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type AddressScalarFieldEnum = (typeof AddressScalarFieldEnum)[keyof typeof AddressScalarFieldEnum]
 
 
 export const SortOrder = {

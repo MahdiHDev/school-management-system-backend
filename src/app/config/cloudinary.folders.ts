@@ -5,7 +5,8 @@ const ROOT = "school-management-system"; // <-- your project's root folder
 export const CloudinaryFolders = {
     employee: {
         profile: `${ROOT}/employees/profile`,
-        signature: `${ROOT}/employees/signature`,
+        authoritySign: `${ROOT}/employees/AuthoritySign`,
+        employeeSign: `${ROOT}/employees/EmoloyeeSign`,
     },
     student: {
         profile: `${ROOT}/students/profile`,
