@@ -15,7 +15,9 @@ export const UserRole = {
   TEACHER: 'TEACHER',
   STUDENT: 'STUDENT',
   ACCOUNTANT: 'ACCOUNTANT',
-  LIBRARIAN: 'LIBRARIAN'
+  LIBRARIAN: 'LIBRARIAN',
+  STORE_MANAGER: 'STORE_MANAGER',
+  OTHER: 'OTHER'
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]

@@ -52,7 +52,7 @@ export type EmployeeMinAggregateOutputType = {
   bloodGroup: $Enums.BloodGroup | null
   religion: $Enums.Religion | null
   employeeRole: $Enums.EmployeeRole | null
-  dateOfBirth: Date | null
+  dateOfJoining: string | null
   birthRegistrationNumber: string | null
   isdeleted: boolean | null
   createdAt: Date | null
@@ -78,7 +78,7 @@ export type EmployeeMaxAggregateOutputType = {
   bloodGroup: $Enums.BloodGroup | null
   religion: $Enums.Religion | null
   employeeRole: $Enums.EmployeeRole | null
-  dateOfBirth: Date | null
+  dateOfJoining: string | null
   birthRegistrationNumber: string | null
   isdeleted: boolean | null
   createdAt: Date | null
@@ -104,7 +104,7 @@ export type EmployeeCountAggregateOutputType = {
   bloodGroup: number
   religion: number
   employeeRole: number
-  dateOfBirth: number
+  dateOfJoining: number
   birthRegistrationNumber: number
   isdeleted: number
   createdAt: number
@@ -140,7 +140,7 @@ export type EmployeeMinAggregateInputType = {
   bloodGroup?: true
   religion?: true
   employeeRole?: true
-  dateOfBirth?: true
+  dateOfJoining?: true
   birthRegistrationNumber?: true
   isdeleted?: true
   createdAt?: true
@@ -166,7 +166,7 @@ export type EmployeeMaxAggregateInputType = {
   bloodGroup?: true
   religion?: true
   employeeRole?: true
-  dateOfBirth?: true
+  dateOfJoining?: true
   birthRegistrationNumber?: true
   isdeleted?: true
   createdAt?: true
@@ -192,7 +192,7 @@ export type EmployeeCountAggregateInputType = {
   bloodGroup?: true
   religion?: true
   employeeRole?: true
-  dateOfBirth?: true
+  dateOfJoining?: true
   birthRegistrationNumber?: true
   isdeleted?: true
   createdAt?: true
@@ -298,14 +298,14 @@ export type EmployeeGroupByOutputType = {
   motherName: string
   emergencyContactNumber: string | null
   monthlySalary: number
-  experience: string
+  experience: string | null
   authoritySign: string
   EmployeeSign: string
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
   employeeRole: $Enums.EmployeeRole
-  dateOfBirth: Date
+  dateOfJoining: string
   birthRegistrationNumber: string | null
   isdeleted: boolean
   createdAt: Date
@@ -347,14 +347,14 @@ export type EmployeeWhereInput = {
   motherName?: Prisma.StringFilter<"Employee"> | string
   emergencyContactNumber?: Prisma.StringNullableFilter<"Employee"> | string | null
   monthlySalary?: Prisma.FloatFilter<"Employee"> | number
-  experience?: Prisma.StringFilter<"Employee"> | string
+  experience?: Prisma.StringNullableFilter<"Employee"> | string | null
   authoritySign?: Prisma.StringFilter<"Employee"> | string
   EmployeeSign?: Prisma.StringFilter<"Employee"> | string
   gender?: Prisma.EnumGenderFilter<"Employee"> | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFilter<"Employee"> | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFilter<"Employee"> | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleFilter<"Employee"> | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeFilter<"Employee"> | Date | string
+  dateOfJoining?: Prisma.StringFilter<"Employee"> | string
   birthRegistrationNumber?: Prisma.StringNullableFilter<"Employee"> | string | null
   isdeleted?: Prisma.BoolFilter<"Employee"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
@@ -376,14 +376,14 @@ export type EmployeeOrderByWithRelationInput = {
   motherName?: Prisma.SortOrder
   emergencyContactNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   monthlySalary?: Prisma.SortOrder
-  experience?: Prisma.SortOrder
+  experience?: Prisma.SortOrderInput | Prisma.SortOrder
   authoritySign?: Prisma.SortOrder
   EmployeeSign?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   bloodGroup?: Prisma.SortOrder
   religion?: Prisma.SortOrder
   employeeRole?: Prisma.SortOrder
-  dateOfBirth?: Prisma.SortOrder
+  dateOfJoining?: Prisma.SortOrder
   birthRegistrationNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   isdeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -409,14 +409,14 @@ export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
   motherName?: Prisma.StringFilter<"Employee"> | string
   emergencyContactNumber?: Prisma.StringNullableFilter<"Employee"> | string | null
   monthlySalary?: Prisma.FloatFilter<"Employee"> | number
-  experience?: Prisma.StringFilter<"Employee"> | string
+  experience?: Prisma.StringNullableFilter<"Employee"> | string | null
   authoritySign?: Prisma.StringFilter<"Employee"> | string
   EmployeeSign?: Prisma.StringFilter<"Employee"> | string
   gender?: Prisma.EnumGenderFilter<"Employee"> | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFilter<"Employee"> | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFilter<"Employee"> | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleFilter<"Employee"> | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeFilter<"Employee"> | Date | string
+  dateOfJoining?: Prisma.StringFilter<"Employee"> | string
   isdeleted?: Prisma.BoolFilter<"Employee"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
@@ -437,14 +437,14 @@ export type EmployeeOrderByWithAggregationInput = {
   motherName?: Prisma.SortOrder
   emergencyContactNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   monthlySalary?: Prisma.SortOrder
-  experience?: Prisma.SortOrder
+  experience?: Prisma.SortOrderInput | Prisma.SortOrder
   authoritySign?: Prisma.SortOrder
   EmployeeSign?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   bloodGroup?: Prisma.SortOrder
   religion?: Prisma.SortOrder
   employeeRole?: Prisma.SortOrder
-  dateOfBirth?: Prisma.SortOrder
+  dateOfJoining?: Prisma.SortOrder
   birthRegistrationNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   isdeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -471,14 +471,14 @@ export type EmployeeScalarWhereWithAggregatesInput = {
   motherName?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   emergencyContactNumber?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   monthlySalary?: Prisma.FloatWithAggregatesFilter<"Employee"> | number
-  experience?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  experience?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   authoritySign?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   EmployeeSign?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   gender?: Prisma.EnumGenderWithAggregatesFilter<"Employee"> | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupWithAggregatesFilter<"Employee"> | $Enums.BloodGroup
   religion?: Prisma.EnumReligionWithAggregatesFilter<"Employee"> | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleWithAggregatesFilter<"Employee"> | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeWithAggregatesFilter<"Employee"> | Date | string
+  dateOfJoining?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   birthRegistrationNumber?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   isdeleted?: Prisma.BoolWithAggregatesFilter<"Employee"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Employee"> | Date | string
@@ -496,14 +496,14 @@ export type EmployeeCreateInput = {
   motherName: string
   emergencyContactNumber?: string | null
   monthlySalary: number
-  experience: string
+  experience?: string | null
   authoritySign: string
   EmployeeSign: string
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
   employeeRole: $Enums.EmployeeRole
-  dateOfBirth: Date | string
+  dateOfJoining: string
   birthRegistrationNumber?: string | null
   isdeleted?: boolean
   createdAt?: Date | string
@@ -525,14 +525,14 @@ export type EmployeeUncheckedCreateInput = {
   motherName: string
   emergencyContactNumber?: string | null
   monthlySalary: number
-  experience: string
+  experience?: string | null
   authoritySign: string
   EmployeeSign: string
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
   employeeRole: $Enums.EmployeeRole
-  dateOfBirth: Date | string
+  dateOfJoining: string
   birthRegistrationNumber?: string | null
   isdeleted?: boolean
   createdAt?: Date | string
@@ -552,14 +552,14 @@ export type EmployeeUpdateInput = {
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -581,14 +581,14 @@ export type EmployeeUncheckedUpdateInput = {
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -609,14 +609,14 @@ export type EmployeeCreateManyInput = {
   motherName: string
   emergencyContactNumber?: string | null
   monthlySalary: number
-  experience: string
+  experience?: string | null
   authoritySign: string
   EmployeeSign: string
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
   employeeRole: $Enums.EmployeeRole
-  dateOfBirth: Date | string
+  dateOfJoining: string
   birthRegistrationNumber?: string | null
   isdeleted?: boolean
   createdAt?: Date | string
@@ -634,14 +634,14 @@ export type EmployeeUpdateManyMutationInput = {
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -660,14 +660,14 @@ export type EmployeeUncheckedUpdateManyInput = {
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -698,7 +698,7 @@ export type EmployeeCountOrderByAggregateInput = {
   bloodGroup?: Prisma.SortOrder
   religion?: Prisma.SortOrder
   employeeRole?: Prisma.SortOrder
-  dateOfBirth?: Prisma.SortOrder
+  dateOfJoining?: Prisma.SortOrder
   birthRegistrationNumber?: Prisma.SortOrder
   isdeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -728,7 +728,7 @@ export type EmployeeMaxOrderByAggregateInput = {
   bloodGroup?: Prisma.SortOrder
   religion?: Prisma.SortOrder
   employeeRole?: Prisma.SortOrder
-  dateOfBirth?: Prisma.SortOrder
+  dateOfJoining?: Prisma.SortOrder
   birthRegistrationNumber?: Prisma.SortOrder
   isdeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -754,7 +754,7 @@ export type EmployeeMinOrderByAggregateInput = {
   bloodGroup?: Prisma.SortOrder
   religion?: Prisma.SortOrder
   employeeRole?: Prisma.SortOrder
-  dateOfBirth?: Prisma.SortOrder
+  dateOfJoining?: Prisma.SortOrder
   birthRegistrationNumber?: Prisma.SortOrder
   isdeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -867,14 +867,14 @@ export type EmployeeCreateWithoutUserInput = {
   motherName: string
   emergencyContactNumber?: string | null
   monthlySalary: number
-  experience: string
+  experience?: string | null
   authoritySign: string
   EmployeeSign: string
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
   employeeRole: $Enums.EmployeeRole
-  dateOfBirth: Date | string
+  dateOfJoining: string
   birthRegistrationNumber?: string | null
   isdeleted?: boolean
   createdAt?: Date | string
@@ -894,14 +894,14 @@ export type EmployeeUncheckedCreateWithoutUserInput = {
   motherName: string
   emergencyContactNumber?: string | null
   monthlySalary: number
-  experience: string
+  experience?: string | null
   authoritySign: string
   EmployeeSign: string
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
   employeeRole: $Enums.EmployeeRole
-  dateOfBirth: Date | string
+  dateOfJoining: string
   birthRegistrationNumber?: string | null
   isdeleted?: boolean
   createdAt?: Date | string
@@ -937,14 +937,14 @@ export type EmployeeUpdateWithoutUserInput = {
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -964,14 +964,14 @@ export type EmployeeUncheckedUpdateWithoutUserInput = {
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -991,14 +991,14 @@ export type EmployeeCreateWithoutTutorProfilesInput = {
   motherName: string
   emergencyContactNumber?: string | null
   monthlySalary: number
-  experience: string
+  experience?: string | null
   authoritySign: string
   EmployeeSign: string
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
   employeeRole: $Enums.EmployeeRole
-  dateOfBirth: Date | string
+  dateOfJoining: string
   birthRegistrationNumber?: string | null
   isdeleted?: boolean
   createdAt?: Date | string
@@ -1019,14 +1019,14 @@ export type EmployeeUncheckedCreateWithoutTutorProfilesInput = {
   motherName: string
   emergencyContactNumber?: string | null
   monthlySalary: number
-  experience: string
+  experience?: string | null
   authoritySign: string
   EmployeeSign: string
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
   employeeRole: $Enums.EmployeeRole
-  dateOfBirth: Date | string
+  dateOfJoining: string
   birthRegistrationNumber?: string | null
   isdeleted?: boolean
   createdAt?: Date | string
@@ -1061,14 +1061,14 @@ export type EmployeeUpdateWithoutTutorProfilesInput = {
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1089,14 +1089,14 @@ export type EmployeeUncheckedUpdateWithoutTutorProfilesInput = {
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1115,14 +1115,14 @@ export type EmployeeCreateWithoutAddressInput = {
   motherName: string
   emergencyContactNumber?: string | null
   monthlySalary: number
-  experience: string
+  experience?: string | null
   authoritySign: string
   EmployeeSign: string
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
   employeeRole: $Enums.EmployeeRole
-  dateOfBirth: Date | string
+  dateOfJoining: string
   birthRegistrationNumber?: string | null
   isdeleted?: boolean
   createdAt?: Date | string
@@ -1143,14 +1143,14 @@ export type EmployeeUncheckedCreateWithoutAddressInput = {
   motherName: string
   emergencyContactNumber?: string | null
   monthlySalary: number
-  experience: string
+  experience?: string | null
   authoritySign: string
   EmployeeSign: string
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
   employeeRole: $Enums.EmployeeRole
-  dateOfBirth: Date | string
+  dateOfJoining: string
   birthRegistrationNumber?: string | null
   isdeleted?: boolean
   createdAt?: Date | string
@@ -1185,14 +1185,14 @@ export type EmployeeUpdateWithoutAddressInput = {
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1213,14 +1213,14 @@ export type EmployeeUncheckedUpdateWithoutAddressInput = {
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
-  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
-  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1278,7 +1278,7 @@ export type EmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   bloodGroup?: boolean
   religion?: boolean
   employeeRole?: boolean
-  dateOfBirth?: boolean
+  dateOfJoining?: boolean
   birthRegistrationNumber?: boolean
   isdeleted?: boolean
   createdAt?: boolean
@@ -1308,7 +1308,7 @@ export type EmployeeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   bloodGroup?: boolean
   religion?: boolean
   employeeRole?: boolean
-  dateOfBirth?: boolean
+  dateOfJoining?: boolean
   birthRegistrationNumber?: boolean
   isdeleted?: boolean
   createdAt?: boolean
@@ -1335,7 +1335,7 @@ export type EmployeeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   bloodGroup?: boolean
   religion?: boolean
   employeeRole?: boolean
-  dateOfBirth?: boolean
+  dateOfJoining?: boolean
   birthRegistrationNumber?: boolean
   isdeleted?: boolean
   createdAt?: boolean
@@ -1362,7 +1362,7 @@ export type EmployeeSelectScalar = {
   bloodGroup?: boolean
   religion?: boolean
   employeeRole?: boolean
-  dateOfBirth?: boolean
+  dateOfJoining?: boolean
   birthRegistrationNumber?: boolean
   isdeleted?: boolean
   createdAt?: boolean
@@ -1370,7 +1370,7 @@ export type EmployeeSelectScalar = {
   deletedAt?: boolean
 }
 
-export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "phone" | "fullName" | "picture" | "nid" | "fatherName" | "motherName" | "emergencyContactNumber" | "monthlySalary" | "experience" | "authoritySign" | "EmployeeSign" | "gender" | "bloodGroup" | "religion" | "employeeRole" | "dateOfBirth" | "birthRegistrationNumber" | "isdeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["employee"]>
+export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "phone" | "fullName" | "picture" | "nid" | "fatherName" | "motherName" | "emergencyContactNumber" | "monthlySalary" | "experience" | "authoritySign" | "EmployeeSign" | "gender" | "bloodGroup" | "religion" | "employeeRole" | "dateOfJoining" | "birthRegistrationNumber" | "isdeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["employee"]>
 export type EmployeeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   tutorProfiles?: boolean | Prisma.Employee$tutorProfilesArgs<ExtArgs>
@@ -1402,14 +1402,14 @@ export type $EmployeePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     motherName: string
     emergencyContactNumber: string | null
     monthlySalary: number
-    experience: string
+    experience: string | null
     authoritySign: string
     EmployeeSign: string
     gender: $Enums.Gender
     bloodGroup: $Enums.BloodGroup
     religion: $Enums.Religion
     employeeRole: $Enums.EmployeeRole
-    dateOfBirth: Date
+    dateOfJoining: string
     birthRegistrationNumber: string | null
     isdeleted: boolean
     createdAt: Date
@@ -1858,7 +1858,7 @@ export interface EmployeeFieldRefs {
   readonly bloodGroup: Prisma.FieldRef<"Employee", 'BloodGroup'>
   readonly religion: Prisma.FieldRef<"Employee", 'Religion'>
   readonly employeeRole: Prisma.FieldRef<"Employee", 'EmployeeRole'>
-  readonly dateOfBirth: Prisma.FieldRef<"Employee", 'DateTime'>
+  readonly dateOfJoining: Prisma.FieldRef<"Employee", 'String'>
   readonly birthRegistrationNumber: Prisma.FieldRef<"Employee", 'String'>
   readonly isdeleted: Prisma.FieldRef<"Employee", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Employee", 'DateTime'>

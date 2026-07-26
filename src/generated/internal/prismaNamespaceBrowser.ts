@@ -175,7 +175,7 @@ export const EmployeeScalarFieldEnum = {
   bloodGroup: 'bloodGroup',
   religion: 'religion',
   employeeRole: 'employeeRole',
-  dateOfBirth: 'dateOfBirth',
+  dateOfJoining: 'dateOfJoining',
   birthRegistrationNumber: 'birthRegistrationNumber',
   isdeleted: 'isdeleted',
   createdAt: 'createdAt',

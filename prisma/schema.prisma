@@ -23,6 +23,8 @@ enum UserRole {
     STUDENT
     ACCOUNTANT
     LIBRARIAN
+    STORE_MANAGER
+    OTHER
 }
 
 enum Gender {
@@ -173,7 +175,7 @@ model Employee {
     motherName             String
     emergencyContactNumber String?
     monthlySalary          Float
-    experience             String
+    experience             String?
     authoritySign          String
     EmployeeSign           String
 
@@ -181,7 +183,7 @@ model Employee {
     bloodGroup              BloodGroup
     religion                Religion
     employeeRole            EmployeeRole
-    dateOfBirth             DateTime
+    dateOfJoining           String
     birthRegistrationNumber String?      @unique
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -239,7 +241,7 @@ model Address {
     isDeleted Boolean @default(false)
 
     // student  Student?  @relation(fields: [studentId], references: [id])
-    employee Employee? @relation(fields: [employeeId], references: [id])
+    employee Employee? @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
     createdAt DateTime  @default(now()) @map("created_at")
     updatedAt DateTime  @updatedAt @map("updated_at")

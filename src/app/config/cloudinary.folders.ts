@@ -7,6 +7,7 @@ export const CloudinaryFolders = {
         profile: `${ROOT}/employees/profile`,
         authoritySign: `${ROOT}/employees/AuthoritySign`,
         employeeSign: `${ROOT}/employees/EmoloyeeSign`,
+        experience: `${ROOT}/employees/Experience`,
     },
     student: {
         profile: `${ROOT}/students/profile`,

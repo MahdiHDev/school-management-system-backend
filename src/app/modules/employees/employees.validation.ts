@@ -84,17 +84,11 @@ export const createEmployeeSchema = z.object({
         .min(11, { error: "Emergency contact must be at least 11 digits" })
         .optional(),
 
-    dateOfBirth: z.coerce.date({
-        error: "Date of birth must be a valid date",
-    }),
+    dateOfJoining: z.string().min(1, { error: "Date of joining is required" }),
 
     monthlySalary: z.coerce.number({
         error: "Monthly salary must be a valid number",
     }),
-
-    experience: z
-        .string({ error: "Experience is required" })
-        .min(1, { error: "Experience cannot be empty" }),
 
     email: z.email({ error: "Please provide a valid email address" }),
 

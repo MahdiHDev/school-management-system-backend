@@ -23,6 +23,10 @@ router.post(
             name: "employeeSign",
             maxCount: 1,
         },
+        {
+            name: "experience",
+            maxCount: 1,
+        },
     ]),
     EmployeeController.createEmployee,
 );

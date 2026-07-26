@@ -22,12 +22,11 @@ export interface EmployeePayload {
     employeeRole: EmployeeRole;
     emergencyContact?: string | undefined;
     monthlySalary: number;
-    experience: string;
-    dateOfBirth: Date;
+    experience?: string;
+    dateOfJoining: string;
     phone: string;
     email: string;
     nid: string;
-    birthRegistrationNumber?: string | undefined;
     address: {
         present: Address;
         permanent: Address;

@@ -26,6 +26,7 @@ const createEmployee = async (
     const pictureFile = files.picture?.[0];
     const authoritySignFile = files.authoritySign?.[0];
     const employeeSignFile = files.employeeSign?.[0];
+    const experienceFile = files.experience?.[0];
 
     if (!authoritySignFile) {
         throw new AppError(400, "Missing Authority Sign Image");
@@ -35,26 +36,33 @@ const createEmployee = async (
         throw new AppError(400, "Missing Employee Sign Image");
     }
 
-    const [picture, authoritySign, employeeSign] = await Promise.all([
-        pictureFile
-            ? CloudinaryService.upload(pictureFile, {
-                  folder: CloudinaryFolders.employee.profile,
-              })
-            : Promise.resolve(null),
+    const [picture, authoritySign, employeeSign, experience] =
+        await Promise.all([
+            pictureFile
+                ? CloudinaryService.upload(pictureFile, {
+                      folder: CloudinaryFolders.employee.profile,
+                  })
+                : Promise.resolve(null),
 
-        CloudinaryService.upload(authoritySignFile, {
-            folder: CloudinaryFolders.employee.authoritySign,
-        }),
-        CloudinaryService.upload(employeeSignFile, {
-            folder: CloudinaryFolders.employee.employeeSign,
-        }),
-    ]);
+            CloudinaryService.upload(authoritySignFile, {
+                folder: CloudinaryFolders.employee.authoritySign,
+            }),
+            CloudinaryService.upload(employeeSignFile, {
+                folder: CloudinaryFolders.employee.employeeSign,
+            }),
+            experienceFile
+                ? CloudinaryService.upload(experienceFile, {
+                      folder: CloudinaryFolders.employee.experience,
+                  })
+                : Promise.resolve(null),
+        ]);
 
     // Track uploaded public_ids so we can roll them back if anything below fails
     const uploadedPublicIds = [
         picture?.public_id,
         authoritySign?.public_id,
         employeeSign?.public_id,
+        experience?.public_id,
     ].filter((id): id is string => !!id);
 
     const tempPassword = "Temp@12345";
@@ -94,16 +102,13 @@ const createEmployee = async (
                     motherName: payload.motherName,
                     emergencyContactNumber: payload.emergencyContact ?? null,
                     monthlySalary: payload.monthlySalary,
-                    experience: payload.experience,
                     authoritySign: authoritySign.secure_url,
+                    experience: experience?.secure_url ?? null,
                     gender: payload.gender,
                     bloodGroup: payload.bloodGroup,
                     religion: payload.religion,
                     employeeRole: payload.employeeRole,
-                    dateOfBirth: new Date(payload.dateOfBirth),
-                    birthRegistrationNumber:
-                        payload.birthRegistrationNumber ?? null,
-
+                    dateOfJoining: payload.dateOfJoining,
                     address: {
                         create: {
                             permanentAddressVillage:
@@ -134,7 +139,28 @@ const createEmployee = async (
         });
 
         return {
-            employee: formatEmployeeResponse(employee),
+            employee: {
+                ...formatEmployeeResponse(employee),
+                picture: picture
+                    ? {
+                          uri: picture.secure_url,
+                          name: pictureFile?.originalname,
+                          type: pictureFile?.mimetype,
+                      }
+                    : undefined,
+
+                authoritySign: {
+                    uri: authoritySign.secure_url,
+                    name: authoritySignFile.originalname,
+                    type: authoritySignFile.mimetype,
+                },
+
+                employeeSign: {
+                    uri: employeeSign.secure_url,
+                    name: employeeSignFile.originalname,
+                    type: employeeSignFile.mimetype,
+                },
+            },
             credentials: {
                 email: payload.email,
                 password: tempPassword,
