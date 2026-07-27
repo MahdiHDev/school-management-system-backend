@@ -1,11 +1,62 @@
+import status from "http-status";
+import { Employee, Prisma } from "../../../generated/client";
 import { CloudinaryService } from "../../../services/cloudinary";
 import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
 import { CloudinaryFolders } from "../../config/cloudinary.folders";
 import AppError from "../../errorHelpers/AppError";
+import { IQueryParams } from "../../interfaces/query.interface";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
+import { QueryBuilder } from "../../utils/QueryBuilder";
+import {
+    employeeFilterableFields,
+    employeeSearchableFields,
+} from "./employees.constant";
 import { EmployeePayload } from "./employees.interface";
 import { formatEmployeeResponse } from "./employees.mapper";
+
+const getAllEmployees = async (query: IQueryParams) => {
+    // const employees = await prisma.employee.findMany({
+    //     where: { isdeleted: false },
+    //     select: {
+    //         id: true,
+    //         fullName: true,
+    //         picture: true,
+    //         gender: true,
+    //         user: {
+    //             select: {
+    //                 role: true,
+    //                 email: true,
+    //             },
+    //         },
+    //     },
+    // });
+
+    // return employees.map(({ user, ...employee }) => ({
+    //     ...employee,
+    //     role: user.role,
+    //     email: user.email,
+    // }));
+
+    const queryBuilder = new QueryBuilder<
+        Employee,
+        Prisma.EmployeeWhereInput,
+        Prisma.EmployeeInclude
+    >(prisma.employee, query, {
+        searchableFields: employeeSearchableFields,
+        filterableFields: employeeFilterableFields,
+    });
+
+    const result = await queryBuilder
+        .search()
+        .filter()
+        .where({ isdeleted: false })
+        .paginate()
+        .sort()
+        .execute();
+
+    return result;
+};
 
 const createEmployee = async (
     payload: EmployeePayload,
@@ -20,7 +71,10 @@ const createEmployee = async (
     console.log("Hitting on Existing User Func 🚀", existingUser);
 
     if (existingUser) {
-        throw new AppError(409, "An account with this email already exists");
+        throw new AppError(
+            status.CONFLICT,
+            "An account with this email already exists",
+        );
     }
 
     const pictureFile = files.picture?.[0];
@@ -148,6 +202,13 @@ const createEmployee = async (
                           type: pictureFile?.mimetype,
                       }
                     : undefined,
+                experience: experience
+                    ? {
+                          uri: experience.secure_url,
+                          name: experienceFile?.originalname,
+                          type: experienceFile?.mimetype,
+                      }
+                    : null,
 
                 authoritySign: {
                     uri: authoritySign.secure_url,
@@ -195,5 +256,6 @@ const createEmployee = async (
 };
 
 export const EmployeeService = {
+    getAllEmployees,
     createEmployee,
 };

@@ -1349,6 +1349,9 @@ var upload = multer({
   storage: multer.memoryStorage()
 });
 
+// src/app/modules/employees/employees.controller.ts
+import status11 from "http-status";
+
 // src/app/modules/employees/employees.validation.ts
 import { z as z2 } from "zod";
 var presentAddressSchema = z2.object({
@@ -1393,6 +1396,9 @@ var createEmployeeSchema = z2.object({
     permanent: permanentAddressSchema
   })
 });
+
+// src/app/modules/employees/employess.service.ts
+import status10 from "http-status";
 
 // src/services/cloudinary/cloudinary.service.ts
 import streamifier from "streamifier";
@@ -1459,6 +1465,381 @@ var CloudinaryFolders = {
   // add more as your project grows
 };
 
+// src/app/utils/QueryBuilder.ts
+var QueryBuilder = class {
+  constructor(model, queryParams, config2 = {}) {
+    __publicField(this, "model", model);
+    __publicField(this, "queryParams", queryParams);
+    __publicField(this, "config", config2);
+    __publicField(this, "query");
+    __publicField(this, "countQuery");
+    __publicField(this, "page", 1);
+    __publicField(this, "limit", 10);
+    __publicField(this, "skip", 0);
+    __publicField(this, "sortBy", "createdAt");
+    __publicField(this, "sortOrder", "desc");
+    __publicField(this, "selectFields");
+    this.query = {
+      where: {},
+      include: {},
+      orderBy: {},
+      skip: 0,
+      take: 10
+    };
+    this.countQuery = {
+      where: {}
+    };
+  }
+  search() {
+    const { searchTerm } = this.queryParams;
+    const { searchableFields } = this.config;
+    if (searchTerm && searchableFields && searchableFields.length > 0) {
+      const searchConditions = searchableFields.map((field) => {
+        if (field.includes(".")) {
+          const parts = field.split(".");
+          if (parts.length === 2) {
+            const [relation, nestedField] = parts;
+            const stringFilter2 = {
+              contains: searchTerm,
+              mode: "insensitive"
+            };
+            return {
+              [relation]: {
+                [nestedField]: stringFilter2
+              }
+            };
+          } else if (parts.length === 3) {
+            const [relation, nestedRelation, nestedField] = parts;
+            const stringFilter2 = {
+              contains: searchTerm,
+              mode: "insensitive"
+            };
+            return {
+              [relation]: {
+                some: {
+                  [nestedRelation]: {
+                    [nestedField]: stringFilter2
+                  }
+                }
+              }
+            };
+          }
+        }
+        const stringFilter = {
+          contains: searchTerm,
+          mode: "insensitive"
+        };
+        return {
+          [field]: stringFilter
+        };
+      });
+      const whereConditions = this.query.where;
+      whereConditions.OR = searchConditions;
+      const countWhereConditions = this.countQuery.where;
+      countWhereConditions.OR = searchConditions;
+    }
+    return this;
+  }
+  // /doctors?searchTerm=john&page=1&sortBy=name&specialty=cardiology&appointmentFee[lt]=100 => {}
+  // { specialty: 'cardiology', appointmentFee: { lt: '100' } }
+  filter() {
+    const { filterableFields } = this.config;
+    const excludedField = [
+      "searchTerm",
+      "page",
+      "limit",
+      "sortBy",
+      "sortOrder",
+      "fields",
+      "include"
+    ];
+    const filterParams = {};
+    Object.keys(this.queryParams).forEach((key) => {
+      if (!excludedField.includes(key)) {
+        filterParams[key] = this.queryParams[key];
+      }
+    });
+    const queryWhere = this.query.where;
+    const countQueryWhere = this.countQuery.where;
+    Object.keys(filterParams).forEach((key) => {
+      const value = filterParams[key];
+      if (value === void 0 || value === "") {
+        return;
+      }
+      const isAllowedField = !filterableFields || filterableFields.length === 0 || filterableFields.includes(key);
+      if (key.includes(".")) {
+        const parts = key.split(".");
+        if (filterableFields && !filterableFields.includes(key)) {
+          return;
+        }
+        if (parts.length === 2) {
+          const [relation, nestedField] = parts;
+          if (!queryWhere[relation]) {
+            queryWhere[relation] = {};
+            countQueryWhere[relation] = {};
+          }
+          const queryRelation = queryWhere[relation];
+          const countRelation = countQueryWhere[relation];
+          queryRelation[nestedField] = this.parseFilterValue(value);
+          countRelation[nestedField] = this.parseFilterValue(value);
+          return;
+        } else if (parts.length === 3) {
+          const [relation, nestedRelation, nestedField] = parts;
+          if (!queryWhere[relation]) {
+            queryWhere[relation] = {
+              some: {}
+            };
+            countQueryWhere[relation] = {
+              some: {}
+            };
+          }
+          const queryRelation = queryWhere[relation];
+          const countRelation = countQueryWhere[relation];
+          if (!queryRelation.some) {
+            queryRelation.some = {};
+          }
+          if (!countRelation.some) {
+            countRelation.some = {};
+          }
+          const querySome = queryRelation.some;
+          const countSome = countRelation.some;
+          if (!querySome[nestedRelation]) {
+            querySome[nestedRelation] = {};
+          }
+          if (!countSome[nestedRelation]) {
+            countSome[nestedRelation] = {};
+          }
+          const queryNestedRelation = querySome[nestedRelation];
+          const countNestedRelation = countSome[nestedRelation];
+          queryNestedRelation[nestedField] = this.parseFilterValue(value);
+          countNestedRelation[nestedField] = this.parseFilterValue(value);
+          return;
+        }
+      }
+      if (!isAllowedField) {
+        return;
+      }
+      if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+        queryWhere[key] = this.parseRangeFilter(
+          value
+        );
+        countQueryWhere[key] = this.parseRangeFilter(
+          value
+        );
+        return;
+      }
+      queryWhere[key] = this.parseFilterValue(value);
+      countQueryWhere[key] = this.parseFilterValue(value);
+    });
+    return this;
+  }
+  paginate() {
+    const page = Number(this.queryParams.page) || 1;
+    const limit = Number(this.queryParams.limit) || 10;
+    this.page = page;
+    this.limit = limit;
+    this.skip = (page - 1) * limit;
+    this.query.skip = this.skip;
+    this.query.take = this.limit;
+    return this;
+  }
+  sort() {
+    const sortBy = this.queryParams.sortBy || "createdAt";
+    const sortOrder = this.queryParams.sortOrder === "asc" ? "asc" : "desc";
+    this.sortBy = sortBy;
+    this.sortOrder = sortOrder;
+    if (sortBy.includes(".")) {
+      const parts = sortBy.split(".");
+      if (parts.length === 2) {
+        const [relation, nestedField] = parts;
+        this.query.orderBy = {
+          [relation]: {
+            [nestedField]: sortOrder
+          }
+        };
+      } else if (parts.length === 3) {
+        const [relation, nestedRelation, nestedField] = parts;
+        this.query.orderBy = {
+          [relation]: {
+            [nestedRelation]: {
+              [nestedField]: sortOrder
+            }
+          }
+        };
+      } else {
+        this.query.orderBy = {
+          [sortBy]: sortOrder
+        };
+      }
+    } else {
+      this.query.orderBy = {
+        [sortBy]: sortOrder
+      };
+    }
+    return this;
+  }
+  fields() {
+    const fieldsParam = this.queryParams.fields;
+    if (fieldsParam && typeof fieldsParam === "string") {
+      const fieldsArray = fieldsParam?.split(",").map((field) => field.trim());
+      this.selectFields = {};
+      fieldsArray?.forEach((field) => {
+        if (this.selectFields) {
+          this.selectFields[field] = true;
+        }
+      });
+      this.query.select = this.selectFields;
+      delete this.query.include;
+    }
+    return this;
+  }
+  include(relation) {
+    if (this.selectFields) {
+      return this;
+    }
+    this.query.include = {
+      ...this.query.include,
+      ...relation
+    };
+    return this;
+  }
+  dynamicInclude(includeConfig, defaultInclude) {
+    if (this.selectFields) {
+      return this;
+    }
+    const result = {};
+    defaultInclude?.forEach((field) => {
+      if (includeConfig[field]) {
+        result[field] = includeConfig[field];
+      }
+    });
+    const includeParam = this.queryParams.include;
+    if (includeParam && typeof includeParam === "string") {
+      const requestedRelations = includeParam.split(",").map((relation) => relation.trim());
+      requestedRelations.forEach((relation) => {
+        if (includeConfig[relation]) {
+          result[relation] = includeConfig[relation];
+        }
+      });
+    }
+    this.query.include = {
+      ...this.query.include,
+      ...result
+    };
+    return this;
+  }
+  where(condition) {
+    this.query.where = this.deepMerge(
+      this.query.where,
+      condition
+    );
+    this.countQuery.where = this.deepMerge(
+      this.countQuery.where,
+      condition
+    );
+    return this;
+  }
+  async execute() {
+    const [total, data] = await Promise.all([
+      this.model.count(
+        this.countQuery
+      ),
+      this.model.findMany(
+        this.query
+      )
+    ]);
+    const totalPages = Math.ceil(total / this.limit);
+    return {
+      data,
+      meta: {
+        page: this.page,
+        limit: this.limit,
+        total,
+        totalPages
+      }
+    };
+  }
+  async count() {
+    return await this.model.count(
+      this.countQuery
+    );
+  }
+  getQuery() {
+    return this.query;
+  }
+  deepMerge(target, source) {
+    const result = { ...target };
+    for (const key in source) {
+      if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
+        if (result[key] && typeof result[key] === "object" && !Array.isArray(result[key])) {
+          result[key] = this.deepMerge(
+            result[key],
+            source[key]
+          );
+        } else {
+          result[key] = source[key];
+        }
+      } else {
+        result[key] = source[key];
+      }
+    }
+    return result;
+  }
+  parseFilterValue(value) {
+    if (value === "true") {
+      return true;
+    }
+    if (value === "false") {
+      return false;
+    }
+    if (typeof value === "string" && !isNaN(Number(value)) && value != "") {
+      return Number(value);
+    }
+    if (Array.isArray(value)) {
+      return { in: value.map((item) => this.parseFilterValue(item)) };
+    }
+    return value;
+  }
+  parseRangeFilter(value) {
+    const rangeQuery = {};
+    Object.keys(value).forEach((operator) => {
+      const operatorValue = value[operator];
+      if (operatorValue === void 0) {
+        return;
+      }
+      const parsedValue = typeof operatorValue === "string" && !isNaN(Number(operatorValue)) ? Number(operatorValue) : operatorValue;
+      switch (operator) {
+        case "lt":
+        case "lte":
+        case "gt":
+        case "gte":
+        case "equals":
+        case "not":
+        case "contains":
+        case "startsWith":
+        case "endsWith":
+          rangeQuery[operator] = parsedValue;
+          break;
+        case "in":
+        case "notIn":
+          if (Array.isArray(operatorValue)) {
+            rangeQuery[operator] = operatorValue;
+          } else {
+            rangeQuery[operator] = [parsedValue];
+          }
+          break;
+        default:
+          break;
+      }
+    });
+    return Object.keys(rangeQuery).length > 0 ? rangeQuery : value;
+  }
+};
+
+// src/app/modules/employees/employees.constant.ts
+var employeeSearchableFields = ["fullName", "email"];
+var employeeFilterableFields = ["user.role"];
+
 // src/app/modules/employees/employees.mapper.ts
 var formatEmployeeResponse = (employee) => {
   const address = employee.address;
@@ -1482,6 +1863,14 @@ var formatEmployeeResponse = (employee) => {
 };
 
 // src/app/modules/employees/employess.service.ts
+var getAllEmployees = async (query) => {
+  const queryBuilder = new QueryBuilder(prisma.employee, query, {
+    searchableFields: employeeSearchableFields,
+    filterableFields: employeeFilterableFields
+  });
+  const result = await queryBuilder.search().filter().where({ isdeleted: false }).paginate().sort().execute();
+  return result;
+};
 var createEmployee = async (payload, files) => {
   const existingUser = await prisma.user.findUnique({
     where: { email: payload.email.toLocaleLowerCase() },
@@ -1489,7 +1878,10 @@ var createEmployee = async (payload, files) => {
   });
   console.log("Hitting on Existing User Func \u{1F680}", existingUser);
   if (existingUser) {
-    throw new AppError_default(409, "An account with this email already exists");
+    throw new AppError_default(
+      status10.CONFLICT,
+      "An account with this email already exists"
+    );
   }
   const pictureFile = files.picture?.[0];
   const authoritySignFile = files.authoritySign?.[0];
@@ -1588,6 +1980,11 @@ var createEmployee = async (payload, files) => {
           name: pictureFile?.originalname,
           type: pictureFile?.mimetype
         } : void 0,
+        experience: experience ? {
+          uri: experience.secure_url,
+          name: experienceFile?.originalname,
+          type: experienceFile?.mimetype
+        } : null,
         authoritySign: {
           uri: authoritySign.secure_url,
           name: authoritySignFile.originalname,
@@ -1625,10 +2022,22 @@ var createEmployee = async (payload, files) => {
   }
 };
 var EmployeeService = {
+  getAllEmployees,
   createEmployee
 };
 
 // src/app/modules/employees/employees.controller.ts
+var getAllEmployees2 = async (req, res) => {
+  const query = req.query;
+  const result = await EmployeeService.getAllEmployees(query);
+  sendResponse(res, {
+    httpStatusCode: status11.OK,
+    success: true,
+    message: "Employees fetched successfully",
+    data: result.data,
+    meta: result.meta
+  });
+};
 var createEmployee2 = async (req, res) => {
   const payload = createEmployeeSchema.parse(JSON.parse(req.body.data));
   const files = req.files;
@@ -1648,12 +2057,17 @@ var createEmployee2 = async (req, res) => {
   });
 };
 var EmployeeController = {
+  getAllEmployees: getAllEmployees2,
   createEmployee: createEmployee2
 };
 
 // src/app/modules/employees/employees.routes.ts
 var router2 = Router2();
-router2.get("/", checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN));
+router2.get(
+  "/",
+  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  EmployeeController.getAllEmployees
+);
 router2.post(
   "/",
   checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),

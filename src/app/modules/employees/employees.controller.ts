@@ -1,9 +1,26 @@
 import { Request, Response } from "express";
 import AppError from "../../errorHelpers/AppError";
 
+import status from "http-status";
 import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
+import { IQueryParams } from "../../interfaces/query.interface";
+import { sendResponse } from "../../shared/sendResponse";
 import { createEmployeeSchema } from "./employees.validation";
 import { EmployeeService } from "./employess.service";
+
+const getAllEmployees = async (req: Request, res: Response) => {
+    const query = req.query;
+
+    const result = await EmployeeService.getAllEmployees(query as IQueryParams);
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Employees fetched successfully",
+        data: result.data,
+        meta: result.meta,
+    });
+};
 
 const createEmployee = async (req: Request, res: Response) => {
     const payload = createEmployeeSchema.parse(JSON.parse(req.body.data));
@@ -29,5 +46,6 @@ const createEmployee = async (req: Request, res: Response) => {
 };
 
 export const EmployeeController = {
+    getAllEmployees,
     createEmployee,
 };

@@ -6,7 +6,11 @@ import { EmployeeController } from "./employees.controller";
 
 const router = Router();
 
-router.get("/", checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN));
+router.get(
+    "/",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    EmployeeController.getAllEmployees,
+);
 router.post(
     "/",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
