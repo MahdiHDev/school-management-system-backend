@@ -1300,11 +1300,18 @@ var resetPassword2 = catchAsync(async (req, res) => {
     message: "Password reset successfully"
   });
 });
+var getMe = async (req, res) => {
+  res.status(200).json({
+    success: true,
+    data: req.user
+  });
+};
 var AuthController = {
   loginUser: loginUser2,
   changePassword: changePassword2,
   forgetPassword: forgetPassword2,
-  resetPassword: resetPassword2
+  resetPassword: resetPassword2,
+  getMe
 };
 
 // src/app/modules/auth/auth.routes.ts
@@ -1324,6 +1331,19 @@ router.post(
 );
 router.post("/forget-password", AuthController.forgetPassword);
 router.post("/reset-password", AuthController.resetPassword);
+router.get(
+  "/me",
+  checkAuth(
+    UserRole.SUPER_ADMIN,
+    UserRole.ADMIN,
+    UserRole.ACCOUNTANT,
+    UserRole.LIBRARIAN,
+    UserRole.STUDENT,
+    UserRole.TEACHER,
+    UserRole.OTHER
+  ),
+  getMe
+);
 var AuthRoutes = router;
 
 // src/app/modules/employees/employees.routes.ts

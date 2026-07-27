@@ -87,9 +87,17 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+export const getMe = async (req: Request, res: Response) => {
+    res.status(200).json({
+        success: true,
+        data: req.user,
+    });
+};
+
 export const AuthController = {
     loginUser,
     changePassword,
     forgetPassword,
     resetPassword,
+    getMe,
 };
