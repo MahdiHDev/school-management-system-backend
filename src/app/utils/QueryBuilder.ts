@@ -415,6 +415,12 @@ export class QueryBuilder<
         return this;
     }
 
+    select(select: Record<string, boolean | Record<string, unknown>>): this {
+        this.query.select = select;
+        delete this.query.include;
+        return this;
+    }
+
     async execute(): Promise<IQueryResult<T>> {
         const [total, data] = await Promise.all([
             this.model.count(

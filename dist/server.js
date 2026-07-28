@@ -1759,6 +1759,11 @@ var QueryBuilder = class {
     );
     return this;
   }
+  select(select) {
+    this.query.select = select;
+    delete this.query.include;
+    return this;
+  }
   async execute() {
     const [total, data] = await Promise.all([
       this.model.count(
@@ -1888,8 +1893,27 @@ var getAllEmployees = async (query) => {
     searchableFields: employeeSearchableFields,
     filterableFields: employeeFilterableFields
   });
-  const result = await queryBuilder.search().filter().where({ isdeleted: false }).paginate().sort().execute();
-  return result;
+  const result = await queryBuilder.search().filter().where({ isdeleted: false }).select({
+    id: true,
+    fullName: true,
+    picture: true,
+    gender: true,
+    user: {
+      select: {
+        email: true,
+        role: true
+      }
+    }
+  }).paginate().sort().execute();
+  const data = result.data;
+  return {
+    ...result,
+    data: data.map(({ user, ...employee }) => ({
+      ...employee,
+      email: user.email,
+      role: user.role
+    }))
+  };
 };
 var createEmployee = async (payload, files) => {
   const existingUser = await prisma.user.findUnique({

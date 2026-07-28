@@ -1,5 +1,5 @@
 import status from "http-status";
-import { Employee, Prisma } from "../../../generated/client";
+import { Prisma } from "../../../generated/client";
 import { CloudinaryService } from "../../../services/cloudinary";
 import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
 import { CloudinaryFolders } from "../../config/cloudinary.folders";
@@ -15,31 +15,24 @@ import {
 import { EmployeePayload } from "./employees.interface";
 import { formatEmployeeResponse } from "./employees.mapper";
 
+type EmployeeListItem = Prisma.EmployeeGetPayload<{
+    select: {
+        id: true;
+        fullName: true;
+        picture: true;
+        gender: true;
+        user: {
+            select: {
+                email: true;
+                role: true;
+            };
+        };
+    };
+}>;
+
 const getAllEmployees = async (query: IQueryParams) => {
-    // const employees = await prisma.employee.findMany({
-    //     where: { isdeleted: false },
-    //     select: {
-    //         id: true,
-    //         fullName: true,
-    //         picture: true,
-    //         gender: true,
-    //         user: {
-    //             select: {
-    //                 role: true,
-    //                 email: true,
-    //             },
-    //         },
-    //     },
-    // });
-
-    // return employees.map(({ user, ...employee }) => ({
-    //     ...employee,
-    //     role: user.role,
-    //     email: user.email,
-    // }));
-
     const queryBuilder = new QueryBuilder<
-        Employee,
+        EmployeeListItem,
         Prisma.EmployeeWhereInput,
         Prisma.EmployeeInclude
     >(prisma.employee, query, {
@@ -51,11 +44,32 @@ const getAllEmployees = async (query: IQueryParams) => {
         .search()
         .filter()
         .where({ isdeleted: false })
+        .select({
+            id: true,
+            fullName: true,
+            picture: true,
+            gender: true,
+            user: {
+                select: {
+                    email: true,
+                    role: true,
+                },
+            },
+        })
         .paginate()
         .sort()
         .execute();
 
-    return result;
+    const data = result.data as unknown as EmployeeListItem[];
+
+    return {
+        ...result,
+        data: data.map(({ user, ...employee }) => ({
+            ...employee,
+            email: user.email,
+            role: user.role,
+        })),
+    };
 };
 
 const createEmployee = async (
@@ -255,7 +269,19 @@ const createEmployee = async (
     }
 };
 
+const deleteEmployee = async (id: string) => {
+    const isEmployeeExist = await prisma.employee.findUnique({
+        where: { id },
+        include: { user: true },
+    });
+
+    if (!isEmployeeExist) {
+        throw new AppError(status.NOT_FOUND, "Employee Not found");
+    }
+};
+
 export const EmployeeService = {
     getAllEmployees,
     createEmployee,
+    deleteEmployee,
 };
