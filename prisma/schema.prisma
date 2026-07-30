@@ -169,15 +169,23 @@ model Employee {
     phone String @unique
 
     fullName               String
-    picture                String?
     nid                    String  @unique
     fatherName             String
     motherName             String
     emergencyContactNumber String?
     monthlySalary          Float
-    experience             String?
-    authoritySign          String
-    EmployeeSign           String
+
+    picture         String?
+    picturePublicId String?
+
+    experience         String?
+    experiencePublicId String?
+
+    authoritySign         String
+    authoritySignPublicId String
+
+    EmployeeSign         String
+    EmployeeSignPublicId String
 
     gender                  Gender
     bloodGroup              BloodGroup

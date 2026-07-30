@@ -34,5 +34,10 @@ router.post(
     ]),
     EmployeeController.createEmployee,
 );
+router.delete(
+    "/:id",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    EmployeeController.deleteEmployee,
+);
 
 export const EmployeeRoutes: Router = router;

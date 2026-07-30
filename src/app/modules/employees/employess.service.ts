@@ -1,5 +1,5 @@
 import status from "http-status";
-import { Prisma } from "../../../generated/client";
+import { Prisma, UserStatus } from "../../../generated/client";
 import { CloudinaryService } from "../../../services/cloudinary";
 import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
 import { CloudinaryFolders } from "../../config/cloudinary.folders";
@@ -143,6 +143,7 @@ const createEmployee = async (
                 password: tempPassword,
                 role: payload.employeeRole,
                 name: payload.fullName,
+                image: picture?.secure_url,
                 needPasswordChange: true,
             },
         });
@@ -164,14 +165,18 @@ const createEmployee = async (
                     phone: payload.phone,
                     fullName: payload.fullName,
                     picture: picture?.secure_url ?? null,
+                    picturePublicId: picture?.public_id ?? null,
                     EmployeeSign: employeeSign.secure_url,
+                    EmployeeSignPublicId: employeeSign.public_id,
                     nid: payload.nid,
                     fatherName: payload.fatherName,
                     motherName: payload.motherName,
                     emergencyContactNumber: payload.emergencyContact ?? null,
                     monthlySalary: payload.monthlySalary,
                     authoritySign: authoritySign.secure_url,
+                    authoritySignPublicId: authoritySign.public_id ?? null,
                     experience: experience?.secure_url ?? null,
+                    experiencePublicId: experience?.public_id ?? null,
                     gender: payload.gender,
                     bloodGroup: payload.bloodGroup,
                     religion: payload.religion,
@@ -270,14 +275,64 @@ const createEmployee = async (
 };
 
 const deleteEmployee = async (id: string) => {
-    const isEmployeeExist = await prisma.employee.findUnique({
+    const employee = await prisma.employee.findUnique({
         where: { id },
-        include: { user: true },
+        select: {
+            id: true,
+            userId: true,
+            picturePublicId: true,
+            authoritySignPublicId: true,
+            EmployeeSignPublicId: true,
+            experiencePublicId: true,
+        },
     });
 
-    if (!isEmployeeExist) {
+    if (!employee) {
         throw new AppError(status.NOT_FOUND, "Employee Not found");
     }
+
+    await prisma.$transaction(async (tx) => {
+        await tx.employee.update({
+            where: { id },
+            data: {
+                isdeleted: true,
+                deletedAt: new Date(),
+            },
+        });
+
+        await tx.user.update({
+            where: { id: employee.userId },
+            data: {
+                isDeleted: true,
+                deletedAt: new Date(),
+                status: UserStatus.DELETED,
+            },
+        });
+
+        await tx.session.deleteMany({
+            where: { userId: employee.userId },
+        });
+    });
+
+    await Promise.allSettled([
+        employee.picturePublicId
+            ? CloudinaryService.delete(employee.picturePublicId)
+            : Promise.resolve(),
+
+        employee.authoritySignPublicId
+            ? CloudinaryService.delete(employee.authoritySignPublicId)
+            : Promise.resolve(),
+
+        employee.EmployeeSignPublicId
+            ? CloudinaryService.delete(employee.EmployeeSignPublicId)
+            : Promise.resolve(),
+
+        employee.experiencePublicId
+            ? CloudinaryService.delete(employee.experiencePublicId)
+            : Promise.resolve(),
+    ]);
+
+    return { message: "Employee deleted successfully" };
 };
 
 export const EmployeeService = {

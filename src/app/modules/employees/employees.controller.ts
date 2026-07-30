@@ -45,7 +45,21 @@ const createEmployee = async (req: Request, res: Response) => {
     });
 };
 
+const deleteEmployee = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const result = await EmployeeService.deleteEmployee(id as string);
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Employee Deleted Successfully",
+        data: result,
+    });
+};
+
 export const EmployeeController = {
     getAllEmployees,
     createEmployee,
+    deleteEmployee,
 };
