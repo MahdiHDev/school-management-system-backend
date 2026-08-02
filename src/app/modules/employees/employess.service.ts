@@ -49,10 +49,10 @@ const getAllEmployees = async (query: IQueryParams) => {
             fullName: true,
             picture: true,
             gender: true,
+            employeeRole: true,
             user: {
                 select: {
                     email: true,
-                    role: true,
                 },
             },
         })
@@ -67,9 +67,23 @@ const getAllEmployees = async (query: IQueryParams) => {
         data: data.map(({ user, ...employee }) => ({
             ...employee,
             email: user.email,
-            role: user.role,
         })),
     };
+};
+
+const getEmployeeById = async (id: string) => {
+    const employee = await prisma.employee.findUnique({
+        where: {
+            id,
+            isdeleted: false,
+        },
+        include: {
+            user: true,
+            address: true,
+        },
+    });
+
+    return employee;
 };
 
 const createEmployee = async (
@@ -81,8 +95,6 @@ const createEmployee = async (
         where: { email: payload.email.toLocaleLowerCase() },
         select: { id: true },
     });
-
-    console.log("Hitting on Existing User Func 🚀", existingUser);
 
     if (existingUser) {
         throw new AppError(
@@ -141,7 +153,7 @@ const createEmployee = async (
             body: {
                 email: payload.email,
                 password: tempPassword,
-                role: payload.employeeRole,
+                role: payload.role,
                 name: payload.fullName,
                 image: picture?.secure_url,
                 needPasswordChange: true,
@@ -159,9 +171,19 @@ const createEmployee = async (
                 },
             });
 
+            const sequence = await tx.sequence.update({
+                where: { id: "employee" },
+                data: {
+                    current: {
+                        increment: 1,
+                    },
+                },
+            });
+
             return await tx.employee.create({
                 data: {
                     userId: userId!,
+                    employeeId: sequence.current.toString(),
                     phone: payload.phone,
                     fullName: payload.fullName,
                     picture: picture?.secure_url ?? null,
@@ -337,6 +359,7 @@ const deleteEmployee = async (id: string) => {
 
 export const EmployeeService = {
     getAllEmployees,
+    getEmployeeById,
     createEmployee,
     deleteEmployee,
 };

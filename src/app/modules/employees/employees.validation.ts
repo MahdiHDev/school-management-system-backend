@@ -4,6 +4,7 @@ import {
     EmployeeRole,
     Gender,
     Religion,
+    UserRole,
 } from "../../../generated/enums";
 
 const presentAddressSchema = z.object({
@@ -71,6 +72,11 @@ export const createEmployeeSchema = z.object({
 
     religion: z.enum(Religion, {
         error: "Religion must be one of: " + Object.values(Religion).join(", "),
+    }),
+
+    role: z.enum(UserRole, {
+        error:
+            "User Role must be one of: " + Object.values(UserRole).join(", "),
     }),
 
     employeeRole: z.enum(EmployeeRole, {

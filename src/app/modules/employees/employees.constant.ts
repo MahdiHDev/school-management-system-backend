@@ -1,4 +1,8 @@
-export const employeeSearchableFields = ["fullName", "user.email"];
+export const employeeSearchableFields = [
+    "fullName",
+    "user.email",
+    "employeeId",
+];
 
 export const employeeFilterableFields = ["user.role"];
 

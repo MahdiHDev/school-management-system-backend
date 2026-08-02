@@ -65,3 +65,29 @@ export const seedSuperAdmin = async () => {
         });
     }
 };
+
+export const seedEmployeeSequence = async () => {
+    try {
+        const sequenceExists = await prisma.sequence.findUnique({
+            where: {
+                id: "employee",
+            },
+        });
+
+        if (sequenceExists) {
+            console.log("Employee sequence already exists. Skipping seed.");
+            return;
+        }
+
+        await prisma.sequence.create({
+            data: {
+                id: "employee",
+                current: 999,
+            },
+        });
+
+        console.log("Employee sequence seeded successfully");
+    } catch (error) {
+        console.error("Error seeding employee sequence:", error);
+    }
+};

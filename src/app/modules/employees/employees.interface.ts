@@ -3,6 +3,7 @@ import {
     EmployeeRole,
     Gender,
     Religion,
+    UserRole,
 } from "../../../generated/enums";
 
 interface Address {
@@ -19,6 +20,7 @@ export interface EmployeePayload {
     gender: Gender;
     bloodGroup: BloodGroup;
     religion: Religion;
+    role: UserRole;
     employeeRole: EmployeeRole;
     emergencyContact?: string | undefined;
     monthlySalary: number;

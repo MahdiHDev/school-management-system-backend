@@ -21,10 +21,7 @@ enum UserRole {
     ADMIN
     TEACHER
     STUDENT
-    ACCOUNTANT
-    LIBRARIAN
-    STORE_MANAGER
-    OTHER
+    EMPLOYEE
 }
 
 enum Gender {
@@ -174,6 +171,7 @@ model Employee {
     motherName             String
     emergencyContactNumber String?
     monthlySalary          Float
+    employeeId             String  @unique
 
     picture         String?
     picturePublicId String?
@@ -254,4 +252,9 @@ model Address {
     createdAt DateTime  @default(now()) @map("created_at")
     updatedAt DateTime  @updatedAt @map("updated_at")
     deletedAt DateTime? @map("deleted_at")
+}
+
+model Sequence {
+    id      String @id
+    current Int
 }

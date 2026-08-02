@@ -22,6 +22,19 @@ const getAllEmployees = async (req: Request, res: Response) => {
     });
 };
 
+const getEmployeeById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const employee = await EmployeeService.getEmployeeById(id as string);
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Employee fetched successfully",
+        data: employee,
+    });
+};
+
 const createEmployee = async (req: Request, res: Response) => {
     const payload = createEmployeeSchema.parse(JSON.parse(req.body.data));
     const files = req.files as Record<string, UploadFile[]>;
@@ -60,6 +73,7 @@ const deleteEmployee = async (req: Request, res: Response) => {
 
 export const EmployeeController = {
     getAllEmployees,
+    getEmployeeById,
     createEmployee,
     deleteEmployee,
 };

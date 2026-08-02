@@ -62,3 +62,8 @@ export type Class = Prisma.ClassModel
  * 
  */
 export type Address = Prisma.AddressModel
+/**
+ * Model Sequence
+ * 
+ */
+export type Sequence = Prisma.SequenceModel

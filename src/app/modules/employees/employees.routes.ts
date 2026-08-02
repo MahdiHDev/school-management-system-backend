@@ -11,6 +11,11 @@ router.get(
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
     EmployeeController.getAllEmployees,
 );
+router.get(
+    "/:id",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    EmployeeController.getEmployeeById,
+);
 router.post(
     "/",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
