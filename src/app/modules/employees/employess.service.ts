@@ -67,6 +67,7 @@ const getAllEmployees = async (query: IQueryParams) => {
         data: data.map(({ user, ...employee }) => ({
             ...employee,
             email: user.email,
+            role: user.role,
         })),
     };
 };

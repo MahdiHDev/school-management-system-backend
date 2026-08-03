@@ -1925,6 +1925,7 @@ var getAllEmployees = async (query) => {
     ...result,
     data: data.map(({ user, ...employee }) => ({
       ...employee,
+      role: employee.employeeRole,
       email: user.email
     }))
   };
