@@ -39,6 +39,31 @@ router.post(
     ]),
     EmployeeController.createEmployee,
 );
+
+router.patch(
+    "/:id",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    upload.fields([
+        {
+            name: "picture",
+            maxCount: 1,
+        },
+        {
+            name: "authoritySign",
+            maxCount: 1,
+        },
+        {
+            name: "employeeSign",
+            maxCount: 1,
+        },
+        {
+            name: "experience",
+            maxCount: 1,
+        },
+    ]),
+    EmployeeController.updateEmployee,
+);
+
 router.delete(
     "/:id",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),

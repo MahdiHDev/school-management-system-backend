@@ -12,7 +12,7 @@ import {
     employeeFilterableFields,
     employeeSearchableFields,
 } from "./employees.constant";
-import { EmployeePayload } from "./employees.interface";
+import { IEmployeePayload, IUpdatePayload } from "./employees.interface";
 import { formatEmployeeResponse } from "./employees.mapper";
 
 type EmployeeListItem = Prisma.EmployeeGetPayload<{
@@ -49,10 +49,10 @@ const getAllEmployees = async (query: IQueryParams) => {
             fullName: true,
             picture: true,
             gender: true,
-            employeeRole: true,
             user: {
                 select: {
                     email: true,
+                    role: true,
                 },
             },
         })
@@ -87,8 +87,109 @@ const getEmployeeById = async (id: string) => {
     return employee;
 };
 
+/**
+ * {
+  "fullName": "Bilal Abbas Khan",
+  "fatherName": "Abdul Hussain",
+  "motherName": "Rehana Begum",
+  "gender": "MALE",
+  "bloodGroup": "O_POSITIVE",
+  "religion": "ISLAM",
+  "employeeRole": "TEACHER",
+  "monthlySalary": 25000,
+  "dateOfJoining": "2000-05-14",
+  "phone": "+8801812345605",
+  "email": "bilal@gmail.com",
+  "nid": "1998123456715",
+"address": {
+    "present": {
+      "village": "Uttara Sector 10",
+      "postOffice": "Uttara",
+      "postCode": "1230",
+      "district": "Dhaka"
+    },
+    "permanent": {
+      "village": "Kamalpur",
+      "postOffice": "Fulbaria",
+      "postCode": "2216",
+      "district": "Mymensingh"
+    }
+  }
+}
+ */
+const getEmployeeByIdForUpdate = async (id: string) => {
+    const employee = await prisma.employee.findUnique({
+        where: {
+            id,
+            isdeleted: false,
+        },
+        select: {
+            fullName: true,
+            fatherName: true,
+            motherName: true,
+            gender: true,
+            bloodGroup: true,
+            religion: true,
+            employeeRole: true,
+            emergencyContactNumber: true,
+            monthlySalary: true,
+            dateOfJoining: true,
+            phone: true,
+            nid: true,
+            address: {
+                select: {
+                    presentAddressVillage: true,
+                    presentAddressPostOffice: true,
+                    presentAddressPostCode: true,
+                    presentAddressDistrict: true,
+
+                    permanentAddressVillage: true,
+                    permanentAddressPostOffice: true,
+                    permanentAddressPostCode: true,
+                    permanentAddressDistrict: true,
+                },
+            },
+            picture: true,
+            authoritySign: true,
+            EmployeeSign: true,
+            experience: true,
+        },
+    });
+
+    if (!employee) {
+        throw new AppError(status.NOT_FOUND, "Employee Not found");
+    }
+
+    if (!employee?.address) {
+        throw new AppError(status.NOT_FOUND, "Employee address not found");
+    }
+
+    const formattedEmployee = employee
+        ? {
+              ...employee,
+
+              address: {
+                  present: {
+                      village: employee?.address.presentAddressVillage,
+                      postOffice: employee?.address.presentAddressPostOffice,
+                      postCode: employee?.address.presentAddressPostCode,
+                      district: employee?.address.presentAddressDistrict,
+                  },
+                  permanent: {
+                      village: employee?.address.permanentAddressVillage,
+                      postOffice: employee?.address.permanentAddressPostOffice,
+                      postCode: employee?.address.permanentAddressPostCode,
+                      district: employee?.address.permanentAddressDistrict,
+                  },
+              },
+          }
+        : null;
+
+    return formattedEmployee;
+};
+
 const createEmployee = async (
-    payload: EmployeePayload,
+    payload: IEmployeePayload,
     files: Record<string, UploadFile[]>,
 ) => {
     // Check for existing email BEFORE any uploads — fail fast, no wasted work
@@ -154,7 +255,7 @@ const createEmployee = async (
             body: {
                 email: payload.email,
                 password: tempPassword,
-                role: payload.role,
+                role: payload.employeeRole,
                 name: payload.fullName,
                 image: picture?.secure_url,
                 needPasswordChange: true,
@@ -189,8 +290,12 @@ const createEmployee = async (
                     fullName: payload.fullName,
                     picture: picture?.secure_url ?? null,
                     picturePublicId: picture?.public_id ?? null,
-                    EmployeeSign: employeeSign.secure_url,
-                    EmployeeSignPublicId: employeeSign.public_id,
+                    pictureName: pictureFile?.originalname ?? null,
+                    pictureType: pictureFile?.mimetype ?? null,
+                    employeeSign: employeeSign.secure_url,
+                    employeeSignPublicId: employeeSign.public_id,
+                    employeeSignName: employeeSignFile.originalname,
+                    employeeSignType: employeeSignFile.mimetype,
                     nid: payload.nid,
                     fatherName: payload.fatherName,
                     motherName: payload.motherName,
@@ -198,8 +303,12 @@ const createEmployee = async (
                     monthlySalary: payload.monthlySalary,
                     authoritySign: authoritySign.secure_url,
                     authoritySignPublicId: authoritySign.public_id ?? null,
+                    authoritySignName: authoritySignFile.originalname,
+                    authoritySignType: authoritySignFile.mimetype,
                     experience: experience?.secure_url ?? null,
                     experiencePublicId: experience?.public_id ?? null,
+                    experienceName: experienceFile?.originalname ?? null,
+                    experienceType: experienceFile?.mimetype ?? null,
                     gender: payload.gender,
                     bloodGroup: payload.bloodGroup,
                     religion: payload.religion,
@@ -239,29 +348,29 @@ const createEmployee = async (
                 ...formatEmployeeResponse(employee),
                 picture: picture
                     ? {
-                          uri: picture.secure_url,
-                          name: pictureFile?.originalname,
-                          type: pictureFile?.mimetype,
+                          uri: employee.picture,
+                          name: employee.pictureName,
+                          type: employee.pictureType,
                       }
                     : undefined,
                 experience: experience
                     ? {
                           uri: experience.secure_url,
-                          name: experienceFile?.originalname,
-                          type: experienceFile?.mimetype,
+                          name: employee.experienceName,
+                          type: employee.experienceType,
                       }
                     : null,
 
                 authoritySign: {
                     uri: authoritySign.secure_url,
-                    name: authoritySignFile.originalname,
-                    type: authoritySignFile.mimetype,
+                    name: employee.authoritySignName,
+                    type: employee.authoritySignType,
                 },
 
                 employeeSign: {
-                    uri: employeeSign.secure_url,
-                    name: employeeSignFile.originalname,
-                    type: employeeSignFile.mimetype,
+                    uri: employeeSign,
+                    name: employee.employeeSignName,
+                    type: employee.employeeSignType,
                 },
             },
             credentials: {
@@ -294,6 +403,245 @@ const createEmployee = async (
         );
 
         throw err;
+    }
+};
+
+const updateEmployee = async (
+    id: string,
+    payload: IUpdatePayload,
+    files: Record<string, UploadFile[]>,
+) => {
+    const employee = await prisma.employee.findUnique({
+        where: { id },
+        include: {
+            user: true,
+            address: true,
+        },
+    });
+
+    if (!employee) {
+        throw new AppError(status.NOT_FOUND, "Employee Not found");
+    }
+
+    const pictureFile = files.picture?.[0];
+    const authoritySignFile = files.authoritySign?.[0];
+    const employeeSignFile = files.employeeSign?.[0];
+    const experienceFile = files.experience?.[0];
+
+    const [picture, authoritySign, employeeSign, experience] =
+        await Promise.all([
+            pictureFile
+                ? CloudinaryService.upload(pictureFile, {
+                      folder: CloudinaryFolders.employee.profile,
+                  })
+                : Promise.resolve(null),
+
+            authoritySignFile
+                ? CloudinaryService.upload(authoritySignFile, {
+                      folder: CloudinaryFolders.employee.authoritySign,
+                  })
+                : Promise.resolve(null),
+
+            employeeSignFile
+                ? CloudinaryService.upload(employeeSignFile, {
+                      folder: CloudinaryFolders.employee.employeeSign,
+                  })
+                : Promise.resolve(null),
+
+            experienceFile
+                ? CloudinaryService.upload(experienceFile, {
+                      folder: CloudinaryFolders.employee.experience,
+                  })
+                : Promise.resolve(null),
+        ]);
+
+    const uploadedPublicIds = [
+        picture?.public_id,
+        authoritySign?.public_id,
+        employeeSign?.public_id,
+        experience?.public_id,
+    ].filter((id): id is string => Boolean(id));
+
+    try {
+        const updatedEmployee = await prisma.$transaction(async (tx) => {
+            await tx.user.update({
+                where: { id: employee.userId },
+                data: {
+                    ...(payload.fullName !== undefined && {
+                        name: payload.fullName,
+                    }),
+
+                    ...(payload.employeeRole !== undefined && {
+                        role: payload.employeeRole,
+                    }),
+
+                    ...(picture && {
+                        image: picture.secure_url,
+                    }),
+                },
+            });
+
+            if (payload.address) {
+                await tx.address.update({
+                    where: { employeeId: employee.id },
+                    data: {
+                        ...(payload.address.permanent?.village !==
+                            undefined && {
+                            permanentAddressVillage:
+                                payload.address.permanent.village,
+                        }),
+
+                        ...(payload.address.permanent?.postOffice !==
+                            undefined && {
+                            permanentAddressPostOffice:
+                                payload.address.permanent.postOffice,
+                        }),
+
+                        ...(payload.address.permanent?.postCode !==
+                            undefined && {
+                            permanentAddressPostCode:
+                                payload.address.permanent.postCode,
+                        }),
+
+                        ...(payload.address.permanent?.district !==
+                            undefined && {
+                            permanentAddressDistrict:
+                                payload.address.permanent.district,
+                        }),
+
+                        ...(payload.address.present?.village !== undefined && {
+                            presentAddressVillage:
+                                payload.address.present.village,
+                        }),
+
+                        ...(payload.address.present?.postOffice !==
+                            undefined && {
+                            presentAddressPostOffice:
+                                payload.address.present.postOffice,
+                        }),
+
+                        ...(payload.address.present?.postCode !== undefined && {
+                            presentAddressPostCode:
+                                payload.address.present.postCode,
+                        }),
+
+                        ...(payload.address.present?.district !== undefined && {
+                            presentAddressDistrict:
+                                payload.address.present.district,
+                        }),
+                    },
+                });
+            }
+
+            return await tx.employee.update({
+                where: {
+                    id,
+                },
+                data: {
+                    ...(payload.fullName !== undefined && {
+                        fullName: payload.fullName,
+                    }),
+
+                    ...(payload.phone !== undefined && {
+                        phone: payload.phone,
+                    }),
+
+                    ...(payload.fatherName !== undefined && {
+                        fatherName: payload.fatherName,
+                    }),
+
+                    ...(payload.motherName !== undefined && {
+                        motherName: payload.motherName,
+                    }),
+
+                    ...(payload.gender !== undefined && {
+                        gender: payload.gender,
+                    }),
+
+                    ...(payload.bloodGroup !== undefined && {
+                        bloodGroup: payload.bloodGroup,
+                    }),
+
+                    ...(payload.religion !== undefined && {
+                        religion: payload.religion,
+                    }),
+
+                    ...(payload.employeeRole !== undefined && {
+                        employeeRole: payload.employeeRole,
+                    }),
+
+                    ...(payload.monthlySalary !== undefined && {
+                        monthlySalary: payload.monthlySalary,
+                    }),
+
+                    ...(payload.nid !== undefined && {
+                        nid: payload.nid,
+                    }),
+
+                    ...(payload.dateOfJoining !== undefined && {
+                        dateOfJoining: payload.dateOfJoining,
+                    }),
+
+                    ...(payload.emergencyContact !== undefined && {
+                        emergencyContactNumber: payload.emergencyContact,
+                    }),
+
+                    ...(picture && {
+                        picture: picture.secure_url,
+                        picturePublicId: picture.public_id,
+                    }),
+
+                    ...(authoritySign && {
+                        authoritySign: authoritySign.secure_url,
+                        authoritySignPublicId: authoritySign.public_id,
+                    }),
+
+                    ...(employeeSign && {
+                        employeeSign: employeeSign.secure_url,
+                        employeeSignPublicId: employeeSign.public_id,
+                    }),
+
+                    ...(experience && {
+                        experience: experience.secure_url,
+                        experiencePublicId: experience.public_id,
+                    }),
+                },
+                include: {
+                    user: true,
+                    address: true,
+                },
+            });
+        });
+
+        // delete old cloudinary assets AFTER successful update
+        await Promise.all([
+            picture &&
+                employee.picturePublicId &&
+                CloudinaryService.delete(employee.picturePublicId),
+
+            authoritySign &&
+                employee.authoritySignPublicId &&
+                CloudinaryService.delete(employee.authoritySignPublicId),
+
+            employeeSign &&
+                employee.employeeSignPublicId &&
+                CloudinaryService.delete(employee.employeeSignPublicId),
+
+            experience &&
+                employee.experiencePublicId &&
+                CloudinaryService.delete(employee.experiencePublicId),
+        ]);
+
+        return formatEmployeeResponse(updatedEmployee);
+    } catch (error) {
+        // rollback newly uploaded files
+        await Promise.all(
+            uploadedPublicIds.map((publicId) =>
+                CloudinaryService.delete(publicId).catch(() => {}),
+            ),
+        );
+
+        throw error;
     }
 };
 
@@ -362,5 +710,6 @@ export const EmployeeService = {
     getAllEmployees,
     getEmployeeById,
     createEmployee,
+    updateEmployee,
     deleteEmployee,
 };

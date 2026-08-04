@@ -3,7 +3,6 @@ import {
     EmployeeRole,
     Gender,
     Religion,
-    UserRole,
 } from "../../../generated/enums";
 
 interface Address {
@@ -13,18 +12,16 @@ interface Address {
     district: string;
 }
 
-export interface EmployeePayload {
+export interface IEmployeePayload {
     fullName: string;
     fatherName: string;
     motherName: string;
     gender: Gender;
     bloodGroup: BloodGroup;
     religion: Religion;
-    role: UserRole;
     employeeRole: EmployeeRole;
     emergencyContact?: string | undefined;
     monthlySalary: number;
-    experience?: string;
     dateOfJoining: string;
     phone: string;
     email: string;
@@ -33,4 +30,33 @@ export interface EmployeePayload {
         present: Address;
         permanent: Address;
     };
+}
+
+interface UpdateAddress {
+    village?: string | undefined;
+    postOffice?: string | undefined;
+    postCode?: string | undefined;
+    district?: string | undefined;
+}
+
+export interface IUpdatePayload {
+    fullName?: string | undefined;
+    fatherName?: string | undefined;
+    motherName?: string | undefined;
+    gender?: Gender | undefined;
+    bloodGroup?: BloodGroup | undefined;
+    religion?: Religion | undefined;
+    employeeRole?: EmployeeRole | undefined;
+    emergencyContact?: string | undefined;
+    monthlySalary?: number | undefined;
+    dateOfJoining?: string | undefined;
+    phone?: string | undefined;
+    nid?: string | undefined;
+
+    address?:
+        | {
+              present?: UpdateAddress | undefined;
+              permanent?: UpdateAddress | undefined;
+          }
+        | undefined;
 }

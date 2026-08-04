@@ -21,7 +21,6 @@ enum UserRole {
     ADMIN
     TEACHER
     STUDENT
-    EMPLOYEE
     PRINCIPAL
     MANAGEMENT_STAFF
     ACCOUNTANT
@@ -181,15 +180,23 @@ model Employee {
 
     picture         String?
     picturePublicId String?
+    pictureName     String?
+    pictureType     String?
 
     experience         String?
     experiencePublicId String?
+    experienceName     String?
+    experienceType     String?
 
     authoritySign         String
     authoritySignPublicId String
+    authoritySignName     String?
+    authoritySignType     String?
 
-    EmployeeSign         String
-    EmployeeSignPublicId String
+    employeeSign         String
+    employeeSignPublicId String
+    employeeSignName     String?
+    employeeSignType     String?
 
     gender                  Gender
     bloodGroup              BloodGroup

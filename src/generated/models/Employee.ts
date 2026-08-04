@@ -47,12 +47,20 @@ export type EmployeeMinAggregateOutputType = {
   employeeId: string | null
   picture: string | null
   picturePublicId: string | null
+  pictureName: string | null
+  pictureType: string | null
   experience: string | null
   experiencePublicId: string | null
+  experienceName: string | null
+  experienceType: string | null
   authoritySign: string | null
   authoritySignPublicId: string | null
-  EmployeeSign: string | null
-  EmployeeSignPublicId: string | null
+  authoritySignName: string | null
+  authoritySignType: string | null
+  employeeSign: string | null
+  employeeSignPublicId: string | null
+  employeeSignName: string | null
+  employeeSignType: string | null
   gender: $Enums.Gender | null
   bloodGroup: $Enums.BloodGroup | null
   religion: $Enums.Religion | null
@@ -78,12 +86,20 @@ export type EmployeeMaxAggregateOutputType = {
   employeeId: string | null
   picture: string | null
   picturePublicId: string | null
+  pictureName: string | null
+  pictureType: string | null
   experience: string | null
   experiencePublicId: string | null
+  experienceName: string | null
+  experienceType: string | null
   authoritySign: string | null
   authoritySignPublicId: string | null
-  EmployeeSign: string | null
-  EmployeeSignPublicId: string | null
+  authoritySignName: string | null
+  authoritySignType: string | null
+  employeeSign: string | null
+  employeeSignPublicId: string | null
+  employeeSignName: string | null
+  employeeSignType: string | null
   gender: $Enums.Gender | null
   bloodGroup: $Enums.BloodGroup | null
   religion: $Enums.Religion | null
@@ -109,12 +125,20 @@ export type EmployeeCountAggregateOutputType = {
   employeeId: number
   picture: number
   picturePublicId: number
+  pictureName: number
+  pictureType: number
   experience: number
   experiencePublicId: number
+  experienceName: number
+  experienceType: number
   authoritySign: number
   authoritySignPublicId: number
-  EmployeeSign: number
-  EmployeeSignPublicId: number
+  authoritySignName: number
+  authoritySignType: number
+  employeeSign: number
+  employeeSignPublicId: number
+  employeeSignName: number
+  employeeSignType: number
   gender: number
   bloodGroup: number
   religion: number
@@ -150,12 +174,20 @@ export type EmployeeMinAggregateInputType = {
   employeeId?: true
   picture?: true
   picturePublicId?: true
+  pictureName?: true
+  pictureType?: true
   experience?: true
   experiencePublicId?: true
+  experienceName?: true
+  experienceType?: true
   authoritySign?: true
   authoritySignPublicId?: true
-  EmployeeSign?: true
-  EmployeeSignPublicId?: true
+  authoritySignName?: true
+  authoritySignType?: true
+  employeeSign?: true
+  employeeSignPublicId?: true
+  employeeSignName?: true
+  employeeSignType?: true
   gender?: true
   bloodGroup?: true
   religion?: true
@@ -181,12 +213,20 @@ export type EmployeeMaxAggregateInputType = {
   employeeId?: true
   picture?: true
   picturePublicId?: true
+  pictureName?: true
+  pictureType?: true
   experience?: true
   experiencePublicId?: true
+  experienceName?: true
+  experienceType?: true
   authoritySign?: true
   authoritySignPublicId?: true
-  EmployeeSign?: true
-  EmployeeSignPublicId?: true
+  authoritySignName?: true
+  authoritySignType?: true
+  employeeSign?: true
+  employeeSignPublicId?: true
+  employeeSignName?: true
+  employeeSignType?: true
   gender?: true
   bloodGroup?: true
   religion?: true
@@ -212,12 +252,20 @@ export type EmployeeCountAggregateInputType = {
   employeeId?: true
   picture?: true
   picturePublicId?: true
+  pictureName?: true
+  pictureType?: true
   experience?: true
   experiencePublicId?: true
+  experienceName?: true
+  experienceType?: true
   authoritySign?: true
   authoritySignPublicId?: true
-  EmployeeSign?: true
-  EmployeeSignPublicId?: true
+  authoritySignName?: true
+  authoritySignType?: true
+  employeeSign?: true
+  employeeSignPublicId?: true
+  employeeSignName?: true
+  employeeSignType?: true
   gender?: true
   bloodGroup?: true
   religion?: true
@@ -330,12 +378,20 @@ export type EmployeeGroupByOutputType = {
   employeeId: string
   picture: string | null
   picturePublicId: string | null
+  pictureName: string | null
+  pictureType: string | null
   experience: string | null
   experiencePublicId: string | null
+  experienceName: string | null
+  experienceType: string | null
   authoritySign: string
   authoritySignPublicId: string
-  EmployeeSign: string
-  EmployeeSignPublicId: string
+  authoritySignName: string | null
+  authoritySignType: string | null
+  employeeSign: string
+  employeeSignPublicId: string
+  employeeSignName: string | null
+  employeeSignType: string | null
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
@@ -384,12 +440,20 @@ export type EmployeeWhereInput = {
   employeeId?: Prisma.StringFilter<"Employee"> | string
   picture?: Prisma.StringNullableFilter<"Employee"> | string | null
   picturePublicId?: Prisma.StringNullableFilter<"Employee"> | string | null
+  pictureName?: Prisma.StringNullableFilter<"Employee"> | string | null
+  pictureType?: Prisma.StringNullableFilter<"Employee"> | string | null
   experience?: Prisma.StringNullableFilter<"Employee"> | string | null
   experiencePublicId?: Prisma.StringNullableFilter<"Employee"> | string | null
+  experienceName?: Prisma.StringNullableFilter<"Employee"> | string | null
+  experienceType?: Prisma.StringNullableFilter<"Employee"> | string | null
   authoritySign?: Prisma.StringFilter<"Employee"> | string
   authoritySignPublicId?: Prisma.StringFilter<"Employee"> | string
-  EmployeeSign?: Prisma.StringFilter<"Employee"> | string
-  EmployeeSignPublicId?: Prisma.StringFilter<"Employee"> | string
+  authoritySignName?: Prisma.StringNullableFilter<"Employee"> | string | null
+  authoritySignType?: Prisma.StringNullableFilter<"Employee"> | string | null
+  employeeSign?: Prisma.StringFilter<"Employee"> | string
+  employeeSignPublicId?: Prisma.StringFilter<"Employee"> | string
+  employeeSignName?: Prisma.StringNullableFilter<"Employee"> | string | null
+  employeeSignType?: Prisma.StringNullableFilter<"Employee"> | string | null
   gender?: Prisma.EnumGenderFilter<"Employee"> | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFilter<"Employee"> | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFilter<"Employee"> | $Enums.Religion
@@ -418,12 +482,20 @@ export type EmployeeOrderByWithRelationInput = {
   employeeId?: Prisma.SortOrder
   picture?: Prisma.SortOrderInput | Prisma.SortOrder
   picturePublicId?: Prisma.SortOrderInput | Prisma.SortOrder
+  pictureName?: Prisma.SortOrderInput | Prisma.SortOrder
+  pictureType?: Prisma.SortOrderInput | Prisma.SortOrder
   experience?: Prisma.SortOrderInput | Prisma.SortOrder
   experiencePublicId?: Prisma.SortOrderInput | Prisma.SortOrder
+  experienceName?: Prisma.SortOrderInput | Prisma.SortOrder
+  experienceType?: Prisma.SortOrderInput | Prisma.SortOrder
   authoritySign?: Prisma.SortOrder
   authoritySignPublicId?: Prisma.SortOrder
-  EmployeeSign?: Prisma.SortOrder
-  EmployeeSignPublicId?: Prisma.SortOrder
+  authoritySignName?: Prisma.SortOrderInput | Prisma.SortOrder
+  authoritySignType?: Prisma.SortOrderInput | Prisma.SortOrder
+  employeeSign?: Prisma.SortOrder
+  employeeSignPublicId?: Prisma.SortOrder
+  employeeSignName?: Prisma.SortOrderInput | Prisma.SortOrder
+  employeeSignType?: Prisma.SortOrderInput | Prisma.SortOrder
   gender?: Prisma.SortOrder
   bloodGroup?: Prisma.SortOrder
   religion?: Prisma.SortOrder
@@ -456,12 +528,20 @@ export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
   monthlySalary?: Prisma.FloatFilter<"Employee"> | number
   picture?: Prisma.StringNullableFilter<"Employee"> | string | null
   picturePublicId?: Prisma.StringNullableFilter<"Employee"> | string | null
+  pictureName?: Prisma.StringNullableFilter<"Employee"> | string | null
+  pictureType?: Prisma.StringNullableFilter<"Employee"> | string | null
   experience?: Prisma.StringNullableFilter<"Employee"> | string | null
   experiencePublicId?: Prisma.StringNullableFilter<"Employee"> | string | null
+  experienceName?: Prisma.StringNullableFilter<"Employee"> | string | null
+  experienceType?: Prisma.StringNullableFilter<"Employee"> | string | null
   authoritySign?: Prisma.StringFilter<"Employee"> | string
   authoritySignPublicId?: Prisma.StringFilter<"Employee"> | string
-  EmployeeSign?: Prisma.StringFilter<"Employee"> | string
-  EmployeeSignPublicId?: Prisma.StringFilter<"Employee"> | string
+  authoritySignName?: Prisma.StringNullableFilter<"Employee"> | string | null
+  authoritySignType?: Prisma.StringNullableFilter<"Employee"> | string | null
+  employeeSign?: Prisma.StringFilter<"Employee"> | string
+  employeeSignPublicId?: Prisma.StringFilter<"Employee"> | string
+  employeeSignName?: Prisma.StringNullableFilter<"Employee"> | string | null
+  employeeSignType?: Prisma.StringNullableFilter<"Employee"> | string | null
   gender?: Prisma.EnumGenderFilter<"Employee"> | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFilter<"Employee"> | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFilter<"Employee"> | $Enums.Religion
@@ -489,12 +569,20 @@ export type EmployeeOrderByWithAggregationInput = {
   employeeId?: Prisma.SortOrder
   picture?: Prisma.SortOrderInput | Prisma.SortOrder
   picturePublicId?: Prisma.SortOrderInput | Prisma.SortOrder
+  pictureName?: Prisma.SortOrderInput | Prisma.SortOrder
+  pictureType?: Prisma.SortOrderInput | Prisma.SortOrder
   experience?: Prisma.SortOrderInput | Prisma.SortOrder
   experiencePublicId?: Prisma.SortOrderInput | Prisma.SortOrder
+  experienceName?: Prisma.SortOrderInput | Prisma.SortOrder
+  experienceType?: Prisma.SortOrderInput | Prisma.SortOrder
   authoritySign?: Prisma.SortOrder
   authoritySignPublicId?: Prisma.SortOrder
-  EmployeeSign?: Prisma.SortOrder
-  EmployeeSignPublicId?: Prisma.SortOrder
+  authoritySignName?: Prisma.SortOrderInput | Prisma.SortOrder
+  authoritySignType?: Prisma.SortOrderInput | Prisma.SortOrder
+  employeeSign?: Prisma.SortOrder
+  employeeSignPublicId?: Prisma.SortOrder
+  employeeSignName?: Prisma.SortOrderInput | Prisma.SortOrder
+  employeeSignType?: Prisma.SortOrderInput | Prisma.SortOrder
   gender?: Prisma.SortOrder
   bloodGroup?: Prisma.SortOrder
   religion?: Prisma.SortOrder
@@ -528,12 +616,20 @@ export type EmployeeScalarWhereWithAggregatesInput = {
   employeeId?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   picture?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   picturePublicId?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  pictureName?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  pictureType?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   experience?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   experiencePublicId?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  experienceName?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  experienceType?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   authoritySign?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   authoritySignPublicId?: Prisma.StringWithAggregatesFilter<"Employee"> | string
-  EmployeeSign?: Prisma.StringWithAggregatesFilter<"Employee"> | string
-  EmployeeSignPublicId?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  authoritySignName?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  authoritySignType?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  employeeSign?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  employeeSignPublicId?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  employeeSignName?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  employeeSignType?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   gender?: Prisma.EnumGenderWithAggregatesFilter<"Employee"> | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupWithAggregatesFilter<"Employee"> | $Enums.BloodGroup
   religion?: Prisma.EnumReligionWithAggregatesFilter<"Employee"> | $Enums.Religion
@@ -558,12 +654,20 @@ export type EmployeeCreateInput = {
   employeeId: string
   picture?: string | null
   picturePublicId?: string | null
+  pictureName?: string | null
+  pictureType?: string | null
   experience?: string | null
   experiencePublicId?: string | null
+  experienceName?: string | null
+  experienceType?: string | null
   authoritySign: string
   authoritySignPublicId: string
-  EmployeeSign: string
-  EmployeeSignPublicId: string
+  authoritySignName?: string | null
+  authoritySignType?: string | null
+  employeeSign: string
+  employeeSignPublicId: string
+  employeeSignName?: string | null
+  employeeSignType?: string | null
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
@@ -592,12 +696,20 @@ export type EmployeeUncheckedCreateInput = {
   employeeId: string
   picture?: string | null
   picturePublicId?: string | null
+  pictureName?: string | null
+  pictureType?: string | null
   experience?: string | null
   experiencePublicId?: string | null
+  experienceName?: string | null
+  experienceType?: string | null
   authoritySign: string
   authoritySignPublicId: string
-  EmployeeSign: string
-  EmployeeSignPublicId: string
+  authoritySignName?: string | null
+  authoritySignType?: string | null
+  employeeSign: string
+  employeeSignPublicId: string
+  employeeSignName?: string | null
+  employeeSignType?: string | null
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
@@ -624,12 +736,20 @@ export type EmployeeUpdateInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   picturePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experiencePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   authoritySignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  authoritySignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authoritySignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSign?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
@@ -658,12 +778,20 @@ export type EmployeeUncheckedUpdateInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   picturePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experiencePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   authoritySignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  authoritySignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authoritySignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSign?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
@@ -691,12 +819,20 @@ export type EmployeeCreateManyInput = {
   employeeId: string
   picture?: string | null
   picturePublicId?: string | null
+  pictureName?: string | null
+  pictureType?: string | null
   experience?: string | null
   experiencePublicId?: string | null
+  experienceName?: string | null
+  experienceType?: string | null
   authoritySign: string
   authoritySignPublicId: string
-  EmployeeSign: string
-  EmployeeSignPublicId: string
+  authoritySignName?: string | null
+  authoritySignType?: string | null
+  employeeSign: string
+  employeeSignPublicId: string
+  employeeSignName?: string | null
+  employeeSignType?: string | null
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
@@ -721,12 +857,20 @@ export type EmployeeUpdateManyMutationInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   picturePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experiencePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   authoritySignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  authoritySignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authoritySignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSign?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
@@ -752,12 +896,20 @@ export type EmployeeUncheckedUpdateManyInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   picturePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experiencePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   authoritySignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  authoritySignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authoritySignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSign?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
@@ -788,12 +940,20 @@ export type EmployeeCountOrderByAggregateInput = {
   employeeId?: Prisma.SortOrder
   picture?: Prisma.SortOrder
   picturePublicId?: Prisma.SortOrder
+  pictureName?: Prisma.SortOrder
+  pictureType?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   experiencePublicId?: Prisma.SortOrder
+  experienceName?: Prisma.SortOrder
+  experienceType?: Prisma.SortOrder
   authoritySign?: Prisma.SortOrder
   authoritySignPublicId?: Prisma.SortOrder
-  EmployeeSign?: Prisma.SortOrder
-  EmployeeSignPublicId?: Prisma.SortOrder
+  authoritySignName?: Prisma.SortOrder
+  authoritySignType?: Prisma.SortOrder
+  employeeSign?: Prisma.SortOrder
+  employeeSignPublicId?: Prisma.SortOrder
+  employeeSignName?: Prisma.SortOrder
+  employeeSignType?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   bloodGroup?: Prisma.SortOrder
   religion?: Prisma.SortOrder
@@ -823,12 +983,20 @@ export type EmployeeMaxOrderByAggregateInput = {
   employeeId?: Prisma.SortOrder
   picture?: Prisma.SortOrder
   picturePublicId?: Prisma.SortOrder
+  pictureName?: Prisma.SortOrder
+  pictureType?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   experiencePublicId?: Prisma.SortOrder
+  experienceName?: Prisma.SortOrder
+  experienceType?: Prisma.SortOrder
   authoritySign?: Prisma.SortOrder
   authoritySignPublicId?: Prisma.SortOrder
-  EmployeeSign?: Prisma.SortOrder
-  EmployeeSignPublicId?: Prisma.SortOrder
+  authoritySignName?: Prisma.SortOrder
+  authoritySignType?: Prisma.SortOrder
+  employeeSign?: Prisma.SortOrder
+  employeeSignPublicId?: Prisma.SortOrder
+  employeeSignName?: Prisma.SortOrder
+  employeeSignType?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   bloodGroup?: Prisma.SortOrder
   religion?: Prisma.SortOrder
@@ -854,12 +1022,20 @@ export type EmployeeMinOrderByAggregateInput = {
   employeeId?: Prisma.SortOrder
   picture?: Prisma.SortOrder
   picturePublicId?: Prisma.SortOrder
+  pictureName?: Prisma.SortOrder
+  pictureType?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   experiencePublicId?: Prisma.SortOrder
+  experienceName?: Prisma.SortOrder
+  experienceType?: Prisma.SortOrder
   authoritySign?: Prisma.SortOrder
   authoritySignPublicId?: Prisma.SortOrder
-  EmployeeSign?: Prisma.SortOrder
-  EmployeeSignPublicId?: Prisma.SortOrder
+  authoritySignName?: Prisma.SortOrder
+  authoritySignType?: Prisma.SortOrder
+  employeeSign?: Prisma.SortOrder
+  employeeSignPublicId?: Prisma.SortOrder
+  employeeSignName?: Prisma.SortOrder
+  employeeSignType?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   bloodGroup?: Prisma.SortOrder
   religion?: Prisma.SortOrder
@@ -979,12 +1155,20 @@ export type EmployeeCreateWithoutUserInput = {
   employeeId: string
   picture?: string | null
   picturePublicId?: string | null
+  pictureName?: string | null
+  pictureType?: string | null
   experience?: string | null
   experiencePublicId?: string | null
+  experienceName?: string | null
+  experienceType?: string | null
   authoritySign: string
   authoritySignPublicId: string
-  EmployeeSign: string
-  EmployeeSignPublicId: string
+  authoritySignName?: string | null
+  authoritySignType?: string | null
+  employeeSign: string
+  employeeSignPublicId: string
+  employeeSignName?: string | null
+  employeeSignType?: string | null
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
@@ -1011,12 +1195,20 @@ export type EmployeeUncheckedCreateWithoutUserInput = {
   employeeId: string
   picture?: string | null
   picturePublicId?: string | null
+  pictureName?: string | null
+  pictureType?: string | null
   experience?: string | null
   experiencePublicId?: string | null
+  experienceName?: string | null
+  experienceType?: string | null
   authoritySign: string
   authoritySignPublicId: string
-  EmployeeSign: string
-  EmployeeSignPublicId: string
+  authoritySignName?: string | null
+  authoritySignType?: string | null
+  employeeSign: string
+  employeeSignPublicId: string
+  employeeSignName?: string | null
+  employeeSignType?: string | null
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
@@ -1059,12 +1251,20 @@ export type EmployeeUpdateWithoutUserInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   picturePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experiencePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   authoritySignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  authoritySignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authoritySignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSign?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
@@ -1091,12 +1291,20 @@ export type EmployeeUncheckedUpdateWithoutUserInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   picturePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experiencePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   authoritySignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  authoritySignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authoritySignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSign?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
@@ -1123,12 +1331,20 @@ export type EmployeeCreateWithoutTutorProfilesInput = {
   employeeId: string
   picture?: string | null
   picturePublicId?: string | null
+  pictureName?: string | null
+  pictureType?: string | null
   experience?: string | null
   experiencePublicId?: string | null
+  experienceName?: string | null
+  experienceType?: string | null
   authoritySign: string
   authoritySignPublicId: string
-  EmployeeSign: string
-  EmployeeSignPublicId: string
+  authoritySignName?: string | null
+  authoritySignType?: string | null
+  employeeSign: string
+  employeeSignPublicId: string
+  employeeSignName?: string | null
+  employeeSignType?: string | null
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
@@ -1156,12 +1372,20 @@ export type EmployeeUncheckedCreateWithoutTutorProfilesInput = {
   employeeId: string
   picture?: string | null
   picturePublicId?: string | null
+  pictureName?: string | null
+  pictureType?: string | null
   experience?: string | null
   experiencePublicId?: string | null
+  experienceName?: string | null
+  experienceType?: string | null
   authoritySign: string
   authoritySignPublicId: string
-  EmployeeSign: string
-  EmployeeSignPublicId: string
+  authoritySignName?: string | null
+  authoritySignType?: string | null
+  employeeSign: string
+  employeeSignPublicId: string
+  employeeSignName?: string | null
+  employeeSignType?: string | null
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
@@ -1203,12 +1427,20 @@ export type EmployeeUpdateWithoutTutorProfilesInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   picturePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experiencePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   authoritySignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  authoritySignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authoritySignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSign?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
@@ -1236,12 +1468,20 @@ export type EmployeeUncheckedUpdateWithoutTutorProfilesInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   picturePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experiencePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   authoritySignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  authoritySignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authoritySignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSign?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
@@ -1267,12 +1507,20 @@ export type EmployeeCreateWithoutAddressInput = {
   employeeId: string
   picture?: string | null
   picturePublicId?: string | null
+  pictureName?: string | null
+  pictureType?: string | null
   experience?: string | null
   experiencePublicId?: string | null
+  experienceName?: string | null
+  experienceType?: string | null
   authoritySign: string
   authoritySignPublicId: string
-  EmployeeSign: string
-  EmployeeSignPublicId: string
+  authoritySignName?: string | null
+  authoritySignType?: string | null
+  employeeSign: string
+  employeeSignPublicId: string
+  employeeSignName?: string | null
+  employeeSignType?: string | null
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
@@ -1300,12 +1548,20 @@ export type EmployeeUncheckedCreateWithoutAddressInput = {
   employeeId: string
   picture?: string | null
   picturePublicId?: string | null
+  pictureName?: string | null
+  pictureType?: string | null
   experience?: string | null
   experiencePublicId?: string | null
+  experienceName?: string | null
+  experienceType?: string | null
   authoritySign: string
   authoritySignPublicId: string
-  EmployeeSign: string
-  EmployeeSignPublicId: string
+  authoritySignName?: string | null
+  authoritySignType?: string | null
+  employeeSign: string
+  employeeSignPublicId: string
+  employeeSignName?: string | null
+  employeeSignType?: string | null
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
@@ -1347,12 +1603,20 @@ export type EmployeeUpdateWithoutAddressInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   picturePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experiencePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   authoritySignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  authoritySignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authoritySignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSign?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
@@ -1380,12 +1644,20 @@ export type EmployeeUncheckedUpdateWithoutAddressInput = {
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   picturePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pictureType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experiencePublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authoritySign?: Prisma.StringFieldUpdateOperationsInput | string
   authoritySignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSign?: Prisma.StringFieldUpdateOperationsInput | string
-  EmployeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  authoritySignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authoritySignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSign?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeSignName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeSignType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
@@ -1443,12 +1715,20 @@ export type EmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   employeeId?: boolean
   picture?: boolean
   picturePublicId?: boolean
+  pictureName?: boolean
+  pictureType?: boolean
   experience?: boolean
   experiencePublicId?: boolean
+  experienceName?: boolean
+  experienceType?: boolean
   authoritySign?: boolean
   authoritySignPublicId?: boolean
-  EmployeeSign?: boolean
-  EmployeeSignPublicId?: boolean
+  authoritySignName?: boolean
+  authoritySignType?: boolean
+  employeeSign?: boolean
+  employeeSignPublicId?: boolean
+  employeeSignName?: boolean
+  employeeSignType?: boolean
   gender?: boolean
   bloodGroup?: boolean
   religion?: boolean
@@ -1478,12 +1758,20 @@ export type EmployeeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   employeeId?: boolean
   picture?: boolean
   picturePublicId?: boolean
+  pictureName?: boolean
+  pictureType?: boolean
   experience?: boolean
   experiencePublicId?: boolean
+  experienceName?: boolean
+  experienceType?: boolean
   authoritySign?: boolean
   authoritySignPublicId?: boolean
-  EmployeeSign?: boolean
-  EmployeeSignPublicId?: boolean
+  authoritySignName?: boolean
+  authoritySignType?: boolean
+  employeeSign?: boolean
+  employeeSignPublicId?: boolean
+  employeeSignName?: boolean
+  employeeSignType?: boolean
   gender?: boolean
   bloodGroup?: boolean
   religion?: boolean
@@ -1510,12 +1798,20 @@ export type EmployeeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   employeeId?: boolean
   picture?: boolean
   picturePublicId?: boolean
+  pictureName?: boolean
+  pictureType?: boolean
   experience?: boolean
   experiencePublicId?: boolean
+  experienceName?: boolean
+  experienceType?: boolean
   authoritySign?: boolean
   authoritySignPublicId?: boolean
-  EmployeeSign?: boolean
-  EmployeeSignPublicId?: boolean
+  authoritySignName?: boolean
+  authoritySignType?: boolean
+  employeeSign?: boolean
+  employeeSignPublicId?: boolean
+  employeeSignName?: boolean
+  employeeSignType?: boolean
   gender?: boolean
   bloodGroup?: boolean
   religion?: boolean
@@ -1542,12 +1838,20 @@ export type EmployeeSelectScalar = {
   employeeId?: boolean
   picture?: boolean
   picturePublicId?: boolean
+  pictureName?: boolean
+  pictureType?: boolean
   experience?: boolean
   experiencePublicId?: boolean
+  experienceName?: boolean
+  experienceType?: boolean
   authoritySign?: boolean
   authoritySignPublicId?: boolean
-  EmployeeSign?: boolean
-  EmployeeSignPublicId?: boolean
+  authoritySignName?: boolean
+  authoritySignType?: boolean
+  employeeSign?: boolean
+  employeeSignPublicId?: boolean
+  employeeSignName?: boolean
+  employeeSignType?: boolean
   gender?: boolean
   bloodGroup?: boolean
   religion?: boolean
@@ -1560,7 +1864,7 @@ export type EmployeeSelectScalar = {
   deletedAt?: boolean
 }
 
-export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "phone" | "fullName" | "nid" | "fatherName" | "motherName" | "emergencyContactNumber" | "monthlySalary" | "employeeId" | "picture" | "picturePublicId" | "experience" | "experiencePublicId" | "authoritySign" | "authoritySignPublicId" | "EmployeeSign" | "EmployeeSignPublicId" | "gender" | "bloodGroup" | "religion" | "employeeRole" | "dateOfJoining" | "birthRegistrationNumber" | "isdeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["employee"]>
+export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "phone" | "fullName" | "nid" | "fatherName" | "motherName" | "emergencyContactNumber" | "monthlySalary" | "employeeId" | "picture" | "picturePublicId" | "pictureName" | "pictureType" | "experience" | "experiencePublicId" | "experienceName" | "experienceType" | "authoritySign" | "authoritySignPublicId" | "authoritySignName" | "authoritySignType" | "employeeSign" | "employeeSignPublicId" | "employeeSignName" | "employeeSignType" | "gender" | "bloodGroup" | "religion" | "employeeRole" | "dateOfJoining" | "birthRegistrationNumber" | "isdeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["employee"]>
 export type EmployeeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   tutorProfiles?: boolean | Prisma.Employee$tutorProfilesArgs<ExtArgs>
@@ -1594,12 +1898,20 @@ export type $EmployeePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     employeeId: string
     picture: string | null
     picturePublicId: string | null
+    pictureName: string | null
+    pictureType: string | null
     experience: string | null
     experiencePublicId: string | null
+    experienceName: string | null
+    experienceType: string | null
     authoritySign: string
     authoritySignPublicId: string
-    EmployeeSign: string
-    EmployeeSignPublicId: string
+    authoritySignName: string | null
+    authoritySignType: string | null
+    employeeSign: string
+    employeeSignPublicId: string
+    employeeSignName: string | null
+    employeeSignType: string | null
     gender: $Enums.Gender
     bloodGroup: $Enums.BloodGroup
     religion: $Enums.Religion
@@ -2048,12 +2360,20 @@ export interface EmployeeFieldRefs {
   readonly employeeId: Prisma.FieldRef<"Employee", 'String'>
   readonly picture: Prisma.FieldRef<"Employee", 'String'>
   readonly picturePublicId: Prisma.FieldRef<"Employee", 'String'>
+  readonly pictureName: Prisma.FieldRef<"Employee", 'String'>
+  readonly pictureType: Prisma.FieldRef<"Employee", 'String'>
   readonly experience: Prisma.FieldRef<"Employee", 'String'>
   readonly experiencePublicId: Prisma.FieldRef<"Employee", 'String'>
+  readonly experienceName: Prisma.FieldRef<"Employee", 'String'>
+  readonly experienceType: Prisma.FieldRef<"Employee", 'String'>
   readonly authoritySign: Prisma.FieldRef<"Employee", 'String'>
   readonly authoritySignPublicId: Prisma.FieldRef<"Employee", 'String'>
-  readonly EmployeeSign: Prisma.FieldRef<"Employee", 'String'>
-  readonly EmployeeSignPublicId: Prisma.FieldRef<"Employee", 'String'>
+  readonly authoritySignName: Prisma.FieldRef<"Employee", 'String'>
+  readonly authoritySignType: Prisma.FieldRef<"Employee", 'String'>
+  readonly employeeSign: Prisma.FieldRef<"Employee", 'String'>
+  readonly employeeSignPublicId: Prisma.FieldRef<"Employee", 'String'>
+  readonly employeeSignName: Prisma.FieldRef<"Employee", 'String'>
+  readonly employeeSignType: Prisma.FieldRef<"Employee", 'String'>
   readonly gender: Prisma.FieldRef<"Employee", 'Gender'>
   readonly bloodGroup: Prisma.FieldRef<"Employee", 'BloodGroup'>
   readonly religion: Prisma.FieldRef<"Employee", 'Religion'>

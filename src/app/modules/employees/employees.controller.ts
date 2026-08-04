@@ -5,7 +5,10 @@ import status from "http-status";
 import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
 import { IQueryParams } from "../../interfaces/query.interface";
 import { sendResponse } from "../../shared/sendResponse";
-import { createEmployeeSchema } from "./employees.validation";
+import {
+    createEmployeeSchema,
+    updateEmployeeSchema,
+} from "./employees.validation";
 import { EmployeeService } from "./employess.service";
 
 const getAllEmployees = async (req: Request, res: Response) => {
@@ -58,6 +61,25 @@ const createEmployee = async (req: Request, res: Response) => {
     });
 };
 
+const updateEmployee = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const payload = updateEmployeeSchema.parse(JSON.parse(req.body.data));
+    const files = req.files as Record<string, UploadFile[]>;
+
+    const employee = await EmployeeService.updateEmployee(
+        id as string,
+        payload,
+        files,
+    );
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Employee Updated Successfully",
+        data: employee,
+    });
+};
+
 const deleteEmployee = async (req: Request, res: Response) => {
     const { id } = req.params;
 
@@ -75,5 +97,6 @@ export const EmployeeController = {
     getAllEmployees,
     getEmployeeById,
     createEmployee,
+    updateEmployee,
     deleteEmployee,
 };

@@ -74,15 +74,10 @@ export const createEmployeeSchema = z.object({
         error: "Religion must be one of: " + Object.values(Religion).join(", "),
     }),
 
-    role: z.enum(UserRole, {
-        error:
-            "User Role must be one of: " + Object.values(UserRole).join(", "),
-    }),
-
     employeeRole: z.enum(EmployeeRole, {
         error:
             "Employee role must be one of: " +
-            Object.values(EmployeeRole).join(", "),
+            Object.values(UserRole).join(", "),
     }),
 
     emergencyContact: z
@@ -111,3 +106,26 @@ export const createEmployeeSchema = z.object({
 });
 
 export type EmployeePayload = z.infer<typeof createEmployeeSchema>;
+
+export const updateEmployeeSchema = z.object({
+    fullName: z.string().optional(),
+    fatherName: z.string().optional(),
+    motherName: z.string().optional(),
+    phone: z.string().optional(),
+    gender: z.enum(Gender).optional(),
+    bloodGroup: z.enum(BloodGroup).optional(),
+    religion: z.enum(Religion).optional(),
+    employeeRole: z.enum(EmployeeRole).optional(),
+    emergencyContact: z.string().optional(),
+    monthlySalary: z.coerce.number().optional(),
+    dateOfJoining: z.string().optional(),
+    nid: z.string().optional(),
+    address: z
+        .object({
+            present: presentAddressSchema.partial().optional(),
+            permanent: permanentAddressSchema.partial().optional(),
+        })
+        .optional(),
+});
+
+export type IUpdatePayload = z.infer<typeof updateEmployeeSchema>;

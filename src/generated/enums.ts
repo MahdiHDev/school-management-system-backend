@@ -14,7 +14,12 @@ export const UserRole = {
   ADMIN: 'ADMIN',
   TEACHER: 'TEACHER',
   STUDENT: 'STUDENT',
-  EMPLOYEE: 'EMPLOYEE'
+  PRINCIPAL: 'PRINCIPAL',
+  MANAGEMENT_STAFF: 'MANAGEMENT_STAFF',
+  ACCOUNTANT: 'ACCOUNTANT',
+  STORE_MANAGER: 'STORE_MANAGER',
+  LIBRARIAN: 'LIBRARIAN',
+  OTHER: 'OTHER'
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
