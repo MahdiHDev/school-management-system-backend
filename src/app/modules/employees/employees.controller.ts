@@ -38,6 +38,21 @@ const getEmployeeById = async (req: Request, res: Response) => {
     });
 };
 
+const getEmployeeByIdForUpdate = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const employee = await EmployeeService.getEmployeeByIdForUpdate(
+        id as string,
+    );
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Employee For Update fetched successfully",
+        data: employee,
+    });
+};
+
 const createEmployee = async (req: Request, res: Response) => {
     const payload = createEmployeeSchema.parse(JSON.parse(req.body.data));
     const files = req.files as Record<string, UploadFile[]>;
@@ -63,7 +78,9 @@ const createEmployee = async (req: Request, res: Response) => {
 
 const updateEmployee = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const payload = updateEmployeeSchema.parse(JSON.parse(req.body.data));
+    const payload = req.body.data
+        ? updateEmployeeSchema.parse(JSON.parse(req.body.data))
+        : {};
     const files = req.files as Record<string, UploadFile[]>;
 
     const employee = await EmployeeService.updateEmployee(
@@ -99,4 +116,5 @@ export const EmployeeController = {
     createEmployee,
     updateEmployee,
     deleteEmployee,
+    getEmployeeByIdForUpdate,
 };

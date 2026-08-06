@@ -16,6 +16,13 @@ router.get(
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
     EmployeeController.getEmployeeById,
 );
+
+router.get(
+    "/:id/update",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    EmployeeController.getEmployeeByIdForUpdate,
+);
+
 router.post(
     "/",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),

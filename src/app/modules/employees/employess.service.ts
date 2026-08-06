@@ -84,6 +84,10 @@ const getEmployeeById = async (id: string) => {
         },
     });
 
+    if (!employee || employee.isdeleted) {
+        throw new AppError(status.NOT_FOUND, "Employee not found");
+    }
+
     return employee;
 };
 
@@ -150,9 +154,17 @@ const getEmployeeByIdForUpdate = async (id: string) => {
                 },
             },
             picture: true,
+            pictureName: true,
+            pictureType: true,
             authoritySign: true,
-            EmployeeSign: true,
+            authoritySignName: true,
+            authoritySignType: true,
+            employeeSign: true,
+            employeeSignName: true,
+            employeeSignType: true,
             experience: true,
+            experienceName: true,
+            experienceType: true,
         },
     });
 
@@ -164,26 +176,60 @@ const getEmployeeByIdForUpdate = async (id: string) => {
         throw new AppError(status.NOT_FOUND, "Employee address not found");
     }
 
-    const formattedEmployee = employee
-        ? {
-              ...employee,
+    const {
+        pictureName,
+        pictureType,
+        authoritySignName,
+        authoritySignType,
+        employeeSignName,
+        employeeSignType,
+        experienceName,
+        experienceType,
+        ...employeeData
+    } = employee;
 
-              address: {
-                  present: {
-                      village: employee?.address.presentAddressVillage,
-                      postOffice: employee?.address.presentAddressPostOffice,
-                      postCode: employee?.address.presentAddressPostCode,
-                      district: employee?.address.presentAddressDistrict,
-                  },
-                  permanent: {
-                      village: employee?.address.permanentAddressVillage,
-                      postOffice: employee?.address.permanentAddressPostOffice,
-                      postCode: employee?.address.permanentAddressPostCode,
-                      district: employee?.address.permanentAddressDistrict,
-                  },
-              },
-          }
-        : null;
+    const formattedEmployee = {
+        ...employeeData,
+
+        picture: {
+            uri: employee.picture,
+            name: pictureName,
+            type: pictureType,
+        },
+
+        authoritySign: {
+            uri: employee.authoritySign,
+            name: authoritySignName,
+            type: authoritySignType,
+        },
+
+        employeeSign: {
+            uri: employee.employeeSign,
+            name: employeeSignName,
+            type: employeeSignType,
+        },
+
+        experience: {
+            uri: employee.experience,
+            name: experienceName,
+            type: experienceType,
+        },
+
+        address: {
+            present: {
+                village: employee.address.presentAddressVillage,
+                postOffice: employee.address.presentAddressPostOffice,
+                postCode: employee.address.presentAddressPostCode,
+                district: employee.address.presentAddressDistrict,
+            },
+            permanent: {
+                village: employee.address.permanentAddressVillage,
+                postOffice: employee.address.permanentAddressPostOffice,
+                postCode: employee.address.permanentAddressPostCode,
+                district: employee.address.permanentAddressDistrict,
+            },
+        },
+    };
 
     return formattedEmployee;
 };
@@ -589,21 +635,37 @@ const updateEmployee = async (
                     ...(picture && {
                         picture: picture.secure_url,
                         picturePublicId: picture.public_id,
+                        ...(pictureFile !== undefined && {
+                            pictureName: pictureFile.originalname,
+                            pictureType: pictureFile.mimetype,
+                        }),
                     }),
 
                     ...(authoritySign && {
                         authoritySign: authoritySign.secure_url,
                         authoritySignPublicId: authoritySign.public_id,
+                        ...(authoritySignFile !== undefined && {
+                            authoritySignName: authoritySignFile.originalname,
+                            authoritySignType: authoritySignFile.mimetype,
+                        }),
                     }),
 
                     ...(employeeSign && {
                         employeeSign: employeeSign.secure_url,
                         employeeSignPublicId: employeeSign.public_id,
+                        ...(employeeSignFile !== undefined && {
+                            employeeSignName: employeeSignFile.originalname,
+                            employeeSignType: employeeSignFile.mimetype,
+                        }),
                     }),
 
                     ...(experience && {
                         experience: experience.secure_url,
                         experiencePublicId: experience.public_id,
+                        ...(experienceFile !== undefined && {
+                            experienceName: experienceFile.originalname,
+                            experienceType: experienceFile.mimetype,
+                        }),
                     }),
                 },
                 include: {
@@ -653,7 +715,7 @@ const deleteEmployee = async (id: string) => {
             userId: true,
             picturePublicId: true,
             authoritySignPublicId: true,
-            EmployeeSignPublicId: true,
+            employeeSignPublicId: true,
             experiencePublicId: true,
         },
     });
@@ -694,8 +756,8 @@ const deleteEmployee = async (id: string) => {
             ? CloudinaryService.delete(employee.authoritySignPublicId)
             : Promise.resolve(),
 
-        employee.EmployeeSignPublicId
-            ? CloudinaryService.delete(employee.EmployeeSignPublicId)
+        employee.employeeSignPublicId
+            ? CloudinaryService.delete(employee.employeeSignPublicId)
             : Promise.resolve(),
 
         employee.experiencePublicId
@@ -709,6 +771,7 @@ const deleteEmployee = async (id: string) => {
 export const EmployeeService = {
     getAllEmployees,
     getEmployeeById,
+    getEmployeeByIdForUpdate,
     createEmployee,
     updateEmployee,
     deleteEmployee,
