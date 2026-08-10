@@ -166,7 +166,7 @@ export const EmployeeScalarFieldEnum = {
   nid: 'nid',
   fatherName: 'fatherName',
   motherName: 'motherName',
-  emergencyContactNumber: 'emergencyContactNumber',
+  emergencyContact: 'emergencyContact',
   monthlySalary: 'monthlySalary',
   employeeId: 'employeeId',
   picture: 'picture',

@@ -135,7 +135,7 @@ const getEmployeeByIdForUpdate = async (id: string) => {
             bloodGroup: true,
             religion: true,
             employeeRole: true,
-            emergencyContactNumber: true,
+            emergencyContact: true,
             monthlySalary: true,
             dateOfJoining: true,
             phone: true,
@@ -165,6 +165,11 @@ const getEmployeeByIdForUpdate = async (id: string) => {
             experience: true,
             experienceName: true,
             experienceType: true,
+            user: {
+                select: {
+                    email: true,
+                },
+            },
         },
     });
 
@@ -185,6 +190,7 @@ const getEmployeeByIdForUpdate = async (id: string) => {
         employeeSignType,
         experienceName,
         experienceType,
+        user: { email },
         ...employeeData
     } = employee;
 
@@ -209,11 +215,13 @@ const getEmployeeByIdForUpdate = async (id: string) => {
             type: employeeSignType,
         },
 
-        experience: {
-            uri: employee.experience,
-            name: experienceName,
-            type: experienceType,
-        },
+        experience: employee.experience
+            ? {
+                  uri: employee.experience,
+                  name: experienceName,
+                  type: experienceType,
+              }
+            : null,
 
         address: {
             present: {
@@ -229,6 +237,8 @@ const getEmployeeByIdForUpdate = async (id: string) => {
                 district: employee.address.permanentAddressDistrict,
             },
         },
+
+        email,
     };
 
     return formattedEmployee;
@@ -345,7 +355,7 @@ const createEmployee = async (
                     nid: payload.nid,
                     fatherName: payload.fatherName,
                     motherName: payload.motherName,
-                    emergencyContactNumber: payload.emergencyContact ?? null,
+                    emergencyContact: payload.emergencyContact ?? null,
                     monthlySalary: payload.monthlySalary,
                     authoritySign: authoritySign.secure_url,
                     authoritySignPublicId: authoritySign.public_id ?? null,
@@ -629,7 +639,7 @@ const updateEmployee = async (
                     }),
 
                     ...(payload.emergencyContact !== undefined && {
-                        emergencyContactNumber: payload.emergencyContact,
+                        emergencyContact: payload.emergencyContact,
                     }),
 
                     ...(picture && {

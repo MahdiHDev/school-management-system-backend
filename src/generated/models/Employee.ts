@@ -42,7 +42,7 @@ export type EmployeeMinAggregateOutputType = {
   nid: string | null
   fatherName: string | null
   motherName: string | null
-  emergencyContactNumber: string | null
+  emergencyContact: string | null
   monthlySalary: number | null
   employeeId: string | null
   picture: string | null
@@ -81,7 +81,7 @@ export type EmployeeMaxAggregateOutputType = {
   nid: string | null
   fatherName: string | null
   motherName: string | null
-  emergencyContactNumber: string | null
+  emergencyContact: string | null
   monthlySalary: number | null
   employeeId: string | null
   picture: string | null
@@ -120,7 +120,7 @@ export type EmployeeCountAggregateOutputType = {
   nid: number
   fatherName: number
   motherName: number
-  emergencyContactNumber: number
+  emergencyContact: number
   monthlySalary: number
   employeeId: number
   picture: number
@@ -169,7 +169,7 @@ export type EmployeeMinAggregateInputType = {
   nid?: true
   fatherName?: true
   motherName?: true
-  emergencyContactNumber?: true
+  emergencyContact?: true
   monthlySalary?: true
   employeeId?: true
   picture?: true
@@ -208,7 +208,7 @@ export type EmployeeMaxAggregateInputType = {
   nid?: true
   fatherName?: true
   motherName?: true
-  emergencyContactNumber?: true
+  emergencyContact?: true
   monthlySalary?: true
   employeeId?: true
   picture?: true
@@ -247,7 +247,7 @@ export type EmployeeCountAggregateInputType = {
   nid?: true
   fatherName?: true
   motherName?: true
-  emergencyContactNumber?: true
+  emergencyContact?: true
   monthlySalary?: true
   employeeId?: true
   picture?: true
@@ -373,7 +373,7 @@ export type EmployeeGroupByOutputType = {
   nid: string
   fatherName: string
   motherName: string
-  emergencyContactNumber: string | null
+  emergencyContact: string | null
   monthlySalary: number
   employeeId: string
   picture: string | null
@@ -435,7 +435,7 @@ export type EmployeeWhereInput = {
   nid?: Prisma.StringFilter<"Employee"> | string
   fatherName?: Prisma.StringFilter<"Employee"> | string
   motherName?: Prisma.StringFilter<"Employee"> | string
-  emergencyContactNumber?: Prisma.StringNullableFilter<"Employee"> | string | null
+  emergencyContact?: Prisma.StringNullableFilter<"Employee"> | string | null
   monthlySalary?: Prisma.FloatFilter<"Employee"> | number
   employeeId?: Prisma.StringFilter<"Employee"> | string
   picture?: Prisma.StringNullableFilter<"Employee"> | string | null
@@ -477,7 +477,7 @@ export type EmployeeOrderByWithRelationInput = {
   nid?: Prisma.SortOrder
   fatherName?: Prisma.SortOrder
   motherName?: Prisma.SortOrder
-  emergencyContactNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  emergencyContact?: Prisma.SortOrderInput | Prisma.SortOrder
   monthlySalary?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   picture?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -524,7 +524,7 @@ export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
   fullName?: Prisma.StringFilter<"Employee"> | string
   fatherName?: Prisma.StringFilter<"Employee"> | string
   motherName?: Prisma.StringFilter<"Employee"> | string
-  emergencyContactNumber?: Prisma.StringNullableFilter<"Employee"> | string | null
+  emergencyContact?: Prisma.StringNullableFilter<"Employee"> | string | null
   monthlySalary?: Prisma.FloatFilter<"Employee"> | number
   picture?: Prisma.StringNullableFilter<"Employee"> | string | null
   picturePublicId?: Prisma.StringNullableFilter<"Employee"> | string | null
@@ -564,7 +564,7 @@ export type EmployeeOrderByWithAggregationInput = {
   nid?: Prisma.SortOrder
   fatherName?: Prisma.SortOrder
   motherName?: Prisma.SortOrder
-  emergencyContactNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  emergencyContact?: Prisma.SortOrderInput | Prisma.SortOrder
   monthlySalary?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   picture?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -611,7 +611,7 @@ export type EmployeeScalarWhereWithAggregatesInput = {
   nid?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   fatherName?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   motherName?: Prisma.StringWithAggregatesFilter<"Employee"> | string
-  emergencyContactNumber?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  emergencyContact?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   monthlySalary?: Prisma.FloatWithAggregatesFilter<"Employee"> | number
   employeeId?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   picture?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
@@ -649,7 +649,7 @@ export type EmployeeCreateInput = {
   nid: string
   fatherName: string
   motherName: string
-  emergencyContactNumber?: string | null
+  emergencyContact?: string | null
   monthlySalary: number
   employeeId: string
   picture?: string | null
@@ -691,7 +691,7 @@ export type EmployeeUncheckedCreateInput = {
   nid: string
   fatherName: string
   motherName: string
-  emergencyContactNumber?: string | null
+  emergencyContact?: string | null
   monthlySalary: number
   employeeId: string
   picture?: string | null
@@ -731,7 +731,7 @@ export type EmployeeUpdateInput = {
   nid?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
-  emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -773,7 +773,7 @@ export type EmployeeUncheckedUpdateInput = {
   nid?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
-  emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -814,7 +814,7 @@ export type EmployeeCreateManyInput = {
   nid: string
   fatherName: string
   motherName: string
-  emergencyContactNumber?: string | null
+  emergencyContact?: string | null
   monthlySalary: number
   employeeId: string
   picture?: string | null
@@ -852,7 +852,7 @@ export type EmployeeUpdateManyMutationInput = {
   nid?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
-  emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -891,7 +891,7 @@ export type EmployeeUncheckedUpdateManyInput = {
   nid?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
-  emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -935,7 +935,7 @@ export type EmployeeCountOrderByAggregateInput = {
   nid?: Prisma.SortOrder
   fatherName?: Prisma.SortOrder
   motherName?: Prisma.SortOrder
-  emergencyContactNumber?: Prisma.SortOrder
+  emergencyContact?: Prisma.SortOrder
   monthlySalary?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   picture?: Prisma.SortOrder
@@ -978,7 +978,7 @@ export type EmployeeMaxOrderByAggregateInput = {
   nid?: Prisma.SortOrder
   fatherName?: Prisma.SortOrder
   motherName?: Prisma.SortOrder
-  emergencyContactNumber?: Prisma.SortOrder
+  emergencyContact?: Prisma.SortOrder
   monthlySalary?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   picture?: Prisma.SortOrder
@@ -1017,7 +1017,7 @@ export type EmployeeMinOrderByAggregateInput = {
   nid?: Prisma.SortOrder
   fatherName?: Prisma.SortOrder
   motherName?: Prisma.SortOrder
-  emergencyContactNumber?: Prisma.SortOrder
+  emergencyContact?: Prisma.SortOrder
   monthlySalary?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   picture?: Prisma.SortOrder
@@ -1150,7 +1150,7 @@ export type EmployeeCreateWithoutUserInput = {
   nid: string
   fatherName: string
   motherName: string
-  emergencyContactNumber?: string | null
+  emergencyContact?: string | null
   monthlySalary: number
   employeeId: string
   picture?: string | null
@@ -1190,7 +1190,7 @@ export type EmployeeUncheckedCreateWithoutUserInput = {
   nid: string
   fatherName: string
   motherName: string
-  emergencyContactNumber?: string | null
+  emergencyContact?: string | null
   monthlySalary: number
   employeeId: string
   picture?: string | null
@@ -1246,7 +1246,7 @@ export type EmployeeUpdateWithoutUserInput = {
   nid?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
-  emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1286,7 +1286,7 @@ export type EmployeeUncheckedUpdateWithoutUserInput = {
   nid?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
-  emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1326,7 +1326,7 @@ export type EmployeeCreateWithoutTutorProfilesInput = {
   nid: string
   fatherName: string
   motherName: string
-  emergencyContactNumber?: string | null
+  emergencyContact?: string | null
   monthlySalary: number
   employeeId: string
   picture?: string | null
@@ -1367,7 +1367,7 @@ export type EmployeeUncheckedCreateWithoutTutorProfilesInput = {
   nid: string
   fatherName: string
   motherName: string
-  emergencyContactNumber?: string | null
+  emergencyContact?: string | null
   monthlySalary: number
   employeeId: string
   picture?: string | null
@@ -1422,7 +1422,7 @@ export type EmployeeUpdateWithoutTutorProfilesInput = {
   nid?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
-  emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1463,7 +1463,7 @@ export type EmployeeUncheckedUpdateWithoutTutorProfilesInput = {
   nid?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
-  emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1502,7 +1502,7 @@ export type EmployeeCreateWithoutAddressInput = {
   nid: string
   fatherName: string
   motherName: string
-  emergencyContactNumber?: string | null
+  emergencyContact?: string | null
   monthlySalary: number
   employeeId: string
   picture?: string | null
@@ -1543,7 +1543,7 @@ export type EmployeeUncheckedCreateWithoutAddressInput = {
   nid: string
   fatherName: string
   motherName: string
-  emergencyContactNumber?: string | null
+  emergencyContact?: string | null
   monthlySalary: number
   employeeId: string
   picture?: string | null
@@ -1598,7 +1598,7 @@ export type EmployeeUpdateWithoutAddressInput = {
   nid?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
-  emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1639,7 +1639,7 @@ export type EmployeeUncheckedUpdateWithoutAddressInput = {
   nid?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
-  emergencyContactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlySalary?: Prisma.FloatFieldUpdateOperationsInput | number
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1710,7 +1710,7 @@ export type EmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   nid?: boolean
   fatherName?: boolean
   motherName?: boolean
-  emergencyContactNumber?: boolean
+  emergencyContact?: boolean
   monthlySalary?: boolean
   employeeId?: boolean
   picture?: boolean
@@ -1753,7 +1753,7 @@ export type EmployeeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   nid?: boolean
   fatherName?: boolean
   motherName?: boolean
-  emergencyContactNumber?: boolean
+  emergencyContact?: boolean
   monthlySalary?: boolean
   employeeId?: boolean
   picture?: boolean
@@ -1793,7 +1793,7 @@ export type EmployeeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   nid?: boolean
   fatherName?: boolean
   motherName?: boolean
-  emergencyContactNumber?: boolean
+  emergencyContact?: boolean
   monthlySalary?: boolean
   employeeId?: boolean
   picture?: boolean
@@ -1833,7 +1833,7 @@ export type EmployeeSelectScalar = {
   nid?: boolean
   fatherName?: boolean
   motherName?: boolean
-  emergencyContactNumber?: boolean
+  emergencyContact?: boolean
   monthlySalary?: boolean
   employeeId?: boolean
   picture?: boolean
@@ -1864,7 +1864,7 @@ export type EmployeeSelectScalar = {
   deletedAt?: boolean
 }
 
-export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "phone" | "fullName" | "nid" | "fatherName" | "motherName" | "emergencyContactNumber" | "monthlySalary" | "employeeId" | "picture" | "picturePublicId" | "pictureName" | "pictureType" | "experience" | "experiencePublicId" | "experienceName" | "experienceType" | "authoritySign" | "authoritySignPublicId" | "authoritySignName" | "authoritySignType" | "employeeSign" | "employeeSignPublicId" | "employeeSignName" | "employeeSignType" | "gender" | "bloodGroup" | "religion" | "employeeRole" | "dateOfJoining" | "birthRegistrationNumber" | "isdeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["employee"]>
+export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "phone" | "fullName" | "nid" | "fatherName" | "motherName" | "emergencyContact" | "monthlySalary" | "employeeId" | "picture" | "picturePublicId" | "pictureName" | "pictureType" | "experience" | "experiencePublicId" | "experienceName" | "experienceType" | "authoritySign" | "authoritySignPublicId" | "authoritySignName" | "authoritySignType" | "employeeSign" | "employeeSignPublicId" | "employeeSignName" | "employeeSignType" | "gender" | "bloodGroup" | "religion" | "employeeRole" | "dateOfJoining" | "birthRegistrationNumber" | "isdeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["employee"]>
 export type EmployeeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   tutorProfiles?: boolean | Prisma.Employee$tutorProfilesArgs<ExtArgs>
@@ -1893,7 +1893,7 @@ export type $EmployeePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     nid: string
     fatherName: string
     motherName: string
-    emergencyContactNumber: string | null
+    emergencyContact: string | null
     monthlySalary: number
     employeeId: string
     picture: string | null
@@ -2355,7 +2355,7 @@ export interface EmployeeFieldRefs {
   readonly nid: Prisma.FieldRef<"Employee", 'String'>
   readonly fatherName: Prisma.FieldRef<"Employee", 'String'>
   readonly motherName: Prisma.FieldRef<"Employee", 'String'>
-  readonly emergencyContactNumber: Prisma.FieldRef<"Employee", 'String'>
+  readonly emergencyContact: Prisma.FieldRef<"Employee", 'String'>
   readonly monthlySalary: Prisma.FieldRef<"Employee", 'Float'>
   readonly employeeId: Prisma.FieldRef<"Employee", 'String'>
   readonly picture: Prisma.FieldRef<"Employee", 'String'>

@@ -170,13 +170,13 @@ model Employee {
 
     phone String @unique
 
-    fullName               String
-    nid                    String  @unique
-    fatherName             String
-    motherName             String
-    emergencyContactNumber String?
-    monthlySalary          Float
-    employeeId             String  @unique
+    fullName         String
+    nid              String  @unique
+    fatherName       String
+    motherName       String
+    emergencyContact String?
+    monthlySalary    Float
+    employeeId       String  @unique
 
     picture         String?
     picturePublicId String?
