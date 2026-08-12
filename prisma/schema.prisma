@@ -168,10 +168,10 @@ model Employee {
     id     String @id @default(uuid())
     userId String @unique
 
-    phone String @unique
+    phone String
 
     fullName         String
-    nid              String  @unique
+    nid              String
     fatherName       String
     motherName       String
     emergencyContact String?
@@ -198,12 +198,11 @@ model Employee {
     employeeSignName     String?
     employeeSignType     String?
 
-    gender                  Gender
-    bloodGroup              BloodGroup
-    religion                Religion
-    employeeRole            EmployeeRole
-    dateOfJoining           String
-    birthRegistrationNumber String?      @unique
+    gender        Gender
+    bloodGroup    BloodGroup
+    religion      Religion
+    employeeRole  EmployeeRole
+    dateOfJoining String
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

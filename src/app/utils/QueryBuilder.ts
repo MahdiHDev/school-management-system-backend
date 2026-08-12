@@ -56,10 +56,16 @@ export class QueryBuilder<
                         if (parts.length === 2) {
                             const [relation, nestedField] = parts;
 
-                            const stringFilter: PrismaStringFilter = {
-                                contains: searchTerm,
-                                mode: "insensitive" as const,
-                            };
+                            const stringFilter: PrismaStringFilter =
+                                relation === "user" && nestedField === "email"
+                                    ? {
+                                          startsWith: searchTerm,
+                                          mode: "insensitive",
+                                      }
+                                    : {
+                                          contains: searchTerm,
+                                          mode: "insensitive",
+                                      };
 
                             return {
                                 [relation!]: {

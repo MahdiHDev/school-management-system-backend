@@ -1558,7 +1558,10 @@ var QueryBuilder = class {
           const parts = field.split(".");
           if (parts.length === 2) {
             const [relation, nestedField] = parts;
-            const stringFilter2 = {
+            const stringFilter2 = relation === "user" && nestedField === "email" ? {
+              startsWith: searchTerm,
+              mode: "insensitive"
+            } : {
               contains: searchTerm,
               mode: "insensitive"
             };
