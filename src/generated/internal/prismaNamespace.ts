@@ -390,7 +390,6 @@ export const ModelName = {
   Verification: 'Verification',
   Admin: 'Admin',
   Employee: 'Employee',
-  TutorProfile: 'TutorProfile',
   Class: 'Class',
   Address: 'Address',
   Sequence: 'Sequence'
@@ -409,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "admin" | "employee" | "tutorProfile" | "class" | "address" | "sequence"
+    modelProps: "user" | "session" | "account" | "verification" | "admin" | "employee" | "class" | "address" | "sequence"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -857,80 +856,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    TutorProfile: {
-      payload: Prisma.$TutorProfilePayload<ExtArgs>
-      fields: Prisma.TutorProfileFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.TutorProfileFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorProfilePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.TutorProfileFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorProfilePayload>
-        }
-        findFirst: {
-          args: Prisma.TutorProfileFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorProfilePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.TutorProfileFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorProfilePayload>
-        }
-        findMany: {
-          args: Prisma.TutorProfileFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorProfilePayload>[]
-        }
-        create: {
-          args: Prisma.TutorProfileCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorProfilePayload>
-        }
-        createMany: {
-          args: Prisma.TutorProfileCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.TutorProfileCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorProfilePayload>[]
-        }
-        delete: {
-          args: Prisma.TutorProfileDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorProfilePayload>
-        }
-        update: {
-          args: Prisma.TutorProfileUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorProfilePayload>
-        }
-        deleteMany: {
-          args: Prisma.TutorProfileDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.TutorProfileUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.TutorProfileUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorProfilePayload>[]
-        }
-        upsert: {
-          args: Prisma.TutorProfileUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorProfilePayload>
-        }
-        aggregate: {
-          args: Prisma.TutorProfileAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateTutorProfile>
-        }
-        groupBy: {
-          args: Prisma.TutorProfileGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TutorProfileGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.TutorProfileCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TutorProfileCountAggregateOutputType> | number
-        }
-      }
-    }
     Class: {
       payload: Prisma.$ClassPayload<ExtArgs>
       fields: Prisma.ClassFieldRefs
@@ -1303,7 +1228,6 @@ export const EmployeeScalarFieldEnum = {
   religion: 'religion',
   employeeRole: 'employeeRole',
   dateOfJoining: 'dateOfJoining',
-  birthRegistrationNumber: 'birthRegistrationNumber',
   isdeleted: 'isdeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -1313,19 +1237,11 @@ export const EmployeeScalarFieldEnum = {
 export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
 
 
-export const TutorProfileScalarFieldEnum = {
-  id: 'id',
-  classId: 'classId',
-  employeeId: 'employeeId'
-} as const
-
-export type TutorProfileScalarFieldEnum = (typeof TutorProfileScalarFieldEnum)[keyof typeof TutorProfileScalarFieldEnum]
-
-
 export const ClassScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  monthlyTutionFee: 'monthlyTutionFee',
+  monthlyTuitionFee: 'monthlyTuitionFee',
+  classTeacher: 'classTeacher',
   isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -1656,7 +1572,6 @@ export type GlobalOmitConfig = {
   verification?: Prisma.VerificationOmit
   admin?: Prisma.AdminOmit
   employee?: Prisma.EmployeeOmit
-  tutorProfile?: Prisma.TutorProfileOmit
   class?: Prisma.ClassOmit
   address?: Prisma.AddressOmit
   sequence?: Prisma.SequenceOmit

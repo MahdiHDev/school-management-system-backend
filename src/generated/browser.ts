@@ -48,11 +48,6 @@ export type Admin = Prisma.AdminModel
  */
 export type Employee = Prisma.EmployeeModel
 /**
- * Model TutorProfile
- * 
- */
-export type TutorProfile = Prisma.TutorProfileModel
-/**
  * Model Class
  * 
  */

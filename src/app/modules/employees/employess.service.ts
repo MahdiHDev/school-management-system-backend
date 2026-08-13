@@ -91,36 +91,6 @@ const getEmployeeById = async (id: string) => {
     return employee;
 };
 
-/**
- * {
-  "fullName": "Bilal Abbas Khan",
-  "fatherName": "Abdul Hussain",
-  "motherName": "Rehana Begum",
-  "gender": "MALE",
-  "bloodGroup": "O_POSITIVE",
-  "religion": "ISLAM",
-  "employeeRole": "TEACHER",
-  "monthlySalary": 25000,
-  "dateOfJoining": "2000-05-14",
-  "phone": "+8801812345605",
-  "email": "bilal@gmail.com",
-  "nid": "1998123456715",
-"address": {
-    "present": {
-      "village": "Uttara Sector 10",
-      "postOffice": "Uttara",
-      "postCode": "1230",
-      "district": "Dhaka"
-    },
-    "permanent": {
-      "village": "Kamalpur",
-      "postOffice": "Fulbaria",
-      "postCode": "2216",
-      "district": "Mymensingh"
-    }
-  }
-}
- */
 const getEmployeeByIdForUpdate = async (id: string) => {
     const employee = await prisma.employee.findUnique({
         where: {

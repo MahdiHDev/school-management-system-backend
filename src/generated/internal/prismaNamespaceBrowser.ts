@@ -57,7 +57,6 @@ export const ModelName = {
   Verification: 'Verification',
   Admin: 'Admin',
   Employee: 'Employee',
-  TutorProfile: 'TutorProfile',
   Class: 'Class',
   Address: 'Address',
   Sequence: 'Sequence'
@@ -190,7 +189,6 @@ export const EmployeeScalarFieldEnum = {
   religion: 'religion',
   employeeRole: 'employeeRole',
   dateOfJoining: 'dateOfJoining',
-  birthRegistrationNumber: 'birthRegistrationNumber',
   isdeleted: 'isdeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -200,19 +198,11 @@ export const EmployeeScalarFieldEnum = {
 export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
 
 
-export const TutorProfileScalarFieldEnum = {
-  id: 'id',
-  classId: 'classId',
-  employeeId: 'employeeId'
-} as const
-
-export type TutorProfileScalarFieldEnum = (typeof TutorProfileScalarFieldEnum)[keyof typeof TutorProfileScalarFieldEnum]
-
-
 export const ClassScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  monthlyTutionFee: 'monthlyTutionFee',
+  monthlyTuitionFee: 'monthlyTuitionFee',
+  classTeacher: 'classTeacher',
   isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',

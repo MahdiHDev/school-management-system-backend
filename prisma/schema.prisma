@@ -206,36 +206,38 @@ model Employee {
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    isdeleted     Boolean        @default(false)
-    createdAt     DateTime       @default(now())
-    updatedAt     DateTime       @updatedAt
-    deletedAt     DateTime?
-    tutorProfiles TutorProfile[]
-    address       Address?
+    isdeleted Boolean   @default(false)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    address Address?
+    classes Class[]
 
     @@map("employee")
 }
 
-model TutorProfile {
-    id String @id @default(uuid())
+// model TutorProfile {
+//     id String @id @default(uuid())
 
-    classId    String
-    employeeId String
+//     classId    String
 
-    class    Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
-    employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
-}
+//     class    Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+//     employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+// }
 
 model Class {
-    id               String @id @default(uuid())
-    name             String
-    monthlyTutionFee Float
+    id                String @id @default(uuid())
+    name              String @unique
+    monthlyTuitionFee Float
+    classTeacher      String
 
-    isDeleted     Boolean        @default(false)
-    createdAt     DateTime       @default(now())
-    updatedAt     DateTime       @updatedAt
-    deletedAt     DateTime?
-    tutorProfiles TutorProfile[]
+    isDeleted Boolean   @default(false)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    employee Employee @relation(fields: [classTeacher], references: [id], onDelete: Cascade)
 
     @@map("class")
 }
