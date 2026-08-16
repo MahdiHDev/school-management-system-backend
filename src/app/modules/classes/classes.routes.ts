@@ -11,6 +11,12 @@ router.get(
     ClassesController.getAllTeachers,
 );
 
+router.get(
+    "/",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    ClassesController.getAllClass,
+);
+
 router.post(
     "/",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
@@ -21,6 +27,12 @@ router.patch(
     "/:id",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
     ClassesController.udpateClass,
+);
+
+router.delete(
+    "/:id",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    ClassesController.deleteClass,
 );
 
 export const ClassesRoutes: Router = router;

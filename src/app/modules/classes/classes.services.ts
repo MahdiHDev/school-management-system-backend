@@ -27,6 +27,20 @@ const getAllTeachers = async () => {
     return formattedTeachers;
 };
 
+const getAllClass = async () => {
+    const result = await prisma.class.findMany({
+        where: {
+            isDeleted: false,
+        },
+        select: {
+            id: true,
+            name: true,
+        },
+    });
+
+    return result;
+};
+
 const createClass = async (payload: ICreateClassPayload) => {
     const newClass = await prisma.class.create({
         data: {
@@ -91,8 +105,21 @@ const updateClass = async (id: string, payload: IUpdateClassPayload) => {
     return updateClass;
 };
 
+const deleteClass = async (id: string) => {
+    const result = await prisma.class.update({
+        where: { id },
+        data: {
+            isDeleted: true,
+        },
+    });
+
+    return result;
+};
+
 export const ClassesService = {
     getAllTeachers,
+    getAllClass,
     createClass,
     updateClass,
+    deleteClass,
 };

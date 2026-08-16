@@ -15,6 +15,17 @@ const getAllTeachers = async (req: Request, res: Response) => {
     });
 };
 
+const getAllClass = async (req: Request, res: Response) => {
+    const result = await ClassesService.getAllClass();
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Classes fetched successfully",
+        data: result,
+    });
+};
+
 const createClass = async (req: Request, res: Response) => {
     const payload = createClassSchema.parse(req.body);
 
@@ -45,8 +56,23 @@ const udpateClass = async (req: Request, res: Response) => {
     });
 };
 
+const deleteClass = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const deletedClass = await ClassesService.deleteClass(id as string);
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Class Deleted Successfully",
+        data: deletedClass,
+    });
+};
+
 export const ClassesController = {
     getAllTeachers,
+    getAllClass,
     createClass,
     udpateClass,
+    deleteClass,
 };
