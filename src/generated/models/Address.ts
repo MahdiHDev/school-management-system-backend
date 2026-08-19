@@ -262,6 +262,7 @@ export type AddressWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Address"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Address"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Address"> | Date | string | null
+  student?: Prisma.XOR<Prisma.StudentNullableScalarRelationFilter, Prisma.StudentWhereInput> | null
   employee?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
 }
 
@@ -281,6 +282,7 @@ export type AddressOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  student?: Prisma.StudentOrderByWithRelationInput
   employee?: Prisma.EmployeeOrderByWithRelationInput
 }
 
@@ -303,6 +305,7 @@ export type AddressWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Address"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Address"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Address"> | Date | string | null
+  student?: Prisma.XOR<Prisma.StudentNullableScalarRelationFilter, Prisma.StudentWhereInput> | null
   employee?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
 }, "id" | "studentId" | "employeeId">
 
@@ -350,7 +353,6 @@ export type AddressScalarWhereWithAggregatesInput = {
 
 export type AddressCreateInput = {
   id?: string
-  studentId?: string | null
   permanentAddressVillage?: string | null
   permanentAddressPostOffice?: string | null
   permanentAddressPostCode?: string | null
@@ -363,6 +365,7 @@ export type AddressCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  student?: Prisma.StudentCreateNestedOneWithoutAddressInput
   employee?: Prisma.EmployeeCreateNestedOneWithoutAddressInput
 }
 
@@ -386,7 +389,6 @@ export type AddressUncheckedCreateInput = {
 
 export type AddressUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  studentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   permanentAddressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   permanentAddressPostOffice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   permanentAddressPostCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -399,6 +401,7 @@ export type AddressUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  student?: Prisma.StudentUpdateOneWithoutAddressNestedInput
   employee?: Prisma.EmployeeUpdateOneWithoutAddressNestedInput
 }
 
@@ -440,7 +443,6 @@ export type AddressCreateManyInput = {
 
 export type AddressUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  studentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   permanentAddressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   permanentAddressPostOffice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   permanentAddressPostCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -564,9 +566,40 @@ export type AddressUncheckedUpdateOneWithoutEmployeeNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AddressUpdateToOneWithWhereWithoutEmployeeInput, Prisma.AddressUpdateWithoutEmployeeInput>, Prisma.AddressUncheckedUpdateWithoutEmployeeInput>
 }
 
+export type AddressCreateNestedOneWithoutStudentInput = {
+  create?: Prisma.XOR<Prisma.AddressCreateWithoutStudentInput, Prisma.AddressUncheckedCreateWithoutStudentInput>
+  connectOrCreate?: Prisma.AddressCreateOrConnectWithoutStudentInput
+  connect?: Prisma.AddressWhereUniqueInput
+}
+
+export type AddressUncheckedCreateNestedOneWithoutStudentInput = {
+  create?: Prisma.XOR<Prisma.AddressCreateWithoutStudentInput, Prisma.AddressUncheckedCreateWithoutStudentInput>
+  connectOrCreate?: Prisma.AddressCreateOrConnectWithoutStudentInput
+  connect?: Prisma.AddressWhereUniqueInput
+}
+
+export type AddressUpdateOneWithoutStudentNestedInput = {
+  create?: Prisma.XOR<Prisma.AddressCreateWithoutStudentInput, Prisma.AddressUncheckedCreateWithoutStudentInput>
+  connectOrCreate?: Prisma.AddressCreateOrConnectWithoutStudentInput
+  upsert?: Prisma.AddressUpsertWithoutStudentInput
+  disconnect?: Prisma.AddressWhereInput | boolean
+  delete?: Prisma.AddressWhereInput | boolean
+  connect?: Prisma.AddressWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AddressUpdateToOneWithWhereWithoutStudentInput, Prisma.AddressUpdateWithoutStudentInput>, Prisma.AddressUncheckedUpdateWithoutStudentInput>
+}
+
+export type AddressUncheckedUpdateOneWithoutStudentNestedInput = {
+  create?: Prisma.XOR<Prisma.AddressCreateWithoutStudentInput, Prisma.AddressUncheckedCreateWithoutStudentInput>
+  connectOrCreate?: Prisma.AddressCreateOrConnectWithoutStudentInput
+  upsert?: Prisma.AddressUpsertWithoutStudentInput
+  disconnect?: Prisma.AddressWhereInput | boolean
+  delete?: Prisma.AddressWhereInput | boolean
+  connect?: Prisma.AddressWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AddressUpdateToOneWithWhereWithoutStudentInput, Prisma.AddressUpdateWithoutStudentInput>, Prisma.AddressUncheckedUpdateWithoutStudentInput>
+}
+
 export type AddressCreateWithoutEmployeeInput = {
   id?: string
-  studentId?: string | null
   permanentAddressVillage?: string | null
   permanentAddressPostOffice?: string | null
   permanentAddressPostCode?: string | null
@@ -579,6 +612,7 @@ export type AddressCreateWithoutEmployeeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  student?: Prisma.StudentCreateNestedOneWithoutAddressInput
 }
 
 export type AddressUncheckedCreateWithoutEmployeeInput = {
@@ -616,6 +650,23 @@ export type AddressUpdateToOneWithWhereWithoutEmployeeInput = {
 
 export type AddressUpdateWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  permanentAddressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddressPostOffice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddressPostCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressPostOffice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressPostCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  student?: Prisma.StudentUpdateOneWithoutAddressNestedInput
+}
+
+export type AddressUncheckedUpdateWithoutEmployeeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   permanentAddressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   permanentAddressPostOffice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -631,9 +682,76 @@ export type AddressUpdateWithoutEmployeeInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-export type AddressUncheckedUpdateWithoutEmployeeInput = {
+export type AddressCreateWithoutStudentInput = {
+  id?: string
+  permanentAddressVillage?: string | null
+  permanentAddressPostOffice?: string | null
+  permanentAddressPostCode?: string | null
+  permanentAddressDistrict?: string | null
+  presentAddressVillage?: string | null
+  presentAddressPostOffice?: string | null
+  presentAddressPostCode?: string | null
+  presentAddressDistrict?: string | null
+  isDeleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  employee?: Prisma.EmployeeCreateNestedOneWithoutAddressInput
+}
+
+export type AddressUncheckedCreateWithoutStudentInput = {
+  id?: string
+  employeeId?: string | null
+  permanentAddressVillage?: string | null
+  permanentAddressPostOffice?: string | null
+  permanentAddressPostCode?: string | null
+  permanentAddressDistrict?: string | null
+  presentAddressVillage?: string | null
+  presentAddressPostOffice?: string | null
+  presentAddressPostCode?: string | null
+  presentAddressDistrict?: string | null
+  isDeleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+}
+
+export type AddressCreateOrConnectWithoutStudentInput = {
+  where: Prisma.AddressWhereUniqueInput
+  create: Prisma.XOR<Prisma.AddressCreateWithoutStudentInput, Prisma.AddressUncheckedCreateWithoutStudentInput>
+}
+
+export type AddressUpsertWithoutStudentInput = {
+  update: Prisma.XOR<Prisma.AddressUpdateWithoutStudentInput, Prisma.AddressUncheckedUpdateWithoutStudentInput>
+  create: Prisma.XOR<Prisma.AddressCreateWithoutStudentInput, Prisma.AddressUncheckedCreateWithoutStudentInput>
+  where?: Prisma.AddressWhereInput
+}
+
+export type AddressUpdateToOneWithWhereWithoutStudentInput = {
+  where?: Prisma.AddressWhereInput
+  data: Prisma.XOR<Prisma.AddressUpdateWithoutStudentInput, Prisma.AddressUncheckedUpdateWithoutStudentInput>
+}
+
+export type AddressUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  studentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddressPostOffice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddressPostCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressPostOffice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressPostCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  employee?: Prisma.EmployeeUpdateOneWithoutAddressNestedInput
+}
+
+export type AddressUncheckedUpdateWithoutStudentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   permanentAddressVillage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   permanentAddressPostOffice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   permanentAddressPostCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -666,6 +784,7 @@ export type AddressSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
+  student?: boolean | Prisma.Address$studentArgs<ExtArgs>
   employee?: boolean | Prisma.Address$employeeArgs<ExtArgs>
 }, ExtArgs["result"]["address"]>
 
@@ -685,6 +804,7 @@ export type AddressSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
+  student?: boolean | Prisma.Address$studentArgs<ExtArgs>
   employee?: boolean | Prisma.Address$employeeArgs<ExtArgs>
 }, ExtArgs["result"]["address"]>
 
@@ -704,6 +824,7 @@ export type AddressSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
+  student?: boolean | Prisma.Address$studentArgs<ExtArgs>
   employee?: boolean | Prisma.Address$employeeArgs<ExtArgs>
 }, ExtArgs["result"]["address"]>
 
@@ -727,18 +848,22 @@ export type AddressSelectScalar = {
 
 export type AddressOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "employeeId" | "permanentAddressVillage" | "permanentAddressPostOffice" | "permanentAddressPostCode" | "permanentAddressDistrict" | "presentAddressVillage" | "presentAddressPostOffice" | "presentAddressPostCode" | "presentAddressDistrict" | "isDeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["address"]>
 export type AddressInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  student?: boolean | Prisma.Address$studentArgs<ExtArgs>
   employee?: boolean | Prisma.Address$employeeArgs<ExtArgs>
 }
 export type AddressIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  student?: boolean | Prisma.Address$studentArgs<ExtArgs>
   employee?: boolean | Prisma.Address$employeeArgs<ExtArgs>
 }
 export type AddressIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  student?: boolean | Prisma.Address$studentArgs<ExtArgs>
   employee?: boolean | Prisma.Address$employeeArgs<ExtArgs>
 }
 
 export type $AddressPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Address"
   objects: {
+    student: Prisma.$StudentPayload<ExtArgs> | null
     employee: Prisma.$EmployeePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1151,6 +1276,7 @@ readonly fields: AddressFieldRefs;
  */
 export interface Prisma__AddressClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  student<T extends Prisma.Address$studentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Address$studentArgs<ExtArgs>>): Prisma.Prisma__StudentClient<runtime.Types.Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   employee<T extends Prisma.Address$employeeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Address$employeeArgs<ExtArgs>>): Prisma.Prisma__EmployeeClient<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1594,6 +1720,25 @@ export type AddressDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Addresses to delete.
    */
   limit?: number
+}
+
+/**
+ * Address.student
+ */
+export type Address$studentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Student
+   */
+  select?: Prisma.StudentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Student
+   */
+  omit?: Prisma.StudentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StudentInclude<ExtArgs> | null
+  where?: Prisma.StudentWhereInput
 }
 
 /**

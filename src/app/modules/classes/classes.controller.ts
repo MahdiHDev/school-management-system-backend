@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import status from "http-status";
+import { IQueryParams } from "../../interfaces/query.interface";
 import { sendResponse } from "../../shared/sendResponse";
 import { ClassesService } from "./classes.services";
 import { createClassSchema, updateClassSchema } from "./classes.validation";
@@ -16,12 +17,28 @@ const getAllTeachers = async (req: Request, res: Response) => {
 };
 
 const getAllClass = async (req: Request, res: Response) => {
-    const result = await ClassesService.getAllClass();
+    const query = req.query;
+
+    const result = await ClassesService.getAllClass(query as IQueryParams);
 
     sendResponse(res, {
         httpStatusCode: status.OK,
         success: true,
         message: "Classes fetched successfully",
+        data: result.data,
+        meta: result.meta,
+    });
+};
+
+const getSingleClass = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const result = await ClassesService.getSingleClass(id as string);
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Class fetched Successfully",
         data: result,
     });
 };
@@ -72,6 +89,7 @@ const deleteClass = async (req: Request, res: Response) => {
 export const ClassesController = {
     getAllTeachers,
     getAllClass,
+    getSingleClass,
     createClass,
     udpateClass,
     deleteClass,

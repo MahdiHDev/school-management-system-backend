@@ -92,6 +92,7 @@ model User {
     accounts           Account[]
     employee           Employee?
     admin              Admin?
+    students           Student[]
 
     @@unique([email])
     @@map("user")
@@ -228,7 +229,7 @@ model Employee {
 
 model Class {
     id                String @id @default(uuid())
-    name              String @unique
+    name              String
     monthlyTuitionFee Float
     classTeacher      String
 
@@ -237,7 +238,8 @@ model Class {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
-    employee Employee @relation(fields: [classTeacher], references: [id], onDelete: Cascade)
+    employee Employee  @relation(fields: [classTeacher], references: [id], onDelete: Cascade)
+    students Student[]
 
     @@map("class")
 }
@@ -260,7 +262,7 @@ model Address {
 
     isDeleted Boolean @default(false)
 
-    // student  Student?  @relation(fields: [studentId], references: [id])
+    student  Student?  @relation(fields: [studentId], references: [id])
     employee Employee? @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
     createdAt DateTime  @default(now()) @map("created_at")
@@ -271,4 +273,78 @@ model Address {
 model Sequence {
     id      String @id
     current Int
+}
+
+model GuardianInfo {
+    id               String  @id @default(uuid())
+    studentId        String  @unique
+    email            String?
+    fatherName       String
+    fatherNameBangla String
+    whatsappNumber   String
+    fatherOccupation String
+
+    motherName         String
+    motherNameBangla   String
+    motherMobileNumber String
+    motherOccupation   String
+
+    nameOfLocalGuardian   String?
+    relationShipOfStudent String?
+    GuardianMobileNumber  String?
+
+    student Student @relation(fields: [studentId], references: [id])
+
+    isdeleted Boolean   @default(false)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+}
+
+model Student {
+    id                      String   @id @default(uuid())
+    userId                  String
+    classId                 String
+    studentId               String   @unique
+    fullName                String
+    fullNameBangla          String
+    dateOfBirth             String
+    birthRegistrationNumber String
+    religion                Religion
+    admissionTotalFees      String
+    admissionDate           String
+    previousInstituteName   String?
+    endingClass             String?
+    result                  String?
+    testimonialNumber       String?
+
+    studentSign         String
+    studentSignPublicId String
+    studentsignName     String
+    studentSignType     String
+
+    authoritySign         String
+    authoritySignPublicId String
+    authoritySignName     String?
+    authoritySignType     String?
+
+    guardianSign         String
+    guardianSignPublicId String?
+    guardianSignName     String?
+    guardianSignType     String?
+
+    picture         String
+    picturePublicId String?
+    pictureName     String?
+    pictureType     String?
+
+    address      Address?
+    guardianInfo GuardianInfo?
+    class        Class         @relation(fields: [classId], references: [id])
+    user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    isdeleted Boolean   @default(false)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
 }

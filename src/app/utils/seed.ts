@@ -91,3 +91,29 @@ export const seedEmployeeSequence = async () => {
         console.error("Error seeding employee sequence:", error);
     }
 };
+
+export const seedStudentSequence = async () => {
+    try {
+        const sequenceExists = await prisma.sequence.findUnique({
+            where: {
+                id: "student",
+            },
+        });
+
+        if (sequenceExists) {
+            console.log("Student sequence already exists. Skipping seed.");
+            return;
+        }
+
+        await prisma.sequence.create({
+            data: {
+                id: "student",
+                current: 999,
+            },
+        });
+
+        console.log("Student sequence seeded successfully");
+    } catch (error) {
+        console.error("Error seeding Student sequence:", error);
+    }
+};

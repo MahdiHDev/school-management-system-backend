@@ -59,7 +59,9 @@ export const ModelName = {
   Employee: 'Employee',
   Class: 'Class',
   Address: 'Address',
-  Sequence: 'Sequence'
+  Sequence: 'Sequence',
+  GuardianInfo: 'GuardianInfo',
+  Student: 'Student'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -239,6 +241,71 @@ export const SequenceScalarFieldEnum = {
 } as const
 
 export type SequenceScalarFieldEnum = (typeof SequenceScalarFieldEnum)[keyof typeof SequenceScalarFieldEnum]
+
+
+export const GuardianInfoScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  email: 'email',
+  fatherName: 'fatherName',
+  fatherNameBangla: 'fatherNameBangla',
+  whatsappNumber: 'whatsappNumber',
+  fatherOccupation: 'fatherOccupation',
+  motherName: 'motherName',
+  motherNameBangla: 'motherNameBangla',
+  motherMobileNumber: 'motherMobileNumber',
+  motherOccupation: 'motherOccupation',
+  nameOfLocalGuardian: 'nameOfLocalGuardian',
+  relationShipOfStudent: 'relationShipOfStudent',
+  GuardianMobileNumber: 'GuardianMobileNumber',
+  isdeleted: 'isdeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type GuardianInfoScalarFieldEnum = (typeof GuardianInfoScalarFieldEnum)[keyof typeof GuardianInfoScalarFieldEnum]
+
+
+export const StudentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  classId: 'classId',
+  studentId: 'studentId',
+  fullName: 'fullName',
+  fullNameBangla: 'fullNameBangla',
+  dateOfBirth: 'dateOfBirth',
+  birthRegistrationNumber: 'birthRegistrationNumber',
+  religion: 'religion',
+  admissionTotalFees: 'admissionTotalFees',
+  admissionDate: 'admissionDate',
+  previousInstituteName: 'previousInstituteName',
+  endingClass: 'endingClass',
+  result: 'result',
+  testimonialNumber: 'testimonialNumber',
+  studentSign: 'studentSign',
+  studentSignPublicId: 'studentSignPublicId',
+  studentsignName: 'studentsignName',
+  studentSignType: 'studentSignType',
+  authoritySign: 'authoritySign',
+  authoritySignPublicId: 'authoritySignPublicId',
+  authoritySignName: 'authoritySignName',
+  authoritySignType: 'authoritySignType',
+  guardianSign: 'guardianSign',
+  guardianSignPublicId: 'guardianSignPublicId',
+  guardianSignName: 'guardianSignName',
+  guardianSignType: 'guardianSignType',
+  picture: 'picture',
+  picturePublicId: 'picturePublicId',
+  pictureName: 'pictureName',
+  pictureType: 'pictureType',
+  isdeleted: 'isdeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
 
 
 export const SortOrder = {

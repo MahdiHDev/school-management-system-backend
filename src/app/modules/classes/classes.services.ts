@@ -1,6 +1,9 @@
 import status from "http-status";
+import { Prisma } from "../../../generated/client";
 import AppError from "../../errorHelpers/AppError";
+import { IQueryParams } from "../../interfaces/query.interface";
 import { prisma } from "../../lib/prisma";
+import { QueryBuilder } from "../../utils/QueryBuilder";
 import { ICreateClassPayload, IUpdateClassPayload } from "./classes.validation";
 
 const getAllTeachers = async () => {
@@ -16,29 +19,82 @@ const getAllTeachers = async () => {
         select: {
             id: true,
             fullName: true,
+            employeeId: true,
         },
     });
 
     const formattedTeachers = teachers.map((teacher) => ({
-        label: teacher.fullName,
+        label: `${teacher.fullName} [${teacher.employeeId}]`,
         value: teacher.id,
     }));
 
     return formattedTeachers;
 };
 
-const getAllClass = async () => {
-    const result = await prisma.class.findMany({
-        where: {
+type ClassListItem = Prisma.ClassGetPayload<{
+    select: {
+        id: true;
+        name: true;
+    };
+}>;
+
+const getAllClass = async (query: IQueryParams) => {
+    const queryBuilder = new QueryBuilder<
+        ClassListItem,
+        Prisma.ClassWhereInput,
+        Prisma.ClassInclude
+    >(prisma.class, query);
+
+    const result = await queryBuilder
+        .where({
             isDeleted: false,
-        },
+        })
+        .select({
+            id: true,
+            name: true,
+        })
+        .paginate()
+        .sort()
+        .execute();
+
+    const data = result.data.map((classItem) => {
+        const totalStudents = 25;
+        const boys = Math.floor(Math.random() * (totalStudents + 1));
+        const girls = totalStudents - boys;
+
+        return {
+            ...classItem,
+            totalStudents,
+            boys,
+            girls,
+        };
+    });
+
+    return {
+        data,
+        meta: result.meta,
+    };
+};
+
+const getSingleClass = async (id: string) => {
+    const result = await prisma.class.findUnique({
+        where: { id },
         select: {
             id: true,
             name: true,
+            monthlyTuitionFee: true,
+            classTeacher: true,
         },
     });
 
-    return result;
+    const formattedResult = {
+        id: result?.id,
+        className: result?.name,
+        tuitionFee: result?.monthlyTuitionFee,
+        classTeacher: result?.classTeacher,
+    };
+
+    return formattedResult;
 };
 
 const createClass = async (payload: ICreateClassPayload) => {
@@ -54,7 +110,12 @@ const createClass = async (payload: ICreateClassPayload) => {
         },
     });
 
-    return newClass;
+    return {
+        ...newClass,
+        totalStudents: 0,
+        boys: 0,
+        girls: 0,
+    };
 };
 
 const updateClass = async (id: string, payload: IUpdateClassPayload) => {
@@ -91,7 +152,7 @@ const updateClass = async (id: string, payload: IUpdateClassPayload) => {
                 name: payload.className,
             }),
             ...(payload.tuitionFee !== undefined && {
-                monthlyTutionFee: payload.tuitionFee,
+                monthlyTuitionFee: payload.tuitionFee,
             }),
             ...(payload.classTeacher !== undefined && {
                 classTeacher: payload.classTeacher,
@@ -102,7 +163,12 @@ const updateClass = async (id: string, payload: IUpdateClassPayload) => {
         },
     });
 
-    return updateClass;
+    return {
+        ...updateClass,
+        totalStudents: 0,
+        boys: 0,
+        girls: 0,
+    };
 };
 
 const deleteClass = async (id: string) => {
@@ -119,6 +185,7 @@ const deleteClass = async (id: string) => {
 export const ClassesService = {
     getAllTeachers,
     getAllClass,
+    getSingleClass,
     createClass,
     updateClass,
     deleteClass,

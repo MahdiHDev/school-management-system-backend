@@ -223,7 +223,7 @@ var config = {
   "clientVersion": "7.8.0",
   "engineVersion": "3c6e192761c0362d496ed980de936e2f3cebcd3a",
   "activeProvider": "postgresql",
-  "inlineSchema": '// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = "prisma-client"\n  // output   = "../generated/prisma"\n  output   = "../src/generated"\n  // moduleFormat = "cjs"\n}\n\ndatasource db {\n  provider = "postgresql"\n}\n\n// Enums \nenum UserRole {\n  SUPER_ADMIN\n  ADMIN\n  TEACHER\n  STUDENT\n  PRINCIPAL\n  MANAGEMENT_STAFF\n  ACCOUNTANT\n  STORE_MANAGER\n  LIBRARIAN\n  OTHER\n}\n\nenum Gender {\n  MALE\n  FEMALE\n  OTHER\n}\n\nenum BloodGroup {\n  A_POSITIVE\n  A_NEGATIVE\n  B_POSITIVE\n  B_NEGATIVE\n  AB_POSITIVE\n  AB_NEGATIVE\n  O_POSITIVE\n  O_NEGATIVE\n}\n\nenum Religion {\n  ISLAM\n  HINDUISM\n  CHRISTIANITY\n  BUDDHISM\n  OTHER\n}\n\nenum AddressType {\n  PRESENT\n  PERMANENT\n}\n\nenum EmployeeRole {\n  PRINCIPAL\n  MANAGEMENT_STAFF\n  TEACHER\n  ACCOUNTANT\n  STORE_MANAGER\n  LIBRARIAN\n  OTHER\n}\n\nenum UserStatus {\n  ACTIVE\n  BLOCKED\n  DELETED\n}\n\nmodel User {\n  id                 String     @id\n  name               String\n  email              String\n  role               UserRole   @default(STUDENT)\n  status             UserStatus @default(ACTIVE)\n  needPasswordChange Boolean    @default(false)\n  isDeleted          Boolean    @default(false)\n  deletedAt          DateTime?\n  emailVerified      Boolean    @default(false)\n  image              String?\n  createdAt          DateTime   @default(now())\n  updatedAt          DateTime   @updatedAt\n  sessions           Session[]\n  accounts           Account[]\n  employee           Employee?\n  admin              Admin?\n\n  @@unique([email])\n  @@map("user")\n}\n\nmodel Session {\n  id        String   @id\n  expiresAt DateTime\n  token     String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  ipAddress String?\n  userAgent String?\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([token])\n  @@index([userId])\n  @@map("session")\n}\n\nmodel Account {\n  id                    String    @id\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @updatedAt\n\n  @@index([userId])\n  @@map("account")\n}\n\nmodel Verification {\n  id         String   @id\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  @@index([identifier])\n  @@map("verification")\n}\n\nmodel Admin {\n  id            String    @id @default(uuid())\n  name          String\n  email         String    @unique\n  profilePhoto  String?\n  contactNumber String?\n  isDeleted     Boolean   @default(false)\n  createdAt     DateTime  @default(now())\n  updatedAt     DateTime  @updatedAt\n  deletedAt     DateTime?\n\n  userId String @unique\n  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([email])\n  @@index([isDeleted])\n  @@map("admins")\n}\n\nmodel Employee {\n  id     String @id @default(uuid())\n  userId String @unique\n\n  phone String\n\n  fullName         String\n  nid              String\n  fatherName       String\n  motherName       String\n  emergencyContact String?\n  monthlySalary    Float\n  employeeId       String  @unique\n\n  picture         String?\n  picturePublicId String?\n  pictureName     String?\n  pictureType     String?\n\n  experience         String?\n  experiencePublicId String?\n  experienceName     String?\n  experienceType     String?\n\n  authoritySign         String\n  authoritySignPublicId String\n  authoritySignName     String?\n  authoritySignType     String?\n\n  employeeSign         String\n  employeeSignPublicId String\n  employeeSignName     String?\n  employeeSignType     String?\n\n  gender        Gender\n  bloodGroup    BloodGroup\n  religion      Religion\n  employeeRole  EmployeeRole\n  dateOfJoining String\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  isdeleted Boolean   @default(false)\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n  deletedAt DateTime?\n\n  address Address?\n  classes Class[]\n\n  @@map("employee")\n}\n\n// model TutorProfile {\n//     id String @id @default(uuid())\n\n//     classId    String\n\n//     class    Class    @relation(fields: [classId], references: [id], onDelete: Cascade)\n//     employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)\n// }\n\nmodel Class {\n  id                String @id @default(uuid())\n  name              String @unique\n  monthlyTuitionFee Float\n  classTeacher      String\n\n  isDeleted Boolean   @default(false)\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n  deletedAt DateTime?\n\n  employee Employee @relation(fields: [classTeacher], references: [id], onDelete: Cascade)\n\n  @@map("class")\n}\n\nmodel Address {\n  id String @id @default(uuid())\n\n  studentId  String? @unique @map("student_id")\n  employeeId String? @unique @map("employee_id")\n\n  permanentAddressVillage    String?\n  permanentAddressPostOffice String?\n  permanentAddressPostCode   String?\n  permanentAddressDistrict   String?\n\n  presentAddressVillage    String?\n  presentAddressPostOffice String?\n  presentAddressPostCode   String?\n  presentAddressDistrict   String?\n\n  isDeleted Boolean @default(false)\n\n  // student  Student?  @relation(fields: [studentId], references: [id])\n  employee Employee? @relation(fields: [employeeId], references: [id], onDelete: Cascade)\n\n  createdAt DateTime  @default(now()) @map("created_at")\n  updatedAt DateTime  @updatedAt @map("updated_at")\n  deletedAt DateTime? @map("deleted_at")\n}\n\nmodel Sequence {\n  id      String @id\n  current Int\n}\n',
+  "inlineSchema": '// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = "prisma-client"\n  // output   = "../generated/prisma"\n  output   = "../src/generated"\n  // moduleFormat = "cjs"\n}\n\ndatasource db {\n  provider = "postgresql"\n}\n\n// Enums \nenum UserRole {\n  SUPER_ADMIN\n  ADMIN\n  TEACHER\n  STUDENT\n  PRINCIPAL\n  MANAGEMENT_STAFF\n  ACCOUNTANT\n  STORE_MANAGER\n  LIBRARIAN\n  OTHER\n}\n\nenum Gender {\n  MALE\n  FEMALE\n  OTHER\n}\n\nenum BloodGroup {\n  A_POSITIVE\n  A_NEGATIVE\n  B_POSITIVE\n  B_NEGATIVE\n  AB_POSITIVE\n  AB_NEGATIVE\n  O_POSITIVE\n  O_NEGATIVE\n}\n\nenum Religion {\n  ISLAM\n  HINDUISM\n  CHRISTIANITY\n  BUDDHISM\n  OTHER\n}\n\nenum AddressType {\n  PRESENT\n  PERMANENT\n}\n\nenum EmployeeRole {\n  PRINCIPAL\n  MANAGEMENT_STAFF\n  TEACHER\n  ACCOUNTANT\n  STORE_MANAGER\n  LIBRARIAN\n  OTHER\n}\n\nenum UserStatus {\n  ACTIVE\n  BLOCKED\n  DELETED\n}\n\nmodel User {\n  id                 String     @id\n  name               String\n  email              String\n  role               UserRole   @default(STUDENT)\n  status             UserStatus @default(ACTIVE)\n  needPasswordChange Boolean    @default(false)\n  isDeleted          Boolean    @default(false)\n  deletedAt          DateTime?\n  emailVerified      Boolean    @default(false)\n  image              String?\n  createdAt          DateTime   @default(now())\n  updatedAt          DateTime   @updatedAt\n  sessions           Session[]\n  accounts           Account[]\n  employee           Employee?\n  admin              Admin?\n\n  @@unique([email])\n  @@map("user")\n}\n\nmodel Session {\n  id        String   @id\n  expiresAt DateTime\n  token     String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  ipAddress String?\n  userAgent String?\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([token])\n  @@index([userId])\n  @@map("session")\n}\n\nmodel Account {\n  id                    String    @id\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @updatedAt\n\n  @@index([userId])\n  @@map("account")\n}\n\nmodel Verification {\n  id         String   @id\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  @@index([identifier])\n  @@map("verification")\n}\n\nmodel Admin {\n  id            String    @id @default(uuid())\n  name          String\n  email         String    @unique\n  profilePhoto  String?\n  contactNumber String?\n  isDeleted     Boolean   @default(false)\n  createdAt     DateTime  @default(now())\n  updatedAt     DateTime  @updatedAt\n  deletedAt     DateTime?\n\n  userId String @unique\n  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([email])\n  @@index([isDeleted])\n  @@map("admins")\n}\n\nmodel Employee {\n  id     String @id @default(uuid())\n  userId String @unique\n\n  phone String\n\n  fullName         String\n  nid              String\n  fatherName       String\n  motherName       String\n  emergencyContact String?\n  monthlySalary    Float\n  employeeId       String  @unique\n\n  picture         String?\n  picturePublicId String?\n  pictureName     String?\n  pictureType     String?\n\n  experience         String?\n  experiencePublicId String?\n  experienceName     String?\n  experienceType     String?\n\n  authoritySign         String\n  authoritySignPublicId String\n  authoritySignName     String?\n  authoritySignType     String?\n\n  employeeSign         String\n  employeeSignPublicId String\n  employeeSignName     String?\n  employeeSignType     String?\n\n  gender        Gender\n  bloodGroup    BloodGroup\n  religion      Religion\n  employeeRole  EmployeeRole\n  dateOfJoining String\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  isdeleted Boolean   @default(false)\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n  deletedAt DateTime?\n\n  address Address?\n  classes Class[]\n\n  @@map("employee")\n}\n\n// model TutorProfile {\n//     id String @id @default(uuid())\n\n//     classId    String\n\n//     class    Class    @relation(fields: [classId], references: [id], onDelete: Cascade)\n//     employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)\n// }\n\nmodel Class {\n  id                String @id @default(uuid())\n  name              String\n  monthlyTuitionFee Float\n  classTeacher      String\n\n  isDeleted Boolean   @default(false)\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n  deletedAt DateTime?\n\n  employee Employee  @relation(fields: [classTeacher], references: [id], onDelete: Cascade)\n  students Student[]\n\n  @@map("class")\n}\n\nmodel Address {\n  id String @id @default(uuid())\n\n  studentId  String? @unique @map("student_id")\n  employeeId String? @unique @map("employee_id")\n\n  permanentAddressVillage    String?\n  permanentAddressPostOffice String?\n  permanentAddressPostCode   String?\n  permanentAddressDistrict   String?\n\n  presentAddressVillage    String?\n  presentAddressPostOffice String?\n  presentAddressPostCode   String?\n  presentAddressDistrict   String?\n\n  isDeleted Boolean @default(false)\n\n  student  Student?  @relation(fields: [studentId], references: [id])\n  employee Employee? @relation(fields: [employeeId], references: [id], onDelete: Cascade)\n\n  createdAt DateTime  @default(now()) @map("created_at")\n  updatedAt DateTime  @updatedAt @map("updated_at")\n  deletedAt DateTime? @map("deleted_at")\n}\n\nmodel Sequence {\n  id      String @id\n  current Int\n}\n\nmodel GuardianInfo {\n  id               String  @id @default(uuid())\n  studentId        String  @unique\n  email            String?\n  fatherName       String\n  fatherNameBangla String\n  whatsappNumber   String\n  fatherOccupation String\n\n  motherName         String\n  motherNameBangla   String\n  motherMobileNumber String\n  motherOccupation   String\n\n  nameOfLocalGuardian   String\n  relationShipOfStudent String\n  GuardianMobileNumber  String\n  GuardianSign          String\n\n  student Student @relation(fields: [studentId], references: [id])\n\n  isdeleted Boolean   @default(false)\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n  deletedAt DateTime?\n}\n\nmodel Student {\n  id                      String   @id @default(uuid())\n  userId                  String\n  classId                 String\n  studentId               String   @unique\n  fullName                String\n  fullNameBangla          String\n  dateOfBirth             String\n  birthRegistrationNumber String\n  religion                Religion\n  studentSign             String\n  admissionTotalFees      String\n  admissionDate           String\n  previousInstituteName   String?\n  endingClass             String?\n  result                  String?\n  testimonialNumber       String?\n  authoritySign           String\n\n  address      Address?\n  guardianInfo GuardianInfo?\n  class        Class         @relation(fields: [classId], references: [id])\n\n  isdeleted      Boolean   @default(false)\n  createdAt      DateTime  @default(now())\n  updatedAt      DateTime  @updatedAt\n  deletedAt      DateTime?\n  guardianInfoId String\n}\n',
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -234,10 +234,10 @@ var config = {
     "graph": ""
   }
 };
-config.runtimeDataModel = JSON.parse('{"models":{"User":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"name","kind":"scalar","type":"String"},{"name":"email","kind":"scalar","type":"String"},{"name":"role","kind":"enum","type":"UserRole"},{"name":"status","kind":"enum","type":"UserStatus"},{"name":"needPasswordChange","kind":"scalar","type":"Boolean"},{"name":"isDeleted","kind":"scalar","type":"Boolean"},{"name":"deletedAt","kind":"scalar","type":"DateTime"},{"name":"emailVerified","kind":"scalar","type":"Boolean"},{"name":"image","kind":"scalar","type":"String"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"sessions","kind":"object","type":"Session","relationName":"SessionToUser"},{"name":"accounts","kind":"object","type":"Account","relationName":"AccountToUser"},{"name":"employee","kind":"object","type":"Employee","relationName":"EmployeeToUser"},{"name":"admin","kind":"object","type":"Admin","relationName":"AdminToUser"}],"dbName":"user"},"Session":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"expiresAt","kind":"scalar","type":"DateTime"},{"name":"token","kind":"scalar","type":"String"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"ipAddress","kind":"scalar","type":"String"},{"name":"userAgent","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"user","kind":"object","type":"User","relationName":"SessionToUser"}],"dbName":"session"},"Account":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"accountId","kind":"scalar","type":"String"},{"name":"providerId","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"user","kind":"object","type":"User","relationName":"AccountToUser"},{"name":"accessToken","kind":"scalar","type":"String"},{"name":"refreshToken","kind":"scalar","type":"String"},{"name":"idToken","kind":"scalar","type":"String"},{"name":"accessTokenExpiresAt","kind":"scalar","type":"DateTime"},{"name":"refreshTokenExpiresAt","kind":"scalar","type":"DateTime"},{"name":"scope","kind":"scalar","type":"String"},{"name":"password","kind":"scalar","type":"String"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"}],"dbName":"account"},"Verification":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"identifier","kind":"scalar","type":"String"},{"name":"value","kind":"scalar","type":"String"},{"name":"expiresAt","kind":"scalar","type":"DateTime"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"}],"dbName":"verification"},"Admin":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"name","kind":"scalar","type":"String"},{"name":"email","kind":"scalar","type":"String"},{"name":"profilePhoto","kind":"scalar","type":"String"},{"name":"contactNumber","kind":"scalar","type":"String"},{"name":"isDeleted","kind":"scalar","type":"Boolean"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"deletedAt","kind":"scalar","type":"DateTime"},{"name":"userId","kind":"scalar","type":"String"},{"name":"user","kind":"object","type":"User","relationName":"AdminToUser"}],"dbName":"admins"},"Employee":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"phone","kind":"scalar","type":"String"},{"name":"fullName","kind":"scalar","type":"String"},{"name":"nid","kind":"scalar","type":"String"},{"name":"fatherName","kind":"scalar","type":"String"},{"name":"motherName","kind":"scalar","type":"String"},{"name":"emergencyContact","kind":"scalar","type":"String"},{"name":"monthlySalary","kind":"scalar","type":"Float"},{"name":"employeeId","kind":"scalar","type":"String"},{"name":"picture","kind":"scalar","type":"String"},{"name":"picturePublicId","kind":"scalar","type":"String"},{"name":"pictureName","kind":"scalar","type":"String"},{"name":"pictureType","kind":"scalar","type":"String"},{"name":"experience","kind":"scalar","type":"String"},{"name":"experiencePublicId","kind":"scalar","type":"String"},{"name":"experienceName","kind":"scalar","type":"String"},{"name":"experienceType","kind":"scalar","type":"String"},{"name":"authoritySign","kind":"scalar","type":"String"},{"name":"authoritySignPublicId","kind":"scalar","type":"String"},{"name":"authoritySignName","kind":"scalar","type":"String"},{"name":"authoritySignType","kind":"scalar","type":"String"},{"name":"employeeSign","kind":"scalar","type":"String"},{"name":"employeeSignPublicId","kind":"scalar","type":"String"},{"name":"employeeSignName","kind":"scalar","type":"String"},{"name":"employeeSignType","kind":"scalar","type":"String"},{"name":"gender","kind":"enum","type":"Gender"},{"name":"bloodGroup","kind":"enum","type":"BloodGroup"},{"name":"religion","kind":"enum","type":"Religion"},{"name":"employeeRole","kind":"enum","type":"EmployeeRole"},{"name":"dateOfJoining","kind":"scalar","type":"String"},{"name":"user","kind":"object","type":"User","relationName":"EmployeeToUser"},{"name":"isdeleted","kind":"scalar","type":"Boolean"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"deletedAt","kind":"scalar","type":"DateTime"},{"name":"address","kind":"object","type":"Address","relationName":"AddressToEmployee"},{"name":"classes","kind":"object","type":"Class","relationName":"ClassToEmployee"}],"dbName":"employee"},"Class":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"name","kind":"scalar","type":"String"},{"name":"monthlyTuitionFee","kind":"scalar","type":"Float"},{"name":"classTeacher","kind":"scalar","type":"String"},{"name":"isDeleted","kind":"scalar","type":"Boolean"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"deletedAt","kind":"scalar","type":"DateTime"},{"name":"employee","kind":"object","type":"Employee","relationName":"ClassToEmployee"}],"dbName":"class"},"Address":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"studentId","kind":"scalar","type":"String","dbName":"student_id"},{"name":"employeeId","kind":"scalar","type":"String","dbName":"employee_id"},{"name":"permanentAddressVillage","kind":"scalar","type":"String"},{"name":"permanentAddressPostOffice","kind":"scalar","type":"String"},{"name":"permanentAddressPostCode","kind":"scalar","type":"String"},{"name":"permanentAddressDistrict","kind":"scalar","type":"String"},{"name":"presentAddressVillage","kind":"scalar","type":"String"},{"name":"presentAddressPostOffice","kind":"scalar","type":"String"},{"name":"presentAddressPostCode","kind":"scalar","type":"String"},{"name":"presentAddressDistrict","kind":"scalar","type":"String"},{"name":"isDeleted","kind":"scalar","type":"Boolean"},{"name":"employee","kind":"object","type":"Employee","relationName":"AddressToEmployee"},{"name":"createdAt","kind":"scalar","type":"DateTime","dbName":"created_at"},{"name":"updatedAt","kind":"scalar","type":"DateTime","dbName":"updated_at"},{"name":"deletedAt","kind":"scalar","type":"DateTime","dbName":"deleted_at"}],"dbName":null},"Sequence":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"current","kind":"scalar","type":"Int"}],"dbName":null}},"enums":{},"types":{}}');
+config.runtimeDataModel = JSON.parse('{"models":{"User":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"name","kind":"scalar","type":"String"},{"name":"email","kind":"scalar","type":"String"},{"name":"role","kind":"enum","type":"UserRole"},{"name":"status","kind":"enum","type":"UserStatus"},{"name":"needPasswordChange","kind":"scalar","type":"Boolean"},{"name":"isDeleted","kind":"scalar","type":"Boolean"},{"name":"deletedAt","kind":"scalar","type":"DateTime"},{"name":"emailVerified","kind":"scalar","type":"Boolean"},{"name":"image","kind":"scalar","type":"String"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"sessions","kind":"object","type":"Session","relationName":"SessionToUser"},{"name":"accounts","kind":"object","type":"Account","relationName":"AccountToUser"},{"name":"employee","kind":"object","type":"Employee","relationName":"EmployeeToUser"},{"name":"admin","kind":"object","type":"Admin","relationName":"AdminToUser"}],"dbName":"user"},"Session":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"expiresAt","kind":"scalar","type":"DateTime"},{"name":"token","kind":"scalar","type":"String"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"ipAddress","kind":"scalar","type":"String"},{"name":"userAgent","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"user","kind":"object","type":"User","relationName":"SessionToUser"}],"dbName":"session"},"Account":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"accountId","kind":"scalar","type":"String"},{"name":"providerId","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"user","kind":"object","type":"User","relationName":"AccountToUser"},{"name":"accessToken","kind":"scalar","type":"String"},{"name":"refreshToken","kind":"scalar","type":"String"},{"name":"idToken","kind":"scalar","type":"String"},{"name":"accessTokenExpiresAt","kind":"scalar","type":"DateTime"},{"name":"refreshTokenExpiresAt","kind":"scalar","type":"DateTime"},{"name":"scope","kind":"scalar","type":"String"},{"name":"password","kind":"scalar","type":"String"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"}],"dbName":"account"},"Verification":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"identifier","kind":"scalar","type":"String"},{"name":"value","kind":"scalar","type":"String"},{"name":"expiresAt","kind":"scalar","type":"DateTime"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"}],"dbName":"verification"},"Admin":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"name","kind":"scalar","type":"String"},{"name":"email","kind":"scalar","type":"String"},{"name":"profilePhoto","kind":"scalar","type":"String"},{"name":"contactNumber","kind":"scalar","type":"String"},{"name":"isDeleted","kind":"scalar","type":"Boolean"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"deletedAt","kind":"scalar","type":"DateTime"},{"name":"userId","kind":"scalar","type":"String"},{"name":"user","kind":"object","type":"User","relationName":"AdminToUser"}],"dbName":"admins"},"Employee":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"phone","kind":"scalar","type":"String"},{"name":"fullName","kind":"scalar","type":"String"},{"name":"nid","kind":"scalar","type":"String"},{"name":"fatherName","kind":"scalar","type":"String"},{"name":"motherName","kind":"scalar","type":"String"},{"name":"emergencyContact","kind":"scalar","type":"String"},{"name":"monthlySalary","kind":"scalar","type":"Float"},{"name":"employeeId","kind":"scalar","type":"String"},{"name":"picture","kind":"scalar","type":"String"},{"name":"picturePublicId","kind":"scalar","type":"String"},{"name":"pictureName","kind":"scalar","type":"String"},{"name":"pictureType","kind":"scalar","type":"String"},{"name":"experience","kind":"scalar","type":"String"},{"name":"experiencePublicId","kind":"scalar","type":"String"},{"name":"experienceName","kind":"scalar","type":"String"},{"name":"experienceType","kind":"scalar","type":"String"},{"name":"authoritySign","kind":"scalar","type":"String"},{"name":"authoritySignPublicId","kind":"scalar","type":"String"},{"name":"authoritySignName","kind":"scalar","type":"String"},{"name":"authoritySignType","kind":"scalar","type":"String"},{"name":"employeeSign","kind":"scalar","type":"String"},{"name":"employeeSignPublicId","kind":"scalar","type":"String"},{"name":"employeeSignName","kind":"scalar","type":"String"},{"name":"employeeSignType","kind":"scalar","type":"String"},{"name":"gender","kind":"enum","type":"Gender"},{"name":"bloodGroup","kind":"enum","type":"BloodGroup"},{"name":"religion","kind":"enum","type":"Religion"},{"name":"employeeRole","kind":"enum","type":"EmployeeRole"},{"name":"dateOfJoining","kind":"scalar","type":"String"},{"name":"user","kind":"object","type":"User","relationName":"EmployeeToUser"},{"name":"isdeleted","kind":"scalar","type":"Boolean"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"deletedAt","kind":"scalar","type":"DateTime"},{"name":"address","kind":"object","type":"Address","relationName":"AddressToEmployee"},{"name":"classes","kind":"object","type":"Class","relationName":"ClassToEmployee"}],"dbName":"employee"},"Class":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"name","kind":"scalar","type":"String"},{"name":"monthlyTuitionFee","kind":"scalar","type":"Float"},{"name":"classTeacher","kind":"scalar","type":"String"},{"name":"isDeleted","kind":"scalar","type":"Boolean"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"deletedAt","kind":"scalar","type":"DateTime"},{"name":"employee","kind":"object","type":"Employee","relationName":"ClassToEmployee"},{"name":"students","kind":"object","type":"Student","relationName":"ClassToStudent"}],"dbName":"class"},"Address":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"studentId","kind":"scalar","type":"String","dbName":"student_id"},{"name":"employeeId","kind":"scalar","type":"String","dbName":"employee_id"},{"name":"permanentAddressVillage","kind":"scalar","type":"String"},{"name":"permanentAddressPostOffice","kind":"scalar","type":"String"},{"name":"permanentAddressPostCode","kind":"scalar","type":"String"},{"name":"permanentAddressDistrict","kind":"scalar","type":"String"},{"name":"presentAddressVillage","kind":"scalar","type":"String"},{"name":"presentAddressPostOffice","kind":"scalar","type":"String"},{"name":"presentAddressPostCode","kind":"scalar","type":"String"},{"name":"presentAddressDistrict","kind":"scalar","type":"String"},{"name":"isDeleted","kind":"scalar","type":"Boolean"},{"name":"student","kind":"object","type":"Student","relationName":"AddressToStudent"},{"name":"employee","kind":"object","type":"Employee","relationName":"AddressToEmployee"},{"name":"createdAt","kind":"scalar","type":"DateTime","dbName":"created_at"},{"name":"updatedAt","kind":"scalar","type":"DateTime","dbName":"updated_at"},{"name":"deletedAt","kind":"scalar","type":"DateTime","dbName":"deleted_at"}],"dbName":null},"Sequence":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"current","kind":"scalar","type":"Int"}],"dbName":null},"GuardianInfo":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"studentId","kind":"scalar","type":"String"},{"name":"email","kind":"scalar","type":"String"},{"name":"fatherName","kind":"scalar","type":"String"},{"name":"fatherNameBangla","kind":"scalar","type":"String"},{"name":"whatsappNumber","kind":"scalar","type":"String"},{"name":"fatherOccupation","kind":"scalar","type":"String"},{"name":"motherName","kind":"scalar","type":"String"},{"name":"motherNameBangla","kind":"scalar","type":"String"},{"name":"motherMobileNumber","kind":"scalar","type":"String"},{"name":"motherOccupation","kind":"scalar","type":"String"},{"name":"nameOfLocalGuardian","kind":"scalar","type":"String"},{"name":"relationShipOfStudent","kind":"scalar","type":"String"},{"name":"GuardianMobileNumber","kind":"scalar","type":"String"},{"name":"GuardianSign","kind":"scalar","type":"String"},{"name":"student","kind":"object","type":"Student","relationName":"GuardianInfoToStudent"},{"name":"isdeleted","kind":"scalar","type":"Boolean"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"deletedAt","kind":"scalar","type":"DateTime"}],"dbName":null},"Student":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"userId","kind":"scalar","type":"String"},{"name":"classId","kind":"scalar","type":"String"},{"name":"studentId","kind":"scalar","type":"String"},{"name":"fullName","kind":"scalar","type":"String"},{"name":"fullNameBangla","kind":"scalar","type":"String"},{"name":"dateOfBirth","kind":"scalar","type":"String"},{"name":"birthRegistrationNumber","kind":"scalar","type":"String"},{"name":"religion","kind":"enum","type":"Religion"},{"name":"studentSign","kind":"scalar","type":"String"},{"name":"admissionTotalFees","kind":"scalar","type":"String"},{"name":"admissionDate","kind":"scalar","type":"String"},{"name":"previousInstituteName","kind":"scalar","type":"String"},{"name":"endingClass","kind":"scalar","type":"String"},{"name":"result","kind":"scalar","type":"String"},{"name":"testimonialNumber","kind":"scalar","type":"String"},{"name":"authoritySign","kind":"scalar","type":"String"},{"name":"address","kind":"object","type":"Address","relationName":"AddressToStudent"},{"name":"guardianInfo","kind":"object","type":"GuardianInfo","relationName":"GuardianInfoToStudent"},{"name":"class","kind":"object","type":"Class","relationName":"ClassToStudent"},{"name":"isdeleted","kind":"scalar","type":"Boolean"},{"name":"createdAt","kind":"scalar","type":"DateTime"},{"name":"updatedAt","kind":"scalar","type":"DateTime"},{"name":"deletedAt","kind":"scalar","type":"DateTime"},{"name":"guardianInfoId","kind":"scalar","type":"String"}],"dbName":null}},"enums":{},"types":{}}');
 config.parameterizationSchema = {
-  strings: JSON.parse('["where","orderBy","cursor","user","sessions","accounts","employee","address","classes","_count","admin","User.findUnique","User.findUniqueOrThrow","User.findFirst","User.findFirstOrThrow","User.findMany","data","User.createOne","User.createMany","User.createManyAndReturn","User.updateOne","User.updateMany","User.updateManyAndReturn","create","update","User.upsertOne","User.deleteOne","User.deleteMany","having","_min","_max","User.groupBy","User.aggregate","Session.findUnique","Session.findUniqueOrThrow","Session.findFirst","Session.findFirstOrThrow","Session.findMany","Session.createOne","Session.createMany","Session.createManyAndReturn","Session.updateOne","Session.updateMany","Session.updateManyAndReturn","Session.upsertOne","Session.deleteOne","Session.deleteMany","Session.groupBy","Session.aggregate","Account.findUnique","Account.findUniqueOrThrow","Account.findFirst","Account.findFirstOrThrow","Account.findMany","Account.createOne","Account.createMany","Account.createManyAndReturn","Account.updateOne","Account.updateMany","Account.updateManyAndReturn","Account.upsertOne","Account.deleteOne","Account.deleteMany","Account.groupBy","Account.aggregate","Verification.findUnique","Verification.findUniqueOrThrow","Verification.findFirst","Verification.findFirstOrThrow","Verification.findMany","Verification.createOne","Verification.createMany","Verification.createManyAndReturn","Verification.updateOne","Verification.updateMany","Verification.updateManyAndReturn","Verification.upsertOne","Verification.deleteOne","Verification.deleteMany","Verification.groupBy","Verification.aggregate","Admin.findUnique","Admin.findUniqueOrThrow","Admin.findFirst","Admin.findFirstOrThrow","Admin.findMany","Admin.createOne","Admin.createMany","Admin.createManyAndReturn","Admin.updateOne","Admin.updateMany","Admin.updateManyAndReturn","Admin.upsertOne","Admin.deleteOne","Admin.deleteMany","Admin.groupBy","Admin.aggregate","Employee.findUnique","Employee.findUniqueOrThrow","Employee.findFirst","Employee.findFirstOrThrow","Employee.findMany","Employee.createOne","Employee.createMany","Employee.createManyAndReturn","Employee.updateOne","Employee.updateMany","Employee.updateManyAndReturn","Employee.upsertOne","Employee.deleteOne","Employee.deleteMany","_avg","_sum","Employee.groupBy","Employee.aggregate","Class.findUnique","Class.findUniqueOrThrow","Class.findFirst","Class.findFirstOrThrow","Class.findMany","Class.createOne","Class.createMany","Class.createManyAndReturn","Class.updateOne","Class.updateMany","Class.updateManyAndReturn","Class.upsertOne","Class.deleteOne","Class.deleteMany","Class.groupBy","Class.aggregate","Address.findUnique","Address.findUniqueOrThrow","Address.findFirst","Address.findFirstOrThrow","Address.findMany","Address.createOne","Address.createMany","Address.createManyAndReturn","Address.updateOne","Address.updateMany","Address.updateManyAndReturn","Address.upsertOne","Address.deleteOne","Address.deleteMany","Address.groupBy","Address.aggregate","Sequence.findUnique","Sequence.findUniqueOrThrow","Sequence.findFirst","Sequence.findFirstOrThrow","Sequence.findMany","Sequence.createOne","Sequence.createMany","Sequence.createManyAndReturn","Sequence.updateOne","Sequence.updateMany","Sequence.updateManyAndReturn","Sequence.upsertOne","Sequence.deleteOne","Sequence.deleteMany","Sequence.groupBy","Sequence.aggregate","AND","OR","NOT","id","current","equals","in","notIn","lt","lte","gt","gte","not","contains","startsWith","endsWith","studentId","employeeId","permanentAddressVillage","permanentAddressPostOffice","permanentAddressPostCode","permanentAddressDistrict","presentAddressVillage","presentAddressPostOffice","presentAddressPostCode","presentAddressDistrict","isDeleted","createdAt","updatedAt","deletedAt","name","monthlyTuitionFee","classTeacher","userId","phone","fullName","nid","fatherName","motherName","emergencyContact","monthlySalary","picture","picturePublicId","pictureName","pictureType","experience","experiencePublicId","experienceName","experienceType","authoritySign","authoritySignPublicId","authoritySignName","authoritySignType","employeeSign","employeeSignPublicId","employeeSignName","employeeSignType","Gender","gender","BloodGroup","bloodGroup","Religion","religion","EmployeeRole","employeeRole","dateOfJoining","isdeleted","every","some","none","email","profilePhoto","contactNumber","identifier","value","expiresAt","accountId","providerId","accessToken","refreshToken","idToken","accessTokenExpiresAt","refreshTokenExpiresAt","scope","password","token","ipAddress","userAgent","UserRole","role","UserStatus","status","needPasswordChange","emailVerified","image","is","isNot","connectOrCreate","upsert","createMany","set","disconnect","delete","connect","updateMany","deleteMany","increment","decrement","multiply","divide"]'),
-  graph: "3gNRkAETBAAAtgIAIAUAALcCACAGAACMAgAgCgAAuAIAIKMBAACzAgAwpAEAABoAEKUBAACzAgAwpgEBAAAAAb0BIACJAgAhvgFAAIoCACG_AUAAigIAIcABQACLAgAhwQEBAPcBACHpAQEAAAAB_AEAALQC_AEi_gEAALUC_gEi_wEgAIkCACGAAiAAiQIAIYECAQCIAgAhAQAAAAEAIAwDAACjAgAgowEAALwCADCkAQAAAwAQpQEAALwCADCmAQEA9wEAIb4BQACKAgAhvwFAAIoCACHEAQEA9wEAIe4BQACKAgAh-AEBAPcBACH5AQEAiAIAIfoBAQCIAgAhAwMAAPcCACD5AQAAxAIAIPoBAADEAgAgDAMAAKMCACCjAQAAvAIAMKQBAAADABClAQAAvAIAMKYBAQAAAAG-AUAAigIAIb8BQACKAgAhxAEBAPcBACHuAUAAigIAIfgBAQAAAAH5AQEAiAIAIfoBAQCIAgAhAwAAAAMAIAEAAAQAMAIAAAUAIBEDAACjAgAgowEAALsCADCkAQAABwAQpQEAALsCADCmAQEA9wEAIb4BQACKAgAhvwFAAIoCACHEAQEA9wEAIe8BAQD3AQAh8AEBAPcBACHxAQEAiAIAIfIBAQCIAgAh8wEBAIgCACH0AUAAiwIAIfUBQACLAgAh9gEBAIgCACH3AQEAiAIAIQgDAAD3AgAg8QEAAMQCACDyAQAAxAIAIPMBAADEAgAg9AEAAMQCACD1AQAAxAIAIPYBAADEAgAg9wEAAMQCACARAwAAowIAIKMBAAC7AgAwpAEAAAcAEKUBAAC7AgAwpgEBAAAAAb4BQACKAgAhvwFAAIoCACHEAQEA9wEAIe8BAQD3AQAh8AEBAPcBACHxAQEAiAIAIfIBAQCIAgAh8wEBAIgCACH0AUAAiwIAIfUBQACLAgAh9gEBAIgCACH3AQEAiAIAIQMAAAAHACABAAAIADACAAAJACApAwAAowIAIAcAAKQCACAIAAClAgAgowEAAJ0CADCkAQAACwAQpQEAAJ0CADCmAQEA9wEAIbQBAQD3AQAhvgFAAIoCACG_AUAAigIAIcABQACLAgAhxAEBAPcBACHFAQEA9wEAIcYBAQD3AQAhxwEBAPcBACHIAQEA9wEAIckBAQD3AQAhygEBAIgCACHLAQgAngIAIcwBAQCIAgAhzQEBAIgCACHOAQEAiAIAIc8BAQCIAgAh0AEBAIgCACHRAQEAiAIAIdIBAQCIAgAh0wEBAIgCACHUAQEA9wEAIdUBAQD3AQAh1gEBAIgCACHXAQEAiAIAIdgBAQD3AQAh2QEBAPcBACHaAQEAiAIAIdsBAQCIAgAh3QEAAJ8C3QEi3wEAAKAC3wEi4QEAAKEC4QEi4wEAAKIC4wEi5AEBAPcBACHlASAAiQIAIQEAAAALACATBgAAjAIAIKMBAACHAgAwpAEAAA0AEKUBAACHAgAwpgEBAPcBACGzAQEAiAIAIbQBAQCIAgAhtQEBAIgCACG2AQEAiAIAIbcBAQCIAgAhuAEBAIgCACG5AQEAiAIAIboBAQCIAgAhuwEBAIgCACG8AQEAiAIAIb0BIACJAgAhvgFAAIoCACG_AUAAigIAIcABQACLAgAhAQAAAA0AIAEAAAALACAMBgAAugIAIKMBAAC5AgAwpAEAABAAEKUBAAC5AgAwpgEBAPcBACG9ASAAiQIAIb4BQACKAgAhvwFAAIoCACHAAUAAiwIAIcEBAQD3AQAhwgEIAJ4CACHDAQEA9wEAIQIGAADOAgAgwAEAAMQCACAMBgAAugIAIKMBAAC5AgAwpAEAABAAEKUBAAC5AgAwpgEBAAAAAb0BIACJAgAhvgFAAIoCACG_AUAAigIAIcABQACLAgAhwQEBAAAAAcIBCACeAgAhwwEBAPcBACEDAAAAEAAgAQAAEQAwAgAAEgAgAQAAABAAIA4DAACjAgAgowEAAKcCADCkAQAAFQAQpQEAAKcCADCmAQEA9wEAIb0BIACJAgAhvgFAAIoCACG_AUAAigIAIcABQACLAgAhwQEBAPcBACHEAQEA9wEAIekBAQD3AQAh6gEBAIgCACHrAQEAiAIAIQEAAAAVACABAAAAAwAgAQAAAAcAIAEAAAABACATBAAAtgIAIAUAALcCACAGAACMAgAgCgAAuAIAIKMBAACzAgAwpAEAABoAEKUBAACzAgAwpgEBAPcBACG9ASAAiQIAIb4BQACKAgAhvwFAAIoCACHAAUAAiwIAIcEBAQD3AQAh6QEBAPcBACH8AQAAtAL8ASL-AQAAtQL-ASL_ASAAiQIAIYACIACJAgAhgQIBAIgCACEGBAAAuwMAIAUAALwDACAGAADOAgAgCgAAvQMAIMABAADEAgAggQIAAMQCACADAAAAGgAgAQAAGwAwAgAAAQAgAwAAABoAIAEAABsAMAIAAAEAIAMAAAAaACABAAAbADACAAABACAQBAAAtwMAIAUAALgDACAGAAC5AwAgCgAAugMAIKYBAQAAAAG9ASAAAAABvgFAAAAAAb8BQAAAAAHAAUAAAAABwQEBAAAAAekBAQAAAAH8AQAAAPwBAv4BAAAA_gEC_wEgAAAAAYACIAAAAAGBAgEAAAABARAAAB8AIAymAQEAAAABvQEgAAAAAb4BQAAAAAG_AUAAAAABwAFAAAAAAcEBAQAAAAHpAQEAAAAB_AEAAAD8AQL-AQAAAP4BAv8BIAAAAAGAAiAAAAABgQIBAAAAAQEQAAAhADABEAAAIQAwEAQAAJEDACAFAACSAwAgBgAAkwMAIAoAAJQDACCmAQEAwgIAIb0BIADJAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhwQEBAMICACHpAQEAwgIAIfwBAACPA_wBIv4BAACQA_4BIv8BIADJAgAhgAIgAMkCACGBAgEAyAIAIQIAAAABACAQAAAkACAMpgEBAMICACG9ASAAyQIAIb4BQADKAgAhvwFAAMoCACHAAUAAywIAIcEBAQDCAgAh6QEBAMICACH8AQAAjwP8ASL-AQAAkAP-ASL_ASAAyQIAIYACIADJAgAhgQIBAMgCACECAAAAGgAgEAAAJgAgAgAAABoAIBAAACYAIAMAAAABACAXAAAfACAYAAAkACABAAAAAQAgAQAAABoAIAUJAACMAwAgHQAAjgMAIB4AAI0DACDAAQAAxAIAIIECAADEAgAgD6MBAACsAgAwpAEAAC0AEKUBAACsAgAwpgEBAO8BACG9ASAA-wEAIb4BQAD8AQAhvwFAAPwBACHAAUAA_QEAIcEBAQDvAQAh6QEBAO8BACH8AQAArQL8ASL-AQAArgL-ASL_ASAA-wEAIYACIAD7AQAhgQIBAPoBACEDAAAAGgAgAQAALAAwHAAALQAgAwAAABoAIAEAABsAMAIAAAEAIAEAAAAFACABAAAABQAgAwAAAAMAIAEAAAQAMAIAAAUAIAMAAAADACABAAAEADACAAAFACADAAAAAwAgAQAABAAwAgAABQAgCQMAAIsDACCmAQEAAAABvgFAAAAAAb8BQAAAAAHEAQEAAAAB7gFAAAAAAfgBAQAAAAH5AQEAAAAB-gEBAAAAAQEQAAA1ACAIpgEBAAAAAb4BQAAAAAG_AUAAAAABxAEBAAAAAe4BQAAAAAH4AQEAAAAB-QEBAAAAAfoBAQAAAAEBEAAANwAwARAAADcAMAkDAACKAwAgpgEBAMICACG-AUAAygIAIb8BQADKAgAhxAEBAMICACHuAUAAygIAIfgBAQDCAgAh-QEBAMgCACH6AQEAyAIAIQIAAAAFACAQAAA6ACAIpgEBAMICACG-AUAAygIAIb8BQADKAgAhxAEBAMICACHuAUAAygIAIfgBAQDCAgAh-QEBAMgCACH6AQEAyAIAIQIAAAADACAQAAA8ACACAAAAAwAgEAAAPAAgAwAAAAUAIBcAADUAIBgAADoAIAEAAAAFACABAAAAAwAgBQkAAIcDACAdAACJAwAgHgAAiAMAIPkBAADEAgAg-gEAAMQCACALowEAAKsCADCkAQAAQwAQpQEAAKsCADCmAQEA7wEAIb4BQAD8AQAhvwFAAPwBACHEAQEA7wEAIe4BQAD8AQAh-AEBAO8BACH5AQEA-gEAIfoBAQD6AQAhAwAAAAMAIAEAAEIAMBwAAEMAIAMAAAADACABAAAEADACAAAFACABAAAACQAgAQAAAAkAIAMAAAAHACABAAAIADACAAAJACADAAAABwAgAQAACAAwAgAACQAgAwAAAAcAIAEAAAgAMAIAAAkAIA4DAACGAwAgpgEBAAAAAb4BQAAAAAG_AUAAAAABxAEBAAAAAe8BAQAAAAHwAQEAAAAB8QEBAAAAAfIBAQAAAAHzAQEAAAAB9AFAAAAAAfUBQAAAAAH2AQEAAAAB9wEBAAAAAQEQAABLACANpgEBAAAAAb4BQAAAAAG_AUAAAAABxAEBAAAAAe8BAQAAAAHwAQEAAAAB8QEBAAAAAfIBAQAAAAHzAQEAAAAB9AFAAAAAAfUBQAAAAAH2AQEAAAAB9wEBAAAAAQEQAABNADABEAAATQAwDgMAAIUDACCmAQEAwgIAIb4BQADKAgAhvwFAAMoCACHEAQEAwgIAIe8BAQDCAgAh8AEBAMICACHxAQEAyAIAIfIBAQDIAgAh8wEBAMgCACH0AUAAywIAIfUBQADLAgAh9gEBAMgCACH3AQEAyAIAIQIAAAAJACAQAABQACANpgEBAMICACG-AUAAygIAIb8BQADKAgAhxAEBAMICACHvAQEAwgIAIfABAQDCAgAh8QEBAMgCACHyAQEAyAIAIfMBAQDIAgAh9AFAAMsCACH1AUAAywIAIfYBAQDIAgAh9wEBAMgCACECAAAABwAgEAAAUgAgAgAAAAcAIBAAAFIAIAMAAAAJACAXAABLACAYAABQACABAAAACQAgAQAAAAcAIAoJAACCAwAgHQAAhAMAIB4AAIMDACDxAQAAxAIAIPIBAADEAgAg8wEAAMQCACD0AQAAxAIAIPUBAADEAgAg9gEAAMQCACD3AQAAxAIAIBCjAQAAqgIAMKQBAABZABClAQAAqgIAMKYBAQDvAQAhvgFAAPwBACG_AUAA_AEAIcQBAQDvAQAh7wEBAO8BACHwAQEA7wEAIfEBAQD6AQAh8gEBAPoBACHzAQEA-gEAIfQBQAD9AQAh9QFAAP0BACH2AQEA-gEAIfcBAQD6AQAhAwAAAAcAIAEAAFgAMBwAAFkAIAMAAAAHACABAAAIADACAAAJACAJowEAAKkCADCkAQAAXwAQpQEAAKkCADCmAQEAAAABvgFAAIoCACG_AUAAigIAIewBAQD3AQAh7QEBAPcBACHuAUAAigIAIQEAAABcACABAAAAXAAgCaMBAACpAgAwpAEAAF8AEKUBAACpAgAwpgEBAPcBACG-AUAAigIAIb8BQACKAgAh7AEBAPcBACHtAQEA9wEAIe4BQACKAgAhAAMAAABfACABAABgADACAABcACADAAAAXwAgAQAAYAAwAgAAXAAgAwAAAF8AIAEAAGAAMAIAAFwAIAamAQEAAAABvgFAAAAAAb8BQAAAAAHsAQEAAAAB7QEBAAAAAe4BQAAAAAEBEAAAZAAgBqYBAQAAAAG-AUAAAAABvwFAAAAAAewBAQAAAAHtAQEAAAAB7gFAAAAAAQEQAABmADABEAAAZgAwBqYBAQDCAgAhvgFAAMoCACG_AUAAygIAIewBAQDCAgAh7QEBAMICACHuAUAAygIAIQIAAABcACAQAABpACAGpgEBAMICACG-AUAAygIAIb8BQADKAgAh7AEBAMICACHtAQEAwgIAIe4BQADKAgAhAgAAAF8AIBAAAGsAIAIAAABfACAQAABrACADAAAAXAAgFwAAZAAgGAAAaQAgAQAAAFwAIAEAAABfACADCQAA_wIAIB0AAIEDACAeAACAAwAgCaMBAACoAgAwpAEAAHIAEKUBAACoAgAwpgEBAO8BACG-AUAA_AEAIb8BQAD8AQAh7AEBAO8BACHtAQEA7wEAIe4BQAD8AQAhAwAAAF8AIAEAAHEAMBwAAHIAIAMAAABfACABAABgADACAABcACAOAwAAowIAIKMBAACnAgAwpAEAABUAEKUBAACnAgAwpgEBAAAAAb0BIACJAgAhvgFAAIoCACG_AUAAigIAIcABQACLAgAhwQEBAPcBACHEAQEAAAAB6QEBAAAAAeoBAQCIAgAh6wEBAIgCACEBAAAAdQAgAQAAAHUAIAQDAAD3AgAgwAEAAMQCACDqAQAAxAIAIOsBAADEAgAgAwAAABUAIAEAAHgAMAIAAHUAIAMAAAAVACABAAB4ADACAAB1ACADAAAAFQAgAQAAeAAwAgAAdQAgCwMAAP4CACCmAQEAAAABvQEgAAAAAb4BQAAAAAG_AUAAAAABwAFAAAAAAcEBAQAAAAHEAQEAAAAB6QEBAAAAAeoBAQAAAAHrAQEAAAABARAAAHwAIAqmAQEAAAABvQEgAAAAAb4BQAAAAAG_AUAAAAABwAFAAAAAAcEBAQAAAAHEAQEAAAAB6QEBAAAAAeoBAQAAAAHrAQEAAAABARAAAH4AMAEQAAB-ADALAwAA_QIAIKYBAQDCAgAhvQEgAMkCACG-AUAAygIAIb8BQADKAgAhwAFAAMsCACHBAQEAwgIAIcQBAQDCAgAh6QEBAMICACHqAQEAyAIAIesBAQDIAgAhAgAAAHUAIBAAAIEBACAKpgEBAMICACG9ASAAyQIAIb4BQADKAgAhvwFAAMoCACHAAUAAywIAIcEBAQDCAgAhxAEBAMICACHpAQEAwgIAIeoBAQDIAgAh6wEBAMgCACECAAAAFQAgEAAAgwEAIAIAAAAVACAQAACDAQAgAwAAAHUAIBcAAHwAIBgAAIEBACABAAAAdQAgAQAAABUAIAYJAAD6AgAgHQAA_AIAIB4AAPsCACDAAQAAxAIAIOoBAADEAgAg6wEAAMQCACANowEAAKYCADCkAQAAigEAEKUBAACmAgAwpgEBAO8BACG9ASAA-wEAIb4BQAD8AQAhvwFAAPwBACHAAUAA_QEAIcEBAQDvAQAhxAEBAO8BACHpAQEA7wEAIeoBAQD6AQAh6wEBAPoBACEDAAAAFQAgAQAAiQEAMBwAAIoBACADAAAAFQAgAQAAeAAwAgAAdQAgKQMAAKMCACAHAACkAgAgCAAApQIAIKMBAACdAgAwpAEAAAsAEKUBAACdAgAwpgEBAAAAAbQBAQAAAAG-AUAAigIAIb8BQACKAgAhwAFAAIsCACHEAQEAAAABxQEBAPcBACHGAQEA9wEAIccBAQD3AQAhyAEBAPcBACHJAQEA9wEAIcoBAQCIAgAhywEIAJ4CACHMAQEAiAIAIc0BAQCIAgAhzgEBAIgCACHPAQEAiAIAIdABAQCIAgAh0QEBAIgCACHSAQEAiAIAIdMBAQCIAgAh1AEBAPcBACHVAQEA9wEAIdYBAQCIAgAh1wEBAIgCACHYAQEA9wEAIdkBAQD3AQAh2gEBAIgCACHbAQEAiAIAId0BAACfAt0BIt8BAACgAt8BIuEBAAChAuEBIuMBAACiAuMBIuQBAQD3AQAh5QEgAIkCACEBAAAAjQEAIAEAAACNAQAgEQMAAPcCACAHAAD4AgAgCAAA-QIAIMABAADEAgAgygEAAMQCACDMAQAAxAIAIM0BAADEAgAgzgEAAMQCACDPAQAAxAIAINABAADEAgAg0QEAAMQCACDSAQAAxAIAINMBAADEAgAg1gEAAMQCACDXAQAAxAIAINoBAADEAgAg2wEAAMQCACADAAAACwAgAQAAkAEAMAIAAI0BACADAAAACwAgAQAAkAEAMAIAAI0BACADAAAACwAgAQAAkAEAMAIAAI0BACAmAwAA9AIAIAcAAPUCACAIAAD2AgAgpgEBAAAAAbQBAQAAAAG-AUAAAAABvwFAAAAAAcABQAAAAAHEAQEAAAABxQEBAAAAAcYBAQAAAAHHAQEAAAAByAEBAAAAAckBAQAAAAHKAQEAAAABywEIAAAAAcwBAQAAAAHNAQEAAAABzgEBAAAAAc8BAQAAAAHQAQEAAAAB0QEBAAAAAdIBAQAAAAHTAQEAAAAB1AEBAAAAAdUBAQAAAAHWAQEAAAAB1wEBAAAAAdgBAQAAAAHZAQEAAAAB2gEBAAAAAdsBAQAAAAHdAQAAAN0BAt8BAAAA3wEC4QEAAADhAQLjAQAAAOMBAuQBAQAAAAHlASAAAAABARAAAJQBACAjpgEBAAAAAbQBAQAAAAG-AUAAAAABvwFAAAAAAcABQAAAAAHEAQEAAAABxQEBAAAAAcYBAQAAAAHHAQEAAAAByAEBAAAAAckBAQAAAAHKAQEAAAABywEIAAAAAcwBAQAAAAHNAQEAAAABzgEBAAAAAc8BAQAAAAHQAQEAAAAB0QEBAAAAAdIBAQAAAAHTAQEAAAAB1AEBAAAAAdUBAQAAAAHWAQEAAAAB1wEBAAAAAdgBAQAAAAHZAQEAAAAB2gEBAAAAAdsBAQAAAAHdAQAAAN0BAt8BAAAA3wEC4QEAAADhAQLjAQAAAOMBAuQBAQAAAAHlASAAAAABARAAAJYBADABEAAAlgEAMCYDAADgAgAgBwAA4QIAIAgAAOICACCmAQEAwgIAIbQBAQDCAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhxAEBAMICACHFAQEAwgIAIcYBAQDCAgAhxwEBAMICACHIAQEAwgIAIckBAQDCAgAhygEBAMgCACHLAQgA1AIAIcwBAQDIAgAhzQEBAMgCACHOAQEAyAIAIc8BAQDIAgAh0AEBAMgCACHRAQEAyAIAIdIBAQDIAgAh0wEBAMgCACHUAQEAwgIAIdUBAQDCAgAh1gEBAMgCACHXAQEAyAIAIdgBAQDCAgAh2QEBAMICACHaAQEAyAIAIdsBAQDIAgAh3QEAANwC3QEi3wEAAN0C3wEi4QEAAN4C4QEi4wEAAN8C4wEi5AEBAMICACHlASAAyQIAIQIAAACNAQAgEAAAmQEAICOmAQEAwgIAIbQBAQDCAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhxAEBAMICACHFAQEAwgIAIcYBAQDCAgAhxwEBAMICACHIAQEAwgIAIckBAQDCAgAhygEBAMgCACHLAQgA1AIAIcwBAQDIAgAhzQEBAMgCACHOAQEAyAIAIc8BAQDIAgAh0AEBAMgCACHRAQEAyAIAIdIBAQDIAgAh0wEBAMgCACHUAQEAwgIAIdUBAQDCAgAh1gEBAMgCACHXAQEAyAIAIdgBAQDCAgAh2QEBAMICACHaAQEAyAIAIdsBAQDIAgAh3QEAANwC3QEi3wEAAN0C3wEi4QEAAN4C4QEi4wEAAN8C4wEi5AEBAMICACHlASAAyQIAIQIAAAALACAQAACbAQAgAgAAAAsAIBAAAJsBACADAAAAjQEAIBcAAJQBACAYAACZAQAgAQAAAI0BACABAAAACwAgEwkAANcCACAdAADaAgAgHgAA2QIAIG8AANgCACBwAADbAgAgwAEAAMQCACDKAQAAxAIAIMwBAADEAgAgzQEAAMQCACDOAQAAxAIAIM8BAADEAgAg0AEAAMQCACDRAQAAxAIAINIBAADEAgAg0wEAAMQCACDWAQAAxAIAINcBAADEAgAg2gEAAMQCACDbAQAAxAIAICajAQAAkAIAMKQBAACiAQAQpQEAAJACADCmAQEA7wEAIbQBAQDvAQAhvgFAAPwBACG_AUAA_AEAIcABQAD9AQAhxAEBAO8BACHFAQEA7wEAIcYBAQDvAQAhxwEBAO8BACHIAQEA7wEAIckBAQDvAQAhygEBAPoBACHLAQgAjgIAIcwBAQD6AQAhzQEBAPoBACHOAQEA-gEAIc8BAQD6AQAh0AEBAPoBACHRAQEA-gEAIdIBAQD6AQAh0wEBAPoBACHUAQEA7wEAIdUBAQDvAQAh1gEBAPoBACHXAQEA-gEAIdgBAQDvAQAh2QEBAO8BACHaAQEA-gEAIdsBAQD6AQAh3QEAAJEC3QEi3wEAAJIC3wEi4QEAAJMC4QEi4wEAAJQC4wEi5AEBAO8BACHlASAA-wEAIQMAAAALACABAAChAQAwHAAAogEAIAMAAAALACABAACQAQAwAgAAjQEAIAEAAAASACABAAAAEgAgAwAAABAAIAEAABEAMAIAABIAIAMAAAAQACABAAARADACAAASACADAAAAEAAgAQAAEQAwAgAAEgAgCQYAANYCACCmAQEAAAABvQEgAAAAAb4BQAAAAAG_AUAAAAABwAFAAAAAAcEBAQAAAAHCAQgAAAABwwEBAAAAAQEQAACqAQAgCKYBAQAAAAG9ASAAAAABvgFAAAAAAb8BQAAAAAHAAUAAAAABwQEBAAAAAcIBCAAAAAHDAQEAAAABARAAAKwBADABEAAArAEAMAkGAADVAgAgpgEBAMICACG9ASAAyQIAIb4BQADKAgAhvwFAAMoCACHAAUAAywIAIcEBAQDCAgAhwgEIANQCACHDAQEAwgIAIQIAAAASACAQAACvAQAgCKYBAQDCAgAhvQEgAMkCACG-AUAAygIAIb8BQADKAgAhwAFAAMsCACHBAQEAwgIAIcIBCADUAgAhwwEBAMICACECAAAAEAAgEAAAsQEAIAIAAAAQACAQAACxAQAgAwAAABIAIBcAAKoBACAYAACvAQAgAQAAABIAIAEAAAAQACAGCQAAzwIAIB0AANICACAeAADRAgAgbwAA0AIAIHAAANMCACDAAQAAxAIAIAujAQAAjQIAMKQBAAC4AQAQpQEAAI0CADCmAQEA7wEAIb0BIAD7AQAhvgFAAPwBACG_AUAA_AEAIcABQAD9AQAhwQEBAO8BACHCAQgAjgIAIcMBAQDvAQAhAwAAABAAIAEAALcBADAcAAC4AQAgAwAAABAAIAEAABEAMAIAABIAIBMGAACMAgAgowEAAIcCADCkAQAADQAQpQEAAIcCADCmAQEAAAABswEBAAAAAbQBAQAAAAG1AQEAiAIAIbYBAQCIAgAhtwEBAIgCACG4AQEAiAIAIbkBAQCIAgAhugEBAIgCACG7AQEAiAIAIbwBAQCIAgAhvQEgAIkCACG-AUAAigIAIb8BQACKAgAhwAFAAIsCACEBAAAAuwEAIAEAAAC7AQAgDAYAAM4CACCzAQAAxAIAILQBAADEAgAgtQEAAMQCACC2AQAAxAIAILcBAADEAgAguAEAAMQCACC5AQAAxAIAILoBAADEAgAguwEAAMQCACC8AQAAxAIAIMABAADEAgAgAwAAAA0AIAEAAL4BADACAAC7AQAgAwAAAA0AIAEAAL4BADACAAC7AQAgAwAAAA0AIAEAAL4BADACAAC7AQAgEAYAAM0CACCmAQEAAAABswEBAAAAAbQBAQAAAAG1AQEAAAABtgEBAAAAAbcBAQAAAAG4AQEAAAABuQEBAAAAAboBAQAAAAG7AQEAAAABvAEBAAAAAb0BIAAAAAG-AUAAAAABvwFAAAAAAcABQAAAAAEBEAAAwgEAIA-mAQEAAAABswEBAAAAAbQBAQAAAAG1AQEAAAABtgEBAAAAAbcBAQAAAAG4AQEAAAABuQEBAAAAAboBAQAAAAG7AQEAAAABvAEBAAAAAb0BIAAAAAG-AUAAAAABvwFAAAAAAcABQAAAAAEBEAAAxAEAMAEQAADEAQAwAQAAAAsAIBAGAADMAgAgpgEBAMICACGzAQEAyAIAIbQBAQDIAgAhtQEBAMgCACG2AQEAyAIAIbcBAQDIAgAhuAEBAMgCACG5AQEAyAIAIboBAQDIAgAhuwEBAMgCACG8AQEAyAIAIb0BIADJAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhAgAAALsBACAQAADIAQAgD6YBAQDCAgAhswEBAMgCACG0AQEAyAIAIbUBAQDIAgAhtgEBAMgCACG3AQEAyAIAIbgBAQDIAgAhuQEBAMgCACG6AQEAyAIAIbsBAQDIAgAhvAEBAMgCACG9ASAAyQIAIb4BQADKAgAhvwFAAMoCACHAAUAAywIAIQIAAAANACAQAADKAQAgAgAAAA0AIBAAAMoBACABAAAACwAgAwAAALsBACAXAADCAQAgGAAAyAEAIAEAAAC7AQAgAQAAAA0AIA4JAADFAgAgHQAAxwIAIB4AAMYCACCzAQAAxAIAILQBAADEAgAgtQEAAMQCACC2AQAAxAIAILcBAADEAgAguAEAAMQCACC5AQAAxAIAILoBAADEAgAguwEAAMQCACC8AQAAxAIAIMABAADEAgAgEqMBAAD5AQAwpAEAANIBABClAQAA-QEAMKYBAQDvAQAhswEBAPoBACG0AQEA-gEAIbUBAQD6AQAhtgEBAPoBACG3AQEA-gEAIbgBAQD6AQAhuQEBAPoBACG6AQEA-gEAIbsBAQD6AQAhvAEBAPoBACG9ASAA-wEAIb4BQAD8AQAhvwFAAPwBACHAAUAA_QEAIQMAAAANACABAADRAQAwHAAA0gEAIAMAAAANACABAAC-AQAwAgAAuwEAIAWjAQAA9gEAMKQBAADYAQAQpQEAAPYBADCmAQEAAAABpwECAPgBACEBAAAA1QEAIAEAAADVAQAgBaMBAAD2AQAwpAEAANgBABClAQAA9gEAMKYBAQD3AQAhpwECAPgBACEAAwAAANgBACABAADZAQAwAgAA1QEAIAMAAADYAQAgAQAA2QEAMAIAANUBACADAAAA2AEAIAEAANkBADACAADVAQAgAqYBAQAAAAGnAQIAAAABARAAAN0BACACpgEBAAAAAacBAgAAAAEBEAAA3wEAMAEQAADfAQAwAqYBAQDCAgAhpwECAMMCACECAAAA1QEAIBAAAOIBACACpgEBAMICACGnAQIAwwIAIQIAAADYAQAgEAAA5AEAIAIAAADYAQAgEAAA5AEAIAMAAADVAQAgFwAA3QEAIBgAAOIBACABAAAA1QEAIAEAAADYAQAgBQkAAL0CACAdAADAAgAgHgAAvwIAIG8AAL4CACBwAADBAgAgBaMBAADuAQAwpAEAAOsBABClAQAA7gEAMKYBAQDvAQAhpwECAPABACEDAAAA2AEAIAEAAOoBADAcAADrAQAgAwAAANgBACABAADZAQAwAgAA1QEAIAWjAQAA7gEAMKQBAADrAQAQpQEAAO4BADCmAQEA7wEAIacBAgDwAQAhDgkAAPIBACAdAAD1AQAgHgAA9QEAIKgBAQAAAAGpAQEAAAAEqgEBAAAABKsBAQAAAAGsAQEAAAABrQEBAAAAAa4BAQAAAAGvAQEA9AEAIbABAQAAAAGxAQEAAAABsgEBAAAAAQ0JAADyAQAgHQAA8gEAIB4AAPIBACBvAADzAQAgcAAA8gEAIKgBAgAAAAGpAQIAAAAEqgECAAAABKsBAgAAAAGsAQIAAAABrQECAAAAAa4BAgAAAAGvAQIA8QEAIQ0JAADyAQAgHQAA8gEAIB4AAPIBACBvAADzAQAgcAAA8gEAIKgBAgAAAAGpAQIAAAAEqgECAAAABKsBAgAAAAGsAQIAAAABrQECAAAAAa4BAgAAAAGvAQIA8QEAIQioAQIAAAABqQECAAAABKoBAgAAAASrAQIAAAABrAECAAAAAa0BAgAAAAGuAQIAAAABrwECAPIBACEIqAEIAAAAAakBCAAAAASqAQgAAAAEqwEIAAAAAawBCAAAAAGtAQgAAAABrgEIAAAAAa8BCADzAQAhDgkAAPIBACAdAAD1AQAgHgAA9QEAIKgBAQAAAAGpAQEAAAAEqgEBAAAABKsBAQAAAAGsAQEAAAABrQEBAAAAAa4BAQAAAAGvAQEA9AEAIbABAQAAAAGxAQEAAAABsgEBAAAAAQuoAQEAAAABqQEBAAAABKoBAQAAAASrAQEAAAABrAEBAAAAAa0BAQAAAAGuAQEAAAABrwEBAPUBACGwAQEAAAABsQEBAAAAAbIBAQAAAAEFowEAAPYBADCkAQAA2AEAEKUBAAD2AQAwpgEBAPcBACGnAQIA-AEAIQuoAQEAAAABqQEBAAAABKoBAQAAAASrAQEAAAABrAEBAAAAAa0BAQAAAAGuAQEAAAABrwEBAPUBACGwAQEAAAABsQEBAAAAAbIBAQAAAAEIqAECAAAAAakBAgAAAASqAQIAAAAEqwECAAAAAawBAgAAAAGtAQIAAAABrgECAAAAAa8BAgDyAQAhEqMBAAD5AQAwpAEAANIBABClAQAA-QEAMKYBAQDvAQAhswEBAPoBACG0AQEA-gEAIbUBAQD6AQAhtgEBAPoBACG3AQEA-gEAIbgBAQD6AQAhuQEBAPoBACG6AQEA-gEAIbsBAQD6AQAhvAEBAPoBACG9ASAA-wEAIb4BQAD8AQAhvwFAAPwBACHAAUAA_QEAIQ4JAAD_AQAgHQAAhgIAIB4AAIYCACCoAQEAAAABqQEBAAAABaoBAQAAAAWrAQEAAAABrAEBAAAAAa0BAQAAAAGuAQEAAAABrwEBAIUCACGwAQEAAAABsQEBAAAAAbIBAQAAAAEFCQAA8gEAIB0AAIQCACAeAACEAgAgqAEgAAAAAa8BIACDAgAhCwkAAPIBACAdAACCAgAgHgAAggIAIKgBQAAAAAGpAUAAAAAEqgFAAAAABKsBQAAAAAGsAUAAAAABrQFAAAAAAa4BQAAAAAGvAUAAgQIAIQsJAAD_AQAgHQAAgAIAIB4AAIACACCoAUAAAAABqQFAAAAABaoBQAAAAAWrAUAAAAABrAFAAAAAAa0BQAAAAAGuAUAAAAABrwFAAP4BACELCQAA_wEAIB0AAIACACAeAACAAgAgqAFAAAAAAakBQAAAAAWqAUAAAAAFqwFAAAAAAawBQAAAAAGtAUAAAAABrgFAAAAAAa8BQAD-AQAhCKgBAgAAAAGpAQIAAAAFqgECAAAABasBAgAAAAGsAQIAAAABrQECAAAAAa4BAgAAAAGvAQIA_wEAIQioAUAAAAABqQFAAAAABaoBQAAAAAWrAUAAAAABrAFAAAAAAa0BQAAAAAGuAUAAAAABrwFAAIACACELCQAA8gEAIB0AAIICACAeAACCAgAgqAFAAAAAAakBQAAAAASqAUAAAAAEqwFAAAAAAawBQAAAAAGtAUAAAAABrgFAAAAAAa8BQACBAgAhCKgBQAAAAAGpAUAAAAAEqgFAAAAABKsBQAAAAAGsAUAAAAABrQFAAAAAAa4BQAAAAAGvAUAAggIAIQUJAADyAQAgHQAAhAIAIB4AAIQCACCoASAAAAABrwEgAIMCACECqAEgAAAAAa8BIACEAgAhDgkAAP8BACAdAACGAgAgHgAAhgIAIKgBAQAAAAGpAQEAAAAFqgEBAAAABasBAQAAAAGsAQEAAAABrQEBAAAAAa4BAQAAAAGvAQEAhQIAIbABAQAAAAGxAQEAAAABsgEBAAAAAQuoAQEAAAABqQEBAAAABaoBAQAAAAWrAQEAAAABrAEBAAAAAa0BAQAAAAGuAQEAAAABrwEBAIYCACGwAQEAAAABsQEBAAAAAbIBAQAAAAETBgAAjAIAIKMBAACHAgAwpAEAAA0AEKUBAACHAgAwpgEBAPcBACGzAQEAiAIAIbQBAQCIAgAhtQEBAIgCACG2AQEAiAIAIbcBAQCIAgAhuAEBAIgCACG5AQEAiAIAIboBAQCIAgAhuwEBAIgCACG8AQEAiAIAIb0BIACJAgAhvgFAAIoCACG_AUAAigIAIcABQACLAgAhC6gBAQAAAAGpAQEAAAAFqgEBAAAABasBAQAAAAGsAQEAAAABrQEBAAAAAa4BAQAAAAGvAQEAhgIAIbABAQAAAAGxAQEAAAABsgEBAAAAAQKoASAAAAABrwEgAIQCACEIqAFAAAAAAakBQAAAAASqAUAAAAAEqwFAAAAAAawBQAAAAAGtAUAAAAABrgFAAAAAAa8BQACCAgAhCKgBQAAAAAGpAUAAAAAFqgFAAAAABasBQAAAAAGsAUAAAAABrQFAAAAAAa4BQAAAAAGvAUAAgAIAISsDAACjAgAgBwAApAIAIAgAAKUCACCjAQAAnQIAMKQBAAALABClAQAAnQIAMKYBAQD3AQAhtAEBAPcBACG-AUAAigIAIb8BQACKAgAhwAFAAIsCACHEAQEA9wEAIcUBAQD3AQAhxgEBAPcBACHHAQEA9wEAIcgBAQD3AQAhyQEBAPcBACHKAQEAiAIAIcsBCACeAgAhzAEBAIgCACHNAQEAiAIAIc4BAQCIAgAhzwEBAIgCACHQAQEAiAIAIdEBAQCIAgAh0gEBAIgCACHTAQEAiAIAIdQBAQD3AQAh1QEBAPcBACHWAQEAiAIAIdcBAQCIAgAh2AEBAPcBACHZAQEA9wEAIdoBAQCIAgAh2wEBAIgCACHdAQAAnwLdASLfAQAAoALfASLhAQAAoQLhASLjAQAAogLjASLkAQEA9wEAIeUBIACJAgAhggIAAAsAIIMCAAALACALowEAAI0CADCkAQAAuAEAEKUBAACNAgAwpgEBAO8BACG9ASAA-wEAIb4BQAD8AQAhvwFAAPwBACHAAUAA_QEAIcEBAQDvAQAhwgEIAI4CACHDAQEA7wEAIQ0JAADyAQAgHQAA8wEAIB4AAPMBACBvAADzAQAgcAAA8wEAIKgBCAAAAAGpAQgAAAAEqgEIAAAABKsBCAAAAAGsAQgAAAABrQEIAAAAAa4BCAAAAAGvAQgAjwIAIQ0JAADyAQAgHQAA8wEAIB4AAPMBACBvAADzAQAgcAAA8wEAIKgBCAAAAAGpAQgAAAAEqgEIAAAABKsBCAAAAAGsAQgAAAABrQEIAAAAAa4BCAAAAAGvAQgAjwIAISajAQAAkAIAMKQBAACiAQAQpQEAAJACADCmAQEA7wEAIbQBAQDvAQAhvgFAAPwBACG_AUAA_AEAIcABQAD9AQAhxAEBAO8BACHFAQEA7wEAIcYBAQDvAQAhxwEBAO8BACHIAQEA7wEAIckBAQDvAQAhygEBAPoBACHLAQgAjgIAIcwBAQD6AQAhzQEBAPoBACHOAQEA-gEAIc8BAQD6AQAh0AEBAPoBACHRAQEA-gEAIdIBAQD6AQAh0wEBAPoBACHUAQEA7wEAIdUBAQDvAQAh1gEBAPoBACHXAQEA-gEAIdgBAQDvAQAh2QEBAO8BACHaAQEA-gEAIdsBAQD6AQAh3QEAAJEC3QEi3wEAAJIC3wEi4QEAAJMC4QEi4wEAAJQC4wEi5AEBAO8BACHlASAA-wEAIQcJAADyAQAgHQAAnAIAIB4AAJwCACCoAQAAAN0BAqkBAAAA3QEIqgEAAADdAQivAQAAmwLdASIHCQAA8gEAIB0AAJoCACAeAACaAgAgqAEAAADfAQKpAQAAAN8BCKoBAAAA3wEIrwEAAJkC3wEiBwkAAPIBACAdAACYAgAgHgAAmAIAIKgBAAAA4QECqQEAAADhAQiqAQAAAOEBCK8BAACXAuEBIgcJAADyAQAgHQAAlgIAIB4AAJYCACCoAQAAAOMBAqkBAAAA4wEIqgEAAADjAQivAQAAlQLjASIHCQAA8gEAIB0AAJYCACAeAACWAgAgqAEAAADjAQKpAQAAAOMBCKoBAAAA4wEIrwEAAJUC4wEiBKgBAAAA4wECqQEAAADjAQiqAQAAAOMBCK8BAACWAuMBIgcJAADyAQAgHQAAmAIAIB4AAJgCACCoAQAAAOEBAqkBAAAA4QEIqgEAAADhAQivAQAAlwLhASIEqAEAAADhAQKpAQAAAOEBCKoBAAAA4QEIrwEAAJgC4QEiBwkAAPIBACAdAACaAgAgHgAAmgIAIKgBAAAA3wECqQEAAADfAQiqAQAAAN8BCK8BAACZAt8BIgSoAQAAAN8BAqkBAAAA3wEIqgEAAADfAQivAQAAmgLfASIHCQAA8gEAIB0AAJwCACAeAACcAgAgqAEAAADdAQKpAQAAAN0BCKoBAAAA3QEIrwEAAJsC3QEiBKgBAAAA3QECqQEAAADdAQiqAQAAAN0BCK8BAACcAt0BIikDAACjAgAgBwAApAIAIAgAAKUCACCjAQAAnQIAMKQBAAALABClAQAAnQIAMKYBAQD3AQAhtAEBAPcBACG-AUAAigIAIb8BQACKAgAhwAFAAIsCACHEAQEA9wEAIcUBAQD3AQAhxgEBAPcBACHHAQEA9wEAIcgBAQD3AQAhyQEBAPcBACHKAQEAiAIAIcsBCACeAgAhzAEBAIgCACHNAQEAiAIAIc4BAQCIAgAhzwEBAIgCACHQAQEAiAIAIdEBAQCIAgAh0gEBAIgCACHTAQEAiAIAIdQBAQD3AQAh1QEBAPcBACHWAQEAiAIAIdcBAQCIAgAh2AEBAPcBACHZAQEA9wEAIdoBAQCIAgAh2wEBAIgCACHdAQAAnwLdASLfAQAAoALfASLhAQAAoQLhASLjAQAAogLjASLkAQEA9wEAIeUBIACJAgAhCKgBCAAAAAGpAQgAAAAEqgEIAAAABKsBCAAAAAGsAQgAAAABrQEIAAAAAa4BCAAAAAGvAQgA8wEAIQSoAQAAAN0BAqkBAAAA3QEIqgEAAADdAQivAQAAnALdASIEqAEAAADfAQKpAQAAAN8BCKoBAAAA3wEIrwEAAJoC3wEiBKgBAAAA4QECqQEAAADhAQiqAQAAAOEBCK8BAACYAuEBIgSoAQAAAOMBAqkBAAAA4wEIqgEAAADjAQivAQAAlgLjASIVBAAAtgIAIAUAALcCACAGAACMAgAgCgAAuAIAIKMBAACzAgAwpAEAABoAEKUBAACzAgAwpgEBAPcBACG9ASAAiQIAIb4BQACKAgAhvwFAAIoCACHAAUAAiwIAIcEBAQD3AQAh6QEBAPcBACH8AQAAtAL8ASL-AQAAtQL-ASL_ASAAiQIAIYACIACJAgAhgQIBAIgCACGCAgAAGgAggwIAABoAIBUGAACMAgAgowEAAIcCADCkAQAADQAQpQEAAIcCADCmAQEA9wEAIbMBAQCIAgAhtAEBAIgCACG1AQEAiAIAIbYBAQCIAgAhtwEBAIgCACG4AQEAiAIAIbkBAQCIAgAhugEBAIgCACG7AQEAiAIAIbwBAQCIAgAhvQEgAIkCACG-AUAAigIAIb8BQACKAgAhwAFAAIsCACGCAgAADQAggwIAAA0AIAPmAQAAEAAg5wEAABAAIOgBAAAQACANowEAAKYCADCkAQAAigEAEKUBAACmAgAwpgEBAO8BACG9ASAA-wEAIb4BQAD8AQAhvwFAAPwBACHAAUAA_QEAIcEBAQDvAQAhxAEBAO8BACHpAQEA7wEAIeoBAQD6AQAh6wEBAPoBACEOAwAAowIAIKMBAACnAgAwpAEAABUAEKUBAACnAgAwpgEBAPcBACG9ASAAiQIAIb4BQACKAgAhvwFAAIoCACHAAUAAiwIAIcEBAQD3AQAhxAEBAPcBACHpAQEA9wEAIeoBAQCIAgAh6wEBAIgCACEJowEAAKgCADCkAQAAcgAQpQEAAKgCADCmAQEA7wEAIb4BQAD8AQAhvwFAAPwBACHsAQEA7wEAIe0BAQDvAQAh7gFAAPwBACEJowEAAKkCADCkAQAAXwAQpQEAAKkCADCmAQEA9wEAIb4BQACKAgAhvwFAAIoCACHsAQEA9wEAIe0BAQD3AQAh7gFAAIoCACEQowEAAKoCADCkAQAAWQAQpQEAAKoCADCmAQEA7wEAIb4BQAD8AQAhvwFAAPwBACHEAQEA7wEAIe8BAQDvAQAh8AEBAO8BACHxAQEA-gEAIfIBAQD6AQAh8wEBAPoBACH0AUAA_QEAIfUBQAD9AQAh9gEBAPoBACH3AQEA-gEAIQujAQAAqwIAMKQBAABDABClAQAAqwIAMKYBAQDvAQAhvgFAAPwBACG_AUAA_AEAIcQBAQDvAQAh7gFAAPwBACH4AQEA7wEAIfkBAQD6AQAh-gEBAPoBACEPowEAAKwCADCkAQAALQAQpQEAAKwCADCmAQEA7wEAIb0BIAD7AQAhvgFAAPwBACG_AUAA_AEAIcABQAD9AQAhwQEBAO8BACHpAQEA7wEAIfwBAACtAvwBIv4BAACuAv4BIv8BIAD7AQAhgAIgAPsBACGBAgEA-gEAIQcJAADyAQAgHQAAsgIAIB4AALICACCoAQAAAPwBAqkBAAAA_AEIqgEAAAD8AQivAQAAsQL8ASIHCQAA8gEAIB0AALACACAeAACwAgAgqAEAAAD-AQKpAQAAAP4BCKoBAAAA_gEIrwEAAK8C_gEiBwkAAPIBACAdAACwAgAgHgAAsAIAIKgBAAAA_gECqQEAAAD-AQiqAQAAAP4BCK8BAACvAv4BIgSoAQAAAP4BAqkBAAAA_gEIqgEAAAD-AQivAQAAsAL-ASIHCQAA8gEAIB0AALICACAeAACyAgAgqAEAAAD8AQKpAQAAAPwBCKoBAAAA_AEIrwEAALEC_AEiBKgBAAAA_AECqQEAAAD8AQiqAQAAAPwBCK8BAACyAvwBIhMEAAC2AgAgBQAAtwIAIAYAAIwCACAKAAC4AgAgowEAALMCADCkAQAAGgAQpQEAALMCADCmAQEA9wEAIb0BIACJAgAhvgFAAIoCACG_AUAAigIAIcABQACLAgAhwQEBAPcBACHpAQEA9wEAIfwBAAC0AvwBIv4BAAC1Av4BIv8BIACJAgAhgAIgAIkCACGBAgEAiAIAIQSoAQAAAPwBAqkBAAAA_AEIqgEAAAD8AQivAQAAsgL8ASIEqAEAAAD-AQKpAQAAAP4BCKoBAAAA_gEIrwEAALAC_gEiA-YBAAADACDnAQAAAwAg6AEAAAMAIAPmAQAABwAg5wEAAAcAIOgBAAAHACAQAwAAowIAIKMBAACnAgAwpAEAABUAEKUBAACnAgAwpgEBAPcBACG9ASAAiQIAIb4BQACKAgAhvwFAAIoCACHAAUAAiwIAIcEBAQD3AQAhxAEBAPcBACHpAQEA9wEAIeoBAQCIAgAh6wEBAIgCACGCAgAAFQAggwIAABUAIAwGAAC6AgAgowEAALkCADCkAQAAEAAQpQEAALkCADCmAQEA9wEAIb0BIACJAgAhvgFAAIoCACG_AUAAigIAIcABQACLAgAhwQEBAPcBACHCAQgAngIAIcMBAQD3AQAhKwMAAKMCACAHAACkAgAgCAAApQIAIKMBAACdAgAwpAEAAAsAEKUBAACdAgAwpgEBAPcBACG0AQEA9wEAIb4BQACKAgAhvwFAAIoCACHAAUAAiwIAIcQBAQD3AQAhxQEBAPcBACHGAQEA9wEAIccBAQD3AQAhyAEBAPcBACHJAQEA9wEAIcoBAQCIAgAhywEIAJ4CACHMAQEAiAIAIc0BAQCIAgAhzgEBAIgCACHPAQEAiAIAIdABAQCIAgAh0QEBAIgCACHSAQEAiAIAIdMBAQCIAgAh1AEBAPcBACHVAQEA9wEAIdYBAQCIAgAh1wEBAIgCACHYAQEA9wEAIdkBAQD3AQAh2gEBAIgCACHbAQEAiAIAId0BAACfAt0BIt8BAACgAt8BIuEBAAChAuEBIuMBAACiAuMBIuQBAQD3AQAh5QEgAIkCACGCAgAACwAggwIAAAsAIBEDAACjAgAgowEAALsCADCkAQAABwAQpQEAALsCADCmAQEA9wEAIb4BQACKAgAhvwFAAIoCACHEAQEA9wEAIe8BAQD3AQAh8AEBAPcBACHxAQEAiAIAIfIBAQCIAgAh8wEBAIgCACH0AUAAiwIAIfUBQACLAgAh9gEBAIgCACH3AQEAiAIAIQwDAACjAgAgowEAALwCADCkAQAAAwAQpQEAALwCADCmAQEA9wEAIb4BQACKAgAhvwFAAIoCACHEAQEA9wEAIe4BQACKAgAh-AEBAPcBACH5AQEAiAIAIfoBAQCIAgAhAAAAAAABhwIBAAAAAQWHAgIAAAABjQICAAAAAY4CAgAAAAGPAgIAAAABkAICAAAAAQAAAAABhwIBAAAAAQGHAiAAAAABAYcCQAAAAAEBhwJAAAAAAQcXAADaAwAgGAAA3QMAIIQCAADbAwAghQIAANwDACCIAgAACwAgiQIAAAsAIIoCAACNAQAgAxcAANoDACCEAgAA2wMAIIoCAACNAQAgEQMAAPcCACAHAAD4AgAgCAAA-QIAIMABAADEAgAgygEAAMQCACDMAQAAxAIAIM0BAADEAgAgzgEAAMQCACDPAQAAxAIAINABAADEAgAg0QEAAMQCACDSAQAAxAIAINMBAADEAgAg1gEAAMQCACDXAQAAxAIAINoBAADEAgAg2wEAAMQCACAAAAAAAAWHAggAAAABjQIIAAAAAY4CCAAAAAGPAggAAAABkAIIAAAAAQUXAADVAwAgGAAA2AMAIIQCAADWAwAghQIAANcDACCKAgAAjQEAIAMXAADVAwAghAIAANYDACCKAgAAjQEAIAAAAAAAAYcCAAAA3QECAYcCAAAA3wECAYcCAAAA4QECAYcCAAAA4wECBRcAAM8DACAYAADTAwAghAIAANADACCFAgAA0gMAIIoCAAABACAHFwAA7wIAIBgAAPICACCEAgAA8AIAIIUCAADxAgAgiAIAAA0AIIkCAAANACCKAgAAuwEAIAsXAADjAgAwGAAA6AIAMIQCAADkAgAwhQIAAOUCADCGAgAA5gIAIIcCAADnAgAwiAIAAOcCADCJAgAA5wIAMIoCAADnAgAwiwIAAOkCADCMAgAA6gIAMAemAQEAAAABvQEgAAAAAb4BQAAAAAG_AUAAAAABwAFAAAAAAcEBAQAAAAHCAQgAAAABAgAAABIAIBcAAO4CACADAAAAEgAgFwAA7gIAIBgAAO0CACABEAAA0QMAMAwGAAC6AgAgowEAALkCADCkAQAAEAAQpQEAALkCADCmAQEAAAABvQEgAIkCACG-AUAAigIAIb8BQACKAgAhwAFAAIsCACHBAQEAAAABwgEIAJ4CACHDAQEA9wEAIQIAAAASACAQAADtAgAgAgAAAOsCACAQAADsAgAgC6MBAADqAgAwpAEAAOsCABClAQAA6gIAMKYBAQD3AQAhvQEgAIkCACG-AUAAigIAIb8BQACKAgAhwAFAAIsCACHBAQEA9wEAIcIBCACeAgAhwwEBAPcBACELowEAAOoCADCkAQAA6wIAEKUBAADqAgAwpgEBAPcBACG9ASAAiQIAIb4BQACKAgAhvwFAAIoCACHAAUAAiwIAIcEBAQD3AQAhwgEIAJ4CACHDAQEA9wEAIQemAQEAwgIAIb0BIADJAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhwQEBAMICACHCAQgA1AIAIQemAQEAwgIAIb0BIADJAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhwQEBAMICACHCAQgA1AIAIQemAQEAAAABvQEgAAAAAb4BQAAAAAG_AUAAAAABwAFAAAAAAcEBAQAAAAHCAQgAAAABDqYBAQAAAAGzAQEAAAABtQEBAAAAAbYBAQAAAAG3AQEAAAABuAEBAAAAAbkBAQAAAAG6AQEAAAABuwEBAAAAAbwBAQAAAAG9ASAAAAABvgFAAAAAAb8BQAAAAAHAAUAAAAABAgAAALsBACAXAADvAgAgAwAAAA0AIBcAAO8CACAYAADzAgAgEAAAAA0AIBAAAPMCACCmAQEAwgIAIbMBAQDIAgAhtQEBAMgCACG2AQEAyAIAIbcBAQDIAgAhuAEBAMgCACG5AQEAyAIAIboBAQDIAgAhuwEBAMgCACG8AQEAyAIAIb0BIADJAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhDqYBAQDCAgAhswEBAMgCACG1AQEAyAIAIbYBAQDIAgAhtwEBAMgCACG4AQEAyAIAIbkBAQDIAgAhugEBAMgCACG7AQEAyAIAIbwBAQDIAgAhvQEgAMkCACG-AUAAygIAIb8BQADKAgAhwAFAAMsCACEDFwAAzwMAIIQCAADQAwAgigIAAAEAIAMXAADvAgAghAIAAPACACCKAgAAuwEAIAQXAADjAgAwhAIAAOQCADCGAgAA5gIAIIoCAADnAgAwBgQAALsDACAFAAC8AwAgBgAAzgIAIAoAAL0DACDAAQAAxAIAIIECAADEAgAgDAYAAM4CACCzAQAAxAIAILQBAADEAgAgtQEAAMQCACC2AQAAxAIAILcBAADEAgAguAEAAMQCACC5AQAAxAIAILoBAADEAgAguwEAAMQCACC8AQAAxAIAIMABAADEAgAgAAAAAAUXAADKAwAgGAAAzQMAIIQCAADLAwAghQIAAMwDACCKAgAAAQAgAxcAAMoDACCEAgAAywMAIIoCAAABACAAAAAAAAAFFwAAxQMAIBgAAMgDACCEAgAAxgMAIIUCAADHAwAgigIAAAEAIAMXAADFAwAghAIAAMYDACCKAgAAAQAgAAAABRcAAMADACAYAADDAwAghAIAAMEDACCFAgAAwgMAIIoCAAABACADFwAAwAMAIIQCAADBAwAgigIAAAEAIAAAAAGHAgAAAPwBAgGHAgAAAP4BAgsXAACrAwAwGAAAsAMAMIQCAACsAwAwhQIAAK0DADCGAgAArgMAIIcCAACvAwAwiAIAAK8DADCJAgAArwMAMIoCAACvAwAwiwIAALEDADCMAgAAsgMAMAsXAACfAwAwGAAApAMAMIQCAACgAwAwhQIAAKEDADCGAgAAogMAIIcCAACjAwAwiAIAAKMDADCJAgAAowMAMIoCAACjAwAwiwIAAKUDADCMAgAApgMAMAcXAACaAwAgGAAAnQMAIIQCAACbAwAghQIAAJwDACCIAgAACwAgiQIAAAsAIIoCAACNAQAgBxcAAJUDACAYAACYAwAghAIAAJYDACCFAgAAlwMAIIgCAAAVACCJAgAAFQAgigIAAHUAIAmmAQEAAAABvQEgAAAAAb4BQAAAAAG_AUAAAAABwAFAAAAAAcEBAQAAAAHpAQEAAAAB6gEBAAAAAesBAQAAAAECAAAAdQAgFwAAlQMAIAMAAAAVACAXAACVAwAgGAAAmQMAIAsAAAAVACAQAACZAwAgpgEBAMICACG9ASAAyQIAIb4BQADKAgAhvwFAAMoCACHAAUAAywIAIcEBAQDCAgAh6QEBAMICACHqAQEAyAIAIesBAQDIAgAhCaYBAQDCAgAhvQEgAMkCACG-AUAAygIAIb8BQADKAgAhwAFAAMsCACHBAQEAwgIAIekBAQDCAgAh6gEBAMgCACHrAQEAyAIAISQHAAD1AgAgCAAA9gIAIKYBAQAAAAG0AQEAAAABvgFAAAAAAb8BQAAAAAHAAUAAAAABxQEBAAAAAcYBAQAAAAHHAQEAAAAByAEBAAAAAckBAQAAAAHKAQEAAAABywEIAAAAAcwBAQAAAAHNAQEAAAABzgEBAAAAAc8BAQAAAAHQAQEAAAAB0QEBAAAAAdIBAQAAAAHTAQEAAAAB1AEBAAAAAdUBAQAAAAHWAQEAAAAB1wEBAAAAAdgBAQAAAAHZAQEAAAAB2gEBAAAAAdsBAQAAAAHdAQAAAN0BAt8BAAAA3wEC4QEAAADhAQLjAQAAAOMBAuQBAQAAAAHlASAAAAABAgAAAI0BACAXAACaAwAgAwAAAAsAIBcAAJoDACAYAACeAwAgJgAAAAsAIAcAAOECACAIAADiAgAgEAAAngMAIKYBAQDCAgAhtAEBAMICACG-AUAAygIAIb8BQADKAgAhwAFAAMsCACHFAQEAwgIAIcYBAQDCAgAhxwEBAMICACHIAQEAwgIAIckBAQDCAgAhygEBAMgCACHLAQgA1AIAIcwBAQDIAgAhzQEBAMgCACHOAQEAyAIAIc8BAQDIAgAh0AEBAMgCACHRAQEAyAIAIdIBAQDIAgAh0wEBAMgCACHUAQEAwgIAIdUBAQDCAgAh1gEBAMgCACHXAQEAyAIAIdgBAQDCAgAh2QEBAMICACHaAQEAyAIAIdsBAQDIAgAh3QEAANwC3QEi3wEAAN0C3wEi4QEAAN4C4QEi4wEAAN8C4wEi5AEBAMICACHlASAAyQIAISQHAADhAgAgCAAA4gIAIKYBAQDCAgAhtAEBAMICACG-AUAAygIAIb8BQADKAgAhwAFAAMsCACHFAQEAwgIAIcYBAQDCAgAhxwEBAMICACHIAQEAwgIAIckBAQDCAgAhygEBAMgCACHLAQgA1AIAIcwBAQDIAgAhzQEBAMgCACHOAQEAyAIAIc8BAQDIAgAh0AEBAMgCACHRAQEAyAIAIdIBAQDIAgAh0wEBAMgCACHUAQEAwgIAIdUBAQDCAgAh1gEBAMgCACHXAQEAyAIAIdgBAQDCAgAh2QEBAMICACHaAQEAyAIAIdsBAQDIAgAh3QEAANwC3QEi3wEAAN0C3wEi4QEAAN4C4QEi4wEAAN8C4wEi5AEBAMICACHlASAAyQIAIQymAQEAAAABvgFAAAAAAb8BQAAAAAHvAQEAAAAB8AEBAAAAAfEBAQAAAAHyAQEAAAAB8wEBAAAAAfQBQAAAAAH1AUAAAAAB9gEBAAAAAfcBAQAAAAECAAAACQAgFwAAqgMAIAMAAAAJACAXAACqAwAgGAAAqQMAIAEQAAC_AwAwEQMAAKMCACCjAQAAuwIAMKQBAAAHABClAQAAuwIAMKYBAQAAAAG-AUAAigIAIb8BQACKAgAhxAEBAPcBACHvAQEA9wEAIfABAQD3AQAh8QEBAIgCACHyAQEAiAIAIfMBAQCIAgAh9AFAAIsCACH1AUAAiwIAIfYBAQCIAgAh9wEBAIgCACECAAAACQAgEAAAqQMAIAIAAACnAwAgEAAAqAMAIBCjAQAApgMAMKQBAACnAwAQpQEAAKYDADCmAQEA9wEAIb4BQACKAgAhvwFAAIoCACHEAQEA9wEAIe8BAQD3AQAh8AEBAPcBACHxAQEAiAIAIfIBAQCIAgAh8wEBAIgCACH0AUAAiwIAIfUBQACLAgAh9gEBAIgCACH3AQEAiAIAIRCjAQAApgMAMKQBAACnAwAQpQEAAKYDADCmAQEA9wEAIb4BQACKAgAhvwFAAIoCACHEAQEA9wEAIe8BAQD3AQAh8AEBAPcBACHxAQEAiAIAIfIBAQCIAgAh8wEBAIgCACH0AUAAiwIAIfUBQACLAgAh9gEBAIgCACH3AQEAiAIAIQymAQEAwgIAIb4BQADKAgAhvwFAAMoCACHvAQEAwgIAIfABAQDCAgAh8QEBAMgCACHyAQEAyAIAIfMBAQDIAgAh9AFAAMsCACH1AUAAywIAIfYBAQDIAgAh9wEBAMgCACEMpgEBAMICACG-AUAAygIAIb8BQADKAgAh7wEBAMICACHwAQEAwgIAIfEBAQDIAgAh8gEBAMgCACHzAQEAyAIAIfQBQADLAgAh9QFAAMsCACH2AQEAyAIAIfcBAQDIAgAhDKYBAQAAAAG-AUAAAAABvwFAAAAAAe8BAQAAAAHwAQEAAAAB8QEBAAAAAfIBAQAAAAHzAQEAAAAB9AFAAAAAAfUBQAAAAAH2AQEAAAAB9wEBAAAAAQemAQEAAAABvgFAAAAAAb8BQAAAAAHuAUAAAAAB-AEBAAAAAfkBAQAAAAH6AQEAAAABAgAAAAUAIBcAALYDACADAAAABQAgFwAAtgMAIBgAALUDACABEAAAvgMAMAwDAACjAgAgowEAALwCADCkAQAAAwAQpQEAALwCADCmAQEAAAABvgFAAIoCACG_AUAAigIAIcQBAQD3AQAh7gFAAIoCACH4AQEAAAAB-QEBAIgCACH6AQEAiAIAIQIAAAAFACAQAAC1AwAgAgAAALMDACAQAAC0AwAgC6MBAACyAwAwpAEAALMDABClAQAAsgMAMKYBAQD3AQAhvgFAAIoCACG_AUAAigIAIcQBAQD3AQAh7gFAAIoCACH4AQEA9wEAIfkBAQCIAgAh-gEBAIgCACELowEAALIDADCkAQAAswMAEKUBAACyAwAwpgEBAPcBACG-AUAAigIAIb8BQACKAgAhxAEBAPcBACHuAUAAigIAIfgBAQD3AQAh-QEBAIgCACH6AQEAiAIAIQemAQEAwgIAIb4BQADKAgAhvwFAAMoCACHuAUAAygIAIfgBAQDCAgAh-QEBAMgCACH6AQEAyAIAIQemAQEAwgIAIb4BQADKAgAhvwFAAMoCACHuAUAAygIAIfgBAQDCAgAh-QEBAMgCACH6AQEAyAIAIQemAQEAAAABvgFAAAAAAb8BQAAAAAHuAUAAAAAB-AEBAAAAAfkBAQAAAAH6AQEAAAABBBcAAKsDADCEAgAArAMAMIYCAACuAwAgigIAAK8DADAEFwAAnwMAMIQCAACgAwAwhgIAAKIDACCKAgAAowMAMAMXAACaAwAghAIAAJsDACCKAgAAjQEAIAMXAACVAwAghAIAAJYDACCKAgAAdQAgAAAEAwAA9wIAIMABAADEAgAg6gEAAMQCACDrAQAAxAIAIAemAQEAAAABvgFAAAAAAb8BQAAAAAHuAUAAAAAB-AEBAAAAAfkBAQAAAAH6AQEAAAABDKYBAQAAAAG-AUAAAAABvwFAAAAAAe8BAQAAAAHwAQEAAAAB8QEBAAAAAfIBAQAAAAHzAQEAAAAB9AFAAAAAAfUBQAAAAAH2AQEAAAAB9wEBAAAAAQ8FAAC4AwAgBgAAuQMAIAoAALoDACCmAQEAAAABvQEgAAAAAb4BQAAAAAG_AUAAAAABwAFAAAAAAcEBAQAAAAHpAQEAAAAB_AEAAAD8AQL-AQAAAP4BAv8BIAAAAAGAAiAAAAABgQIBAAAAAQIAAAABACAXAADAAwAgAwAAABoAIBcAAMADACAYAADEAwAgEQAAABoAIAUAAJIDACAGAACTAwAgCgAAlAMAIBAAAMQDACCmAQEAwgIAIb0BIADJAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhwQEBAMICACHpAQEAwgIAIfwBAACPA_wBIv4BAACQA_4BIv8BIADJAgAhgAIgAMkCACGBAgEAyAIAIQ8FAACSAwAgBgAAkwMAIAoAAJQDACCmAQEAwgIAIb0BIADJAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhwQEBAMICACHpAQEAwgIAIfwBAACPA_wBIv4BAACQA_4BIv8BIADJAgAhgAIgAMkCACGBAgEAyAIAIQ8EAAC3AwAgBgAAuQMAIAoAALoDACCmAQEAAAABvQEgAAAAAb4BQAAAAAG_AUAAAAABwAFAAAAAAcEBAQAAAAHpAQEAAAAB_AEAAAD8AQL-AQAAAP4BAv8BIAAAAAGAAiAAAAABgQIBAAAAAQIAAAABACAXAADFAwAgAwAAABoAIBcAAMUDACAYAADJAwAgEQAAABoAIAQAAJEDACAGAACTAwAgCgAAlAMAIBAAAMkDACCmAQEAwgIAIb0BIADJAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhwQEBAMICACHpAQEAwgIAIfwBAACPA_wBIv4BAACQA_4BIv8BIADJAgAhgAIgAMkCACGBAgEAyAIAIQ8EAACRAwAgBgAAkwMAIAoAAJQDACCmAQEAwgIAIb0BIADJAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhwQEBAMICACHpAQEAwgIAIfwBAACPA_wBIv4BAACQA_4BIv8BIADJAgAhgAIgAMkCACGBAgEAyAIAIQ8EAAC3AwAgBQAAuAMAIAYAALkDACCmAQEAAAABvQEgAAAAAb4BQAAAAAG_AUAAAAABwAFAAAAAAcEBAQAAAAHpAQEAAAAB_AEAAAD8AQL-AQAAAP4BAv8BIAAAAAGAAiAAAAABgQIBAAAAAQIAAAABACAXAADKAwAgAwAAABoAIBcAAMoDACAYAADOAwAgEQAAABoAIAQAAJEDACAFAACSAwAgBgAAkwMAIBAAAM4DACCmAQEAwgIAIb0BIADJAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhwQEBAMICACHpAQEAwgIAIfwBAACPA_wBIv4BAACQA_4BIv8BIADJAgAhgAIgAMkCACGBAgEAyAIAIQ8EAACRAwAgBQAAkgMAIAYAAJMDACCmAQEAwgIAIb0BIADJAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhwQEBAMICACHpAQEAwgIAIfwBAACPA_wBIv4BAACQA_4BIv8BIADJAgAhgAIgAMkCACGBAgEAyAIAIQ8EAAC3AwAgBQAAuAMAIAoAALoDACCmAQEAAAABvQEgAAAAAb4BQAAAAAG_AUAAAAABwAFAAAAAAcEBAQAAAAHpAQEAAAAB_AEAAAD8AQL-AQAAAP4BAv8BIAAAAAGAAiAAAAABgQIBAAAAAQIAAAABACAXAADPAwAgB6YBAQAAAAG9ASAAAAABvgFAAAAAAb8BQAAAAAHAAUAAAAABwQEBAAAAAcIBCAAAAAEDAAAAGgAgFwAAzwMAIBgAANQDACARAAAAGgAgBAAAkQMAIAUAAJIDACAKAACUAwAgEAAA1AMAIKYBAQDCAgAhvQEgAMkCACG-AUAAygIAIb8BQADKAgAhwAFAAMsCACHBAQEAwgIAIekBAQDCAgAh_AEAAI8D_AEi_gEAAJAD_gEi_wEgAMkCACGAAiAAyQIAIYECAQDIAgAhDwQAAJEDACAFAACSAwAgCgAAlAMAIKYBAQDCAgAhvQEgAMkCACG-AUAAygIAIb8BQADKAgAhwAFAAMsCACHBAQEAwgIAIekBAQDCAgAh_AEAAI8D_AEi_gEAAJAD_gEi_wEgAMkCACGAAiAAyQIAIYECAQDIAgAhJQMAAPQCACAHAAD1AgAgpgEBAAAAAbQBAQAAAAG-AUAAAAABvwFAAAAAAcABQAAAAAHEAQEAAAABxQEBAAAAAcYBAQAAAAHHAQEAAAAByAEBAAAAAckBAQAAAAHKAQEAAAABywEIAAAAAcwBAQAAAAHNAQEAAAABzgEBAAAAAc8BAQAAAAHQAQEAAAAB0QEBAAAAAdIBAQAAAAHTAQEAAAAB1AEBAAAAAdUBAQAAAAHWAQEAAAAB1wEBAAAAAdgBAQAAAAHZAQEAAAAB2gEBAAAAAdsBAQAAAAHdAQAAAN0BAt8BAAAA3wEC4QEAAADhAQLjAQAAAOMBAuQBAQAAAAHlASAAAAABAgAAAI0BACAXAADVAwAgAwAAAAsAIBcAANUDACAYAADZAwAgJwAAAAsAIAMAAOACACAHAADhAgAgEAAA2QMAIKYBAQDCAgAhtAEBAMICACG-AUAAygIAIb8BQADKAgAhwAFAAMsCACHEAQEAwgIAIcUBAQDCAgAhxgEBAMICACHHAQEAwgIAIcgBAQDCAgAhyQEBAMICACHKAQEAyAIAIcsBCADUAgAhzAEBAMgCACHNAQEAyAIAIc4BAQDIAgAhzwEBAMgCACHQAQEAyAIAIdEBAQDIAgAh0gEBAMgCACHTAQEAyAIAIdQBAQDCAgAh1QEBAMICACHWAQEAyAIAIdcBAQDIAgAh2AEBAMICACHZAQEAwgIAIdoBAQDIAgAh2wEBAMgCACHdAQAA3ALdASLfAQAA3QLfASLhAQAA3gLhASLjAQAA3wLjASLkAQEAwgIAIeUBIADJAgAhJQMAAOACACAHAADhAgAgpgEBAMICACG0AQEAwgIAIb4BQADKAgAhvwFAAMoCACHAAUAAywIAIcQBAQDCAgAhxQEBAMICACHGAQEAwgIAIccBAQDCAgAhyAEBAMICACHJAQEAwgIAIcoBAQDIAgAhywEIANQCACHMAQEAyAIAIc0BAQDIAgAhzgEBAMgCACHPAQEAyAIAIdABAQDIAgAh0QEBAMgCACHSAQEAyAIAIdMBAQDIAgAh1AEBAMICACHVAQEAwgIAIdYBAQDIAgAh1wEBAMgCACHYAQEAwgIAIdkBAQDCAgAh2gEBAMgCACHbAQEAyAIAId0BAADcAt0BIt8BAADdAt8BIuEBAADeAuEBIuMBAADfAuMBIuQBAQDCAgAh5QEgAMkCACElAwAA9AIAIAgAAPYCACCmAQEAAAABtAEBAAAAAb4BQAAAAAG_AUAAAAABwAFAAAAAAcQBAQAAAAHFAQEAAAABxgEBAAAAAccBAQAAAAHIAQEAAAAByQEBAAAAAcoBAQAAAAHLAQgAAAABzAEBAAAAAc0BAQAAAAHOAQEAAAABzwEBAAAAAdABAQAAAAHRAQEAAAAB0gEBAAAAAdMBAQAAAAHUAQEAAAAB1QEBAAAAAdYBAQAAAAHXAQEAAAAB2AEBAAAAAdkBAQAAAAHaAQEAAAAB2wEBAAAAAd0BAAAA3QEC3wEAAADfAQLhAQAAAOEBAuMBAAAA4wEC5AEBAAAAAeUBIAAAAAECAAAAjQEAIBcAANoDACADAAAACwAgFwAA2gMAIBgAAN4DACAnAAAACwAgAwAA4AIAIAgAAOICACAQAADeAwAgpgEBAMICACG0AQEAwgIAIb4BQADKAgAhvwFAAMoCACHAAUAAywIAIcQBAQDCAgAhxQEBAMICACHGAQEAwgIAIccBAQDCAgAhyAEBAMICACHJAQEAwgIAIcoBAQDIAgAhywEIANQCACHMAQEAyAIAIc0BAQDIAgAhzgEBAMgCACHPAQEAyAIAIdABAQDIAgAh0QEBAMgCACHSAQEAyAIAIdMBAQDIAgAh1AEBAMICACHVAQEAwgIAIdYBAQDIAgAh1wEBAMgCACHYAQEAwgIAIdkBAQDCAgAh2gEBAMgCACHbAQEAyAIAId0BAADcAt0BIt8BAADdAt8BIuEBAADeAuEBIuMBAADfAuMBIuQBAQDCAgAh5QEgAMkCACElAwAA4AIAIAgAAOICACCmAQEAwgIAIbQBAQDCAgAhvgFAAMoCACG_AUAAygIAIcABQADLAgAhxAEBAMICACHFAQEAwgIAIcYBAQDCAgAhxwEBAMICACHIAQEAwgIAIckBAQDCAgAhygEBAMgCACHLAQgA1AIAIcwBAQDIAgAhzQEBAMgCACHOAQEAyAIAIc8BAQDIAgAh0AEBAMgCACHRAQEAyAIAIdIBAQDIAgAh0wEBAMgCACHUAQEAwgIAIdUBAQDCAgAh1gEBAMgCACHXAQEAyAIAIdgBAQDCAgAh2QEBAMICACHaAQEAyAIAIdsBAQDIAgAh3QEAANwC3QEi3wEAAN0C3wEi4QEAAN4C4QEi4wEAAN8C4wEi5AEBAMICACHlASAAyQIAIQUEBgIFCgMGDAQJAAkKFggBAwABAQMAAQQDAAEHDgUIEwYJAAcBBg8EAQYABAEIFAABAwABAgQXAAUYAAAAAAMJAA4dAA8eABAAAAADCQAOHQAPHgAQAQMAAQEDAAEDCQAVHQAWHgAXAAAAAwkAFR0AFh4AFwEDAAEBAwABAwkAHB0AHR4AHgAAAAMJABwdAB0eAB4AAAADCQAkHQAlHgAmAAAAAwkAJB0AJR4AJgEDAAEBAwABAwkAKx0ALB4ALQAAAAMJACsdACweAC0BAwABAQMAAQUJADIdADUeADZvADNwADQAAAAAAAUJADIdADUeADZvADNwADQBBgAEAQYABAUJADsdAD4eAD9vADxwAD0AAAAAAAUJADsdAD4eAD9vADxwAD0BBscBBAEGzQEEAwkARB0ARR4ARgAAAAMJAEQdAEUeAEYAAAAFCQBMHQBPHgBQbwBNcABOAAAAAAAFCQBMHQBPHgBQbwBNcABOCwIBDBkBDRwBDh0BDx4BESABEiIKEyMLFCUBFScKFigMGSkBGioBGysKHy4NIC8RITACIjECIzICJDMCJTQCJjYCJzgKKDkSKTsCKj0KKz4TLD8CLUACLkEKL0QUMEUYMUYDMkcDM0gDNEkDNUoDNkwDN04KOE8ZOVEDOlMKO1QaPFUDPVYDPlcKP1obQFsfQV0gQl4gQ2EgRGIgRWMgRmUgR2cKSGghSWogSmwKS20iTG4gTW8gTnAKT3MjUHQnUXYIUncIU3kIVHoIVXsIVn0IV38KWIABKFmCAQhahAEKW4UBKVyGAQhdhwEIXogBCl-LASpgjAEuYY4BBGKPAQRjkQEEZJIBBGWTAQRmlQEEZ5cBCmiYAS9pmgEEapwBCmudATBsngEEbZ8BBG6gAQpxowExcqQBN3OlAQZ0pgEGdacBBnaoAQZ3qQEGeKsBBnmtAQp6rgE4e7ABBnyyAQp9swE5frQBBn-1AQaAAbYBCoEBuQE6ggG6AUCDAbwBBYQBvQEFhQG_AQWGAcABBYcBwQEFiAHDAQWJAcUBCooBxgFBiwHJAQWMAcsBCo0BzAFCjgHOAQWPAc8BBZAB0AEKkQHTAUOSAdQBR5MB1gFIlAHXAUiVAdoBSJYB2wFIlwHcAUiYAd4BSJkB4AEKmgHhAUmbAeMBSJwB5QEKnQHmAUqeAecBSJ8B6AFIoAHpAQqhAewBS6IB7QFR"
+  strings: JSON.parse('["where","orderBy","cursor","user","sessions","accounts","address","student","guardianInfo","employee","students","_count","class","classes","admin","User.findUnique","User.findUniqueOrThrow","User.findFirst","User.findFirstOrThrow","User.findMany","data","User.createOne","User.createMany","User.createManyAndReturn","User.updateOne","User.updateMany","User.updateManyAndReturn","create","update","User.upsertOne","User.deleteOne","User.deleteMany","having","_min","_max","User.groupBy","User.aggregate","Session.findUnique","Session.findUniqueOrThrow","Session.findFirst","Session.findFirstOrThrow","Session.findMany","Session.createOne","Session.createMany","Session.createManyAndReturn","Session.updateOne","Session.updateMany","Session.updateManyAndReturn","Session.upsertOne","Session.deleteOne","Session.deleteMany","Session.groupBy","Session.aggregate","Account.findUnique","Account.findUniqueOrThrow","Account.findFirst","Account.findFirstOrThrow","Account.findMany","Account.createOne","Account.createMany","Account.createManyAndReturn","Account.updateOne","Account.updateMany","Account.updateManyAndReturn","Account.upsertOne","Account.deleteOne","Account.deleteMany","Account.groupBy","Account.aggregate","Verification.findUnique","Verification.findUniqueOrThrow","Verification.findFirst","Verification.findFirstOrThrow","Verification.findMany","Verification.createOne","Verification.createMany","Verification.createManyAndReturn","Verification.updateOne","Verification.updateMany","Verification.updateManyAndReturn","Verification.upsertOne","Verification.deleteOne","Verification.deleteMany","Verification.groupBy","Verification.aggregate","Admin.findUnique","Admin.findUniqueOrThrow","Admin.findFirst","Admin.findFirstOrThrow","Admin.findMany","Admin.createOne","Admin.createMany","Admin.createManyAndReturn","Admin.updateOne","Admin.updateMany","Admin.updateManyAndReturn","Admin.upsertOne","Admin.deleteOne","Admin.deleteMany","Admin.groupBy","Admin.aggregate","Employee.findUnique","Employee.findUniqueOrThrow","Employee.findFirst","Employee.findFirstOrThrow","Employee.findMany","Employee.createOne","Employee.createMany","Employee.createManyAndReturn","Employee.updateOne","Employee.updateMany","Employee.updateManyAndReturn","Employee.upsertOne","Employee.deleteOne","Employee.deleteMany","_avg","_sum","Employee.groupBy","Employee.aggregate","Class.findUnique","Class.findUniqueOrThrow","Class.findFirst","Class.findFirstOrThrow","Class.findMany","Class.createOne","Class.createMany","Class.createManyAndReturn","Class.updateOne","Class.updateMany","Class.updateManyAndReturn","Class.upsertOne","Class.deleteOne","Class.deleteMany","Class.groupBy","Class.aggregate","Address.findUnique","Address.findUniqueOrThrow","Address.findFirst","Address.findFirstOrThrow","Address.findMany","Address.createOne","Address.createMany","Address.createManyAndReturn","Address.updateOne","Address.updateMany","Address.updateManyAndReturn","Address.upsertOne","Address.deleteOne","Address.deleteMany","Address.groupBy","Address.aggregate","Sequence.findUnique","Sequence.findUniqueOrThrow","Sequence.findFirst","Sequence.findFirstOrThrow","Sequence.findMany","Sequence.createOne","Sequence.createMany","Sequence.createManyAndReturn","Sequence.updateOne","Sequence.updateMany","Sequence.updateManyAndReturn","Sequence.upsertOne","Sequence.deleteOne","Sequence.deleteMany","Sequence.groupBy","Sequence.aggregate","GuardianInfo.findUnique","GuardianInfo.findUniqueOrThrow","GuardianInfo.findFirst","GuardianInfo.findFirstOrThrow","GuardianInfo.findMany","GuardianInfo.createOne","GuardianInfo.createMany","GuardianInfo.createManyAndReturn","GuardianInfo.updateOne","GuardianInfo.updateMany","GuardianInfo.updateManyAndReturn","GuardianInfo.upsertOne","GuardianInfo.deleteOne","GuardianInfo.deleteMany","GuardianInfo.groupBy","GuardianInfo.aggregate","Student.findUnique","Student.findUniqueOrThrow","Student.findFirst","Student.findFirstOrThrow","Student.findMany","Student.createOne","Student.createMany","Student.createManyAndReturn","Student.updateOne","Student.updateMany","Student.updateManyAndReturn","Student.upsertOne","Student.deleteOne","Student.deleteMany","Student.groupBy","Student.aggregate","AND","OR","NOT","id","userId","classId","studentId","fullName","fullNameBangla","dateOfBirth","birthRegistrationNumber","Religion","religion","studentSign","admissionTotalFees","admissionDate","previousInstituteName","endingClass","result","testimonialNumber","authoritySign","isdeleted","createdAt","updatedAt","deletedAt","guardianInfoId","equals","in","notIn","lt","lte","gt","gte","not","contains","startsWith","endsWith","email","fatherName","fatherNameBangla","whatsappNumber","fatherOccupation","motherName","motherNameBangla","motherMobileNumber","motherOccupation","nameOfLocalGuardian","relationShipOfStudent","GuardianMobileNumber","GuardianSign","current","employeeId","permanentAddressVillage","permanentAddressPostOffice","permanentAddressPostCode","permanentAddressDistrict","presentAddressVillage","presentAddressPostOffice","presentAddressPostCode","presentAddressDistrict","isDeleted","name","monthlyTuitionFee","classTeacher","phone","nid","emergencyContact","monthlySalary","picture","picturePublicId","pictureName","pictureType","experience","experiencePublicId","experienceName","experienceType","authoritySignPublicId","authoritySignName","authoritySignType","employeeSign","employeeSignPublicId","employeeSignName","employeeSignType","Gender","gender","BloodGroup","bloodGroup","EmployeeRole","employeeRole","dateOfJoining","every","some","none","profilePhoto","contactNumber","identifier","value","expiresAt","accountId","providerId","accessToken","refreshToken","idToken","accessTokenExpiresAt","refreshTokenExpiresAt","scope","password","token","ipAddress","userAgent","UserRole","role","UserStatus","status","needPasswordChange","emailVerified","image","is","isNot","connectOrCreate","upsert","disconnect","delete","connect","createMany","set","updateMany","deleteMany","increment","decrement","multiply","divide"]'),
+  graph: "3ARisAETBAAA9AIAIAUAAPUCACAJAADNAgAgDgAA9gIAIMcBAADxAgAwyAEAACMAEMkBAADxAgAwygEBAAAAAd0BQADBAgAh3gFAAMECACHfAUAAwgIAIewBAQAAAAGDAiAAwAIAIYQCAQC_AgAhtgIAAPICtgIiuAIAAPMCuAIiuQIgAMACACG6AiAAwAIAIbsCAQC-AgAhAQAAAAEAIAwDAADhAgAgxwEAAP4CADDIAQAAAwAQyQEAAP4CADDKAQEAvwIAIcsBAQC_AgAh3QFAAMECACHeAUAAwQIAIagCQADBAgAhsgIBAL8CACGzAgEAvgIAIbQCAQC-AgAhAwMAAOIDACCzAgAA_wIAILQCAAD_AgAgDAMAAOECACDHAQAA_gIAMMgBAAADABDJAQAA_gIAMMoBAQAAAAHLAQEAvwIAId0BQADBAgAh3gFAAMECACGoAkAAwQIAIbICAQAAAAGzAgEAvgIAIbQCAQC-AgAhAwAAAAMAIAEAAAQAMAIAAAUAIBEDAADhAgAgxwEAAP0CADDIAQAABwAQyQEAAP0CADDKAQEAvwIAIcsBAQC_AgAh3QFAAMECACHeAUAAwQIAIakCAQC_AgAhqgIBAL8CACGrAgEAvgIAIawCAQC-AgAhrQIBAL4CACGuAkAAwgIAIa8CQADCAgAhsAIBAL4CACGxAgEAvgIAIQgDAADiAwAgqwIAAP8CACCsAgAA_wIAIK0CAAD_AgAgrgIAAP8CACCvAgAA_wIAILACAAD_AgAgsQIAAP8CACARAwAA4QIAIMcBAAD9AgAwyAEAAAcAEMkBAAD9AgAwygEBAAAAAcsBAQC_AgAh3QFAAMECACHeAUAAwQIAIakCAQC_AgAhqgIBAL8CACGrAgEAvgIAIawCAQC-AgAhrQIBAL4CACGuAkAAwgIAIa8CQADCAgAhsAIBAL4CACGxAgEAvgIAIQMAAAAHACABAAAIADACAAAJACApAwAA4QIAIAYAAOICACANAADjAgAgxwEAANsCADDIAQAACwAQyQEAANsCADDKAQEAvwIAIcsBAQC_AgAhzgEBAL8CACHTAQAA3wLTASLbAQEAvwIAIdwBIADAAgAh3QFAAMECACHeAUAAwQIAId8BQADCAgAh7QEBAL8CACHxAQEAvwIAIfoBAQC_AgAhhwIBAL8CACGIAgEAvwIAIYkCAQC-AgAhigIIANwCACGLAgEAvgIAIYwCAQC-AgAhjQIBAL4CACGOAgEAvgIAIY8CAQC-AgAhkAIBAL4CACGRAgEAvgIAIZICAQC-AgAhkwIBAL8CACGUAgEAvgIAIZUCAQC-AgAhlgIBAL8CACGXAgEAvwIAIZgCAQC-AgAhmQIBAL4CACGbAgAA3QKbAiKdAgAA3gKdAiKfAgAA4AKfAiKgAgEAvwIAIQEAAAALACAUBwAAzAIAIAkAAM0CACDHAQAAywIAMMgBAAANABDJAQAAywIAMMoBAQC_AgAhzQEBAL4CACHdAUAAwQIAId4BQADBAgAh3wFAAMICACH6AQEAvgIAIfsBAQC-AgAh_AEBAL4CACH9AQEAvgIAIf4BAQC-AgAh_wEBAL4CACGAAgEAvgIAIYECAQC-AgAhggIBAL4CACGDAiAAwAIAIQEAAAANACAcBgAA4gIAIAgAAPsCACAMAAD8AgAgxwEAAPoCADDIAQAADwAQyQEAAPoCADDKAQEAvwIAIcsBAQC_AgAhzAEBAL8CACHNAQEAvwIAIc4BAQC_AgAhzwEBAL8CACHQAQEAvwIAIdEBAQC_AgAh0wEAAN8C0wEi1AEBAL8CACHVAQEAvwIAIdYBAQC_AgAh1wEBAL4CACHYAQEAvgIAIdkBAQC-AgAh2gEBAL4CACHbAQEAvwIAIdwBIADAAgAh3QFAAMECACHeAUAAwQIAId8BQADCAgAh4AEBAL8CACEBAAAADwAgAQAAAA0AIBcHAADDAgAgxwEAAL0CADDIAQAAEgAQyQEAAL0CADDKAQEAvwIAIc0BAQC_AgAh3AEgAMACACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHsAQEAvgIAIe0BAQC_AgAh7gEBAL8CACHvAQEAvwIAIfABAQC_AgAh8QEBAL8CACHyAQEAvwIAIfMBAQC_AgAh9AEBAL8CACH1AQEAvwIAIfYBAQC_AgAh9wEBAL8CACH4AQEAvwIAIQEAAAASACAIBgAA4wMAIAgAAKoEACAMAACrBAAg1wEAAP8CACDYAQAA_wIAINkBAAD_AgAg2gEAAP8CACDfAQAA_wIAIBwGAADiAgAgCAAA-wIAIAwAAPwCACDHAQAA-gIAMMgBAAAPABDJAQAA-gIAMMoBAQAAAAHLAQEAvwIAIcwBAQC_AgAhzQEBAAAAAc4BAQC_AgAhzwEBAL8CACHQAQEAvwIAIdEBAQC_AgAh0wEAAN8C0wEi1AEBAL8CACHVAQEAvwIAIdYBAQC_AgAh1wEBAL4CACHYAQEAvgIAIdkBAQC-AgAh2gEBAL4CACHbAQEAvwIAIdwBIADAAgAh3QFAAMECACHeAUAAwQIAId8BQADCAgAh4AEBAL8CACEDAAAADwAgAQAAFAAwAgAAFQAgAQAAAA8AIAEAAAALACANCQAA-AIAIAoAAPkCACDHAQAA9wIAMMgBAAAZABDJAQAA9wIAMMoBAQC_AgAh3QFAAMECACHeAUAAwQIAId8BQADCAgAhgwIgAMACACGEAgEAvwIAIYUCCADcAgAhhgIBAL8CACEDCQAArAMAIAoAAKkEACDfAQAA_wIAIA0JAAD4AgAgCgAA-QIAIMcBAAD3AgAwyAEAABkAEMkBAAD3AgAwygEBAAAAAd0BQADBAgAh3gFAAMECACHfAUAAwgIAIYMCIADAAgAhhAIBAL8CACGFAggA3AIAIYYCAQC_AgAhAwAAABkAIAEAABoAMAIAABsAIAEAAAAZACAOAwAA4QIAIMcBAADlAgAwyAEAAB4AEMkBAADlAgAwygEBAL8CACHLAQEAvwIAId0BQADBAgAh3gFAAMECACHfAUAAwgIAIewBAQC_AgAhgwIgAMACACGEAgEAvwIAIaQCAQC-AgAhpQIBAL4CACEBAAAAHgAgAQAAAAMAIAEAAAAHACABAAAAAQAgEwQAAPQCACAFAAD1AgAgCQAAzQIAIA4AAPYCACDHAQAA8QIAMMgBAAAjABDJAQAA8QIAMMoBAQC_AgAh3QFAAMECACHeAUAAwQIAId8BQADCAgAh7AEBAL8CACGDAiAAwAIAIYQCAQC_AgAhtgIAAPICtgIiuAIAAPMCuAIiuQIgAMACACG6AiAAwAIAIbsCAQC-AgAhBgQAAKYEACAFAACnBAAgCQAArAMAIA4AAKgEACDfAQAA_wIAILsCAAD_AgAgAwAAACMAIAEAACQAMAIAAAEAIAMAAAAjACABAAAkADACAAABACADAAAAIwAgAQAAJAAwAgAAAQAgEAQAAKIEACAFAACjBAAgCQAApAQAIA4AAKUEACDKAQEAAAAB3QFAAAAAAd4BQAAAAAHfAUAAAAAB7AEBAAAAAYMCIAAAAAGEAgEAAAABtgIAAAC2AgK4AgAAALgCArkCIAAAAAG6AiAAAAABuwIBAAAAAQEUAAAoACAMygEBAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAewBAQAAAAGDAiAAAAABhAIBAAAAAbYCAAAAtgICuAIAAAC4AgK5AiAAAAABugIgAAAAAbsCAQAAAAEBFAAAKgAwARQAACoAMBAEAAD8AwAgBQAA_QMAIAkAAP4DACAOAAD_AwAgygEBAIMDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACHsAQEAgwMAIYMCIACGAwAhhAIBAIMDACG2AgAA-gO2AiK4AgAA-wO4AiK5AiAAhgMAIboCIACGAwAhuwIBAIUDACECAAAAAQAgFAAALQAgDMoBAQCDAwAh3QFAAIcDACHeAUAAhwMAId8BQACIAwAh7AEBAIMDACGDAiAAhgMAIYQCAQCDAwAhtgIAAPoDtgIiuAIAAPsDuAIiuQIgAIYDACG6AiAAhgMAIbsCAQCFAwAhAgAAACMAIBQAAC8AIAIAAAAjACAUAAAvACADAAAAAQAgGwAAKAAgHAAALQAgAQAAAAEAIAEAAAAjACAFCwAA9wMAICEAAPkDACAiAAD4AwAg3wEAAP8CACC7AgAA_wIAIA_HAQAA6gIAMMgBAAA2ABDJAQAA6gIAMMoBAQCoAgAh3QFAAKwCACHeAUAArAIAId8BQACtAgAh7AEBAKgCACGDAiAAqwIAIYQCAQCoAgAhtgIAAOsCtgIiuAIAAOwCuAIiuQIgAKsCACG6AiAAqwIAIbsCAQCqAgAhAwAAACMAIAEAADUAMCAAADYAIAMAAAAjACABAAAkADACAAABACABAAAABQAgAQAAAAUAIAMAAAADACABAAAEADACAAAFACADAAAAAwAgAQAABAAwAgAABQAgAwAAAAMAIAEAAAQAMAIAAAUAIAkDAAD2AwAgygEBAAAAAcsBAQAAAAHdAUAAAAAB3gFAAAAAAagCQAAAAAGyAgEAAAABswIBAAAAAbQCAQAAAAEBFAAAPgAgCMoBAQAAAAHLAQEAAAAB3QFAAAAAAd4BQAAAAAGoAkAAAAABsgIBAAAAAbMCAQAAAAG0AgEAAAABARQAAEAAMAEUAABAADAJAwAA9QMAIMoBAQCDAwAhywEBAIMDACHdAUAAhwMAId4BQACHAwAhqAJAAIcDACGyAgEAgwMAIbMCAQCFAwAhtAIBAIUDACECAAAABQAgFAAAQwAgCMoBAQCDAwAhywEBAIMDACHdAUAAhwMAId4BQACHAwAhqAJAAIcDACGyAgEAgwMAIbMCAQCFAwAhtAIBAIUDACECAAAAAwAgFAAARQAgAgAAAAMAIBQAAEUAIAMAAAAFACAbAAA-ACAcAABDACABAAAABQAgAQAAAAMAIAULAADyAwAgIQAA9AMAICIAAPMDACCzAgAA_wIAILQCAAD_AgAgC8cBAADpAgAwyAEAAEwAEMkBAADpAgAwygEBAKgCACHLAQEAqAIAId0BQACsAgAh3gFAAKwCACGoAkAArAIAIbICAQCoAgAhswIBAKoCACG0AgEAqgIAIQMAAAADACABAABLADAgAABMACADAAAAAwAgAQAABAAwAgAABQAgAQAAAAkAIAEAAAAJACADAAAABwAgAQAACAAwAgAACQAgAwAAAAcAIAEAAAgAMAIAAAkAIAMAAAAHACABAAAIADACAAAJACAOAwAA8QMAIMoBAQAAAAHLAQEAAAAB3QFAAAAAAd4BQAAAAAGpAgEAAAABqgIBAAAAAasCAQAAAAGsAgEAAAABrQIBAAAAAa4CQAAAAAGvAkAAAAABsAIBAAAAAbECAQAAAAEBFAAAVAAgDcoBAQAAAAHLAQEAAAAB3QFAAAAAAd4BQAAAAAGpAgEAAAABqgIBAAAAAasCAQAAAAGsAgEAAAABrQIBAAAAAa4CQAAAAAGvAkAAAAABsAIBAAAAAbECAQAAAAEBFAAAVgAwARQAAFYAMA4DAADwAwAgygEBAIMDACHLAQEAgwMAId0BQACHAwAh3gFAAIcDACGpAgEAgwMAIaoCAQCDAwAhqwIBAIUDACGsAgEAhQMAIa0CAQCFAwAhrgJAAIgDACGvAkAAiAMAIbACAQCFAwAhsQIBAIUDACECAAAACQAgFAAAWQAgDcoBAQCDAwAhywEBAIMDACHdAUAAhwMAId4BQACHAwAhqQIBAIMDACGqAgEAgwMAIasCAQCFAwAhrAIBAIUDACGtAgEAhQMAIa4CQACIAwAhrwJAAIgDACGwAgEAhQMAIbECAQCFAwAhAgAAAAcAIBQAAFsAIAIAAAAHACAUAABbACADAAAACQAgGwAAVAAgHAAAWQAgAQAAAAkAIAEAAAAHACAKCwAA7QMAICEAAO8DACAiAADuAwAgqwIAAP8CACCsAgAA_wIAIK0CAAD_AgAgrgIAAP8CACCvAgAA_wIAILACAAD_AgAgsQIAAP8CACAQxwEAAOgCADDIAQAAYgAQyQEAAOgCADDKAQEAqAIAIcsBAQCoAgAh3QFAAKwCACHeAUAArAIAIakCAQCoAgAhqgIBAKgCACGrAgEAqgIAIawCAQCqAgAhrQIBAKoCACGuAkAArQIAIa8CQACtAgAhsAIBAKoCACGxAgEAqgIAIQMAAAAHACABAABhADAgAABiACADAAAABwAgAQAACAAwAgAACQAgCccBAADnAgAwyAEAAGgAEMkBAADnAgAwygEBAAAAAd0BQADBAgAh3gFAAMECACGmAgEAvwIAIacCAQC_AgAhqAJAAMECACEBAAAAZQAgAQAAAGUAIAnHAQAA5wIAMMgBAABoABDJAQAA5wIAMMoBAQC_AgAh3QFAAMECACHeAUAAwQIAIaYCAQC_AgAhpwIBAL8CACGoAkAAwQIAIQADAAAAaAAgAQAAaQAwAgAAZQAgAwAAAGgAIAEAAGkAMAIAAGUAIAMAAABoACABAABpADACAABlACAGygEBAAAAAd0BQAAAAAHeAUAAAAABpgIBAAAAAacCAQAAAAGoAkAAAAABARQAAG0AIAbKAQEAAAAB3QFAAAAAAd4BQAAAAAGmAgEAAAABpwIBAAAAAagCQAAAAAEBFAAAbwAwARQAAG8AMAbKAQEAgwMAId0BQACHAwAh3gFAAIcDACGmAgEAgwMAIacCAQCDAwAhqAJAAIcDACECAAAAZQAgFAAAcgAgBsoBAQCDAwAh3QFAAIcDACHeAUAAhwMAIaYCAQCDAwAhpwIBAIMDACGoAkAAhwMAIQIAAABoACAUAAB0ACACAAAAaAAgFAAAdAAgAwAAAGUAIBsAAG0AIBwAAHIAIAEAAABlACABAAAAaAAgAwsAAOoDACAhAADsAwAgIgAA6wMAIAnHAQAA5gIAMMgBAAB7ABDJAQAA5gIAMMoBAQCoAgAh3QFAAKwCACHeAUAArAIAIaYCAQCoAgAhpwIBAKgCACGoAkAArAIAIQMAAABoACABAAB6ADAgAAB7ACADAAAAaAAgAQAAaQAwAgAAZQAgDgMAAOECACDHAQAA5QIAMMgBAAAeABDJAQAA5QIAMMoBAQAAAAHLAQEAAAAB3QFAAMECACHeAUAAwQIAId8BQADCAgAh7AEBAAAAAYMCIADAAgAhhAIBAL8CACGkAgEAvgIAIaUCAQC-AgAhAQAAAH4AIAEAAAB-ACAEAwAA4gMAIN8BAAD_AgAgpAIAAP8CACClAgAA_wIAIAMAAAAeACABAACBAQAwAgAAfgAgAwAAAB4AIAEAAIEBADACAAB-ACADAAAAHgAgAQAAgQEAMAIAAH4AIAsDAADpAwAgygEBAAAAAcsBAQAAAAHdAUAAAAAB3gFAAAAAAd8BQAAAAAHsAQEAAAABgwIgAAAAAYQCAQAAAAGkAgEAAAABpQIBAAAAAQEUAACFAQAgCsoBAQAAAAHLAQEAAAAB3QFAAAAAAd4BQAAAAAHfAUAAAAAB7AEBAAAAAYMCIAAAAAGEAgEAAAABpAIBAAAAAaUCAQAAAAEBFAAAhwEAMAEUAACHAQAwCwMAAOgDACDKAQEAgwMAIcsBAQCDAwAh3QFAAIcDACHeAUAAhwMAId8BQACIAwAh7AEBAIMDACGDAiAAhgMAIYQCAQCDAwAhpAIBAIUDACGlAgEAhQMAIQIAAAB-ACAUAACKAQAgCsoBAQCDAwAhywEBAIMDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACHsAQEAgwMAIYMCIACGAwAhhAIBAIMDACGkAgEAhQMAIaUCAQCFAwAhAgAAAB4AIBQAAIwBACACAAAAHgAgFAAAjAEAIAMAAAB-ACAbAACFAQAgHAAAigEAIAEAAAB-ACABAAAAHgAgBgsAAOUDACAhAADnAwAgIgAA5gMAIN8BAAD_AgAgpAIAAP8CACClAgAA_wIAIA3HAQAA5AIAMMgBAACTAQAQyQEAAOQCADDKAQEAqAIAIcsBAQCoAgAh3QFAAKwCACHeAUAArAIAId8BQACtAgAh7AEBAKgCACGDAiAAqwIAIYQCAQCoAgAhpAIBAKoCACGlAgEAqgIAIQMAAAAeACABAACSAQAwIAAAkwEAIAMAAAAeACABAACBAQAwAgAAfgAgKQMAAOECACAGAADiAgAgDQAA4wIAIMcBAADbAgAwyAEAAAsAEMkBAADbAgAwygEBAAAAAcsBAQAAAAHOAQEAvwIAIdMBAADfAtMBItsBAQC_AgAh3AEgAMACACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHtAQEAvwIAIfEBAQC_AgAh-gEBAAAAAYcCAQC_AgAhiAIBAL8CACGJAgEAvgIAIYoCCADcAgAhiwIBAL4CACGMAgEAvgIAIY0CAQC-AgAhjgIBAL4CACGPAgEAvgIAIZACAQC-AgAhkQIBAL4CACGSAgEAvgIAIZMCAQC_AgAhlAIBAL4CACGVAgEAvgIAIZYCAQC_AgAhlwIBAL8CACGYAgEAvgIAIZkCAQC-AgAhmwIAAN0CmwIinQIAAN4CnQIinwIAAOACnwIioAIBAL8CACEBAAAAlgEAIAEAAACWAQAgEQMAAOIDACAGAADjAwAgDQAA5AMAIN8BAAD_AgAgiQIAAP8CACCLAgAA_wIAIIwCAAD_AgAgjQIAAP8CACCOAgAA_wIAII8CAAD_AgAgkAIAAP8CACCRAgAA_wIAIJICAAD_AgAglAIAAP8CACCVAgAA_wIAIJgCAAD_AgAgmQIAAP8CACADAAAACwAgAQAAmQEAMAIAAJYBACADAAAACwAgAQAAmQEAMAIAAJYBACADAAAACwAgAQAAmQEAMAIAAJYBACAmAwAA3wMAIAYAAOADACANAADhAwAgygEBAAAAAcsBAQAAAAHOAQEAAAAB0wEAAADTAQLbAQEAAAAB3AEgAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAe0BAQAAAAHxAQEAAAAB-gEBAAAAAYcCAQAAAAGIAgEAAAABiQIBAAAAAYoCCAAAAAGLAgEAAAABjAIBAAAAAY0CAQAAAAGOAgEAAAABjwIBAAAAAZACAQAAAAGRAgEAAAABkgIBAAAAAZMCAQAAAAGUAgEAAAABlQIBAAAAAZYCAQAAAAGXAgEAAAABmAIBAAAAAZkCAQAAAAGbAgAAAJsCAp0CAAAAnQICnwIAAACfAgKgAgEAAAABARQAAJ0BACAjygEBAAAAAcsBAQAAAAHOAQEAAAAB0wEAAADTAQLbAQEAAAAB3AEgAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAe0BAQAAAAHxAQEAAAAB-gEBAAAAAYcCAQAAAAGIAgEAAAABiQIBAAAAAYoCCAAAAAGLAgEAAAABjAIBAAAAAY0CAQAAAAGOAgEAAAABjwIBAAAAAZACAQAAAAGRAgEAAAABkgIBAAAAAZMCAQAAAAGUAgEAAAABlQIBAAAAAZYCAQAAAAGXAgEAAAABmAIBAAAAAZkCAQAAAAGbAgAAAJsCAp0CAAAAnQICnwIAAACfAgKgAgEAAAABARQAAJ8BADABFAAAnwEAMCYDAADLAwAgBgAAzAMAIA0AAM0DACDKAQEAgwMAIcsBAQCDAwAhzgEBAIMDACHTAQAAhAPTASLbAQEAgwMAIdwBIACGAwAh3QFAAIcDACHeAUAAhwMAId8BQACIAwAh7QEBAIMDACHxAQEAgwMAIfoBAQCDAwAhhwIBAIMDACGIAgEAgwMAIYkCAQCFAwAhigIIALIDACGLAgEAhQMAIYwCAQCFAwAhjQIBAIUDACGOAgEAhQMAIY8CAQCFAwAhkAIBAIUDACGRAgEAhQMAIZICAQCFAwAhkwIBAIMDACGUAgEAhQMAIZUCAQCFAwAhlgIBAIMDACGXAgEAgwMAIZgCAQCFAwAhmQIBAIUDACGbAgAAyAObAiKdAgAAyQOdAiKfAgAAygOfAiKgAgEAgwMAIQIAAACWAQAgFAAAogEAICPKAQEAgwMAIcsBAQCDAwAhzgEBAIMDACHTAQAAhAPTASLbAQEAgwMAIdwBIACGAwAh3QFAAIcDACHeAUAAhwMAId8BQACIAwAh7QEBAIMDACHxAQEAgwMAIfoBAQCDAwAhhwIBAIMDACGIAgEAgwMAIYkCAQCFAwAhigIIALIDACGLAgEAhQMAIYwCAQCFAwAhjQIBAIUDACGOAgEAhQMAIY8CAQCFAwAhkAIBAIUDACGRAgEAhQMAIZICAQCFAwAhkwIBAIMDACGUAgEAhQMAIZUCAQCFAwAhlgIBAIMDACGXAgEAgwMAIZgCAQCFAwAhmQIBAIUDACGbAgAAyAObAiKdAgAAyQOdAiKfAgAAygOfAiKgAgEAgwMAIQIAAAALACAUAACkAQAgAgAAAAsAIBQAAKQBACADAAAAlgEAIBsAAJ0BACAcAACiAQAgAQAAAJYBACABAAAACwAgEwsAAMMDACAhAADGAwAgIgAAxQMAIHMAAMQDACB0AADHAwAg3wEAAP8CACCJAgAA_wIAIIsCAAD_AgAgjAIAAP8CACCNAgAA_wIAII4CAAD_AgAgjwIAAP8CACCQAgAA_wIAIJECAAD_AgAgkgIAAP8CACCUAgAA_wIAIJUCAAD_AgAgmAIAAP8CACCZAgAA_wIAICbHAQAA0QIAMMgBAACrAQAQyQEAANECADDKAQEAqAIAIcsBAQCoAgAhzgEBAKgCACHTAQAAqQLTASLbAQEAqAIAIdwBIACrAgAh3QFAAKwCACHeAUAArAIAId8BQACtAgAh7QEBAKgCACHxAQEAqAIAIfoBAQCoAgAhhwIBAKgCACGIAgEAqAIAIYkCAQCqAgAhigIIAM8CACGLAgEAqgIAIYwCAQCqAgAhjQIBAKoCACGOAgEAqgIAIY8CAQCqAgAhkAIBAKoCACGRAgEAqgIAIZICAQCqAgAhkwIBAKgCACGUAgEAqgIAIZUCAQCqAgAhlgIBAKgCACGXAgEAqAIAIZgCAQCqAgAhmQIBAKoCACGbAgAA0gKbAiKdAgAA0wKdAiKfAgAA1AKfAiKgAgEAqAIAIQMAAAALACABAACqAQAwIAAAqwEAIAMAAAALACABAACZAQAwAgAAlgEAIAEAAAAbACABAAAAGwAgAwAAABkAIAEAABoAMAIAABsAIAMAAAAZACABAAAaADACAAAbACADAAAAGQAgAQAAGgAwAgAAGwAgCgkAAMEDACAKAADCAwAgygEBAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAYMCIAAAAAGEAgEAAAABhQIIAAAAAYYCAQAAAAEBFAAAswEAIAjKAQEAAAAB3QFAAAAAAd4BQAAAAAHfAUAAAAABgwIgAAAAAYQCAQAAAAGFAggAAAABhgIBAAAAAQEUAAC1AQAwARQAALUBADAKCQAAswMAIAoAALQDACDKAQEAgwMAId0BQACHAwAh3gFAAIcDACHfAUAAiAMAIYMCIACGAwAhhAIBAIMDACGFAggAsgMAIYYCAQCDAwAhAgAAABsAIBQAALgBACAIygEBAIMDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACGDAiAAhgMAIYQCAQCDAwAhhQIIALIDACGGAgEAgwMAIQIAAAAZACAUAAC6AQAgAgAAABkAIBQAALoBACADAAAAGwAgGwAAswEAIBwAALgBACABAAAAGwAgAQAAABkAIAYLAACtAwAgIQAAsAMAICIAAK8DACBzAACuAwAgdAAAsQMAIN8BAAD_AgAgC8cBAADOAgAwyAEAAMEBABDJAQAAzgIAMMoBAQCoAgAh3QFAAKwCACHeAUAArAIAId8BQACtAgAhgwIgAKsCACGEAgEAqAIAIYUCCADPAgAhhgIBAKgCACEDAAAAGQAgAQAAwAEAMCAAAMEBACADAAAAGQAgAQAAGgAwAgAAGwAgFAcAAMwCACAJAADNAgAgxwEAAMsCADDIAQAADQAQyQEAAMsCADDKAQEAAAABzQEBAAAAAd0BQADBAgAh3gFAAMECACHfAUAAwgIAIfoBAQAAAAH7AQEAvgIAIfwBAQC-AgAh_QEBAL4CACH-AQEAvgIAIf8BAQC-AgAhgAIBAL4CACGBAgEAvgIAIYICAQC-AgAhgwIgAMACACEBAAAAxAEAIAEAAADEAQAgDQcAAKADACAJAACsAwAgzQEAAP8CACDfAQAA_wIAIPoBAAD_AgAg-wEAAP8CACD8AQAA_wIAIP0BAAD_AgAg_gEAAP8CACD_AQAA_wIAIIACAAD_AgAggQIAAP8CACCCAgAA_wIAIAMAAAANACABAADHAQAwAgAAxAEAIAMAAAANACABAADHAQAwAgAAxAEAIAMAAAANACABAADHAQAwAgAAxAEAIBEHAACrAwAgCQAAlwMAIMoBAQAAAAHNAQEAAAAB3QFAAAAAAd4BQAAAAAHfAUAAAAAB-gEBAAAAAfsBAQAAAAH8AQEAAAAB_QEBAAAAAf4BAQAAAAH_AQEAAAABgAIBAAAAAYECAQAAAAGCAgEAAAABgwIgAAAAAQEUAADLAQAgD8oBAQAAAAHNAQEAAAAB3QFAAAAAAd4BQAAAAAHfAUAAAAAB-gEBAAAAAfsBAQAAAAH8AQEAAAAB_QEBAAAAAf4BAQAAAAH_AQEAAAABgAIBAAAAAYECAQAAAAGCAgEAAAABgwIgAAAAAQEUAADNAQAwARQAAM0BADABAAAADwAgAQAAAAsAIBEHAACqAwAgCQAAlgMAIMoBAQCDAwAhzQEBAIUDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACH6AQEAhQMAIfsBAQCFAwAh_AEBAIUDACH9AQEAhQMAIf4BAQCFAwAh_wEBAIUDACGAAgEAhQMAIYECAQCFAwAhggIBAIUDACGDAiAAhgMAIQIAAADEAQAgFAAA0gEAIA_KAQEAgwMAIc0BAQCFAwAh3QFAAIcDACHeAUAAhwMAId8BQACIAwAh-gEBAIUDACH7AQEAhQMAIfwBAQCFAwAh_QEBAIUDACH-AQEAhQMAIf8BAQCFAwAhgAIBAIUDACGBAgEAhQMAIYICAQCFAwAhgwIgAIYDACECAAAADQAgFAAA1AEAIAIAAAANACAUAADUAQAgAQAAAA8AIAEAAAALACADAAAAxAEAIBsAAMsBACAcAADSAQAgAQAAAMQBACABAAAADQAgDgsAAKcDACAhAACpAwAgIgAAqAMAIM0BAAD_AgAg3wEAAP8CACD6AQAA_wIAIPsBAAD_AgAg_AEAAP8CACD9AQAA_wIAIP4BAAD_AgAg_wEAAP8CACCAAgAA_wIAIIECAAD_AgAgggIAAP8CACASxwEAAMoCADDIAQAA3QEAEMkBAADKAgAwygEBAKgCACHNAQEAqgIAId0BQACsAgAh3gFAAKwCACHfAUAArQIAIfoBAQCqAgAh-wEBAKoCACH8AQEAqgIAIf0BAQCqAgAh_gEBAKoCACH_AQEAqgIAIYACAQCqAgAhgQIBAKoCACGCAgEAqgIAIYMCIACrAgAhAwAAAA0AIAEAANwBADAgAADdAQAgAwAAAA0AIAEAAMcBADACAADEAQAgBccBAADIAgAwyAEAAOMBABDJAQAAyAIAMMoBAQAAAAH5AQIAyQIAIQEAAADgAQAgAQAAAOABACAFxwEAAMgCADDIAQAA4wEAEMkBAADIAgAwygEBAL8CACH5AQIAyQIAIQADAAAA4wEAIAEAAOQBADACAADgAQAgAwAAAOMBACABAADkAQAwAgAA4AEAIAMAAADjAQAgAQAA5AEAMAIAAOABACACygEBAAAAAfkBAgAAAAEBFAAA6AEAIALKAQEAAAAB-QECAAAAAQEUAADqAQAwARQAAOoBADACygEBAIMDACH5AQIApgMAIQIAAADgAQAgFAAA7QEAIALKAQEAgwMAIfkBAgCmAwAhAgAAAOMBACAUAADvAQAgAgAAAOMBACAUAADvAQAgAwAAAOABACAbAADoAQAgHAAA7QEAIAEAAADgAQAgAQAAAOMBACAFCwAAoQMAICEAAKQDACAiAACjAwAgcwAAogMAIHQAAKUDACAFxwEAAMQCADDIAQAA9gEAEMkBAADEAgAwygEBAKgCACH5AQIAxQIAIQMAAADjAQAgAQAA9QEAMCAAAPYBACADAAAA4wEAIAEAAOQBADACAADgAQAgFwcAAMMCACDHAQAAvQIAMMgBAAASABDJAQAAvQIAMMoBAQAAAAHNAQEAAAAB3AEgAMACACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHsAQEAvgIAIe0BAQC_AgAh7gEBAL8CACHvAQEAvwIAIfABAQC_AgAh8QEBAL8CACHyAQEAvwIAIfMBAQC_AgAh9AEBAL8CACH1AQEAvwIAIfYBAQC_AgAh9wEBAL8CACH4AQEAvwIAIQEAAAD5AQAgAQAAAPkBACADBwAAoAMAIN8BAAD_AgAg7AEAAP8CACADAAAAEgAgAQAA_AEAMAIAAPkBACADAAAAEgAgAQAA_AEAMAIAAPkBACADAAAAEgAgAQAA_AEAMAIAAPkBACAUBwAAnwMAIMoBAQAAAAHNAQEAAAAB3AEgAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAewBAQAAAAHtAQEAAAAB7gEBAAAAAe8BAQAAAAHwAQEAAAAB8QEBAAAAAfIBAQAAAAHzAQEAAAAB9AEBAAAAAfUBAQAAAAH2AQEAAAAB9wEBAAAAAfgBAQAAAAEBFAAAgAIAIBPKAQEAAAABzQEBAAAAAdwBIAAAAAHdAUAAAAAB3gFAAAAAAd8BQAAAAAHsAQEAAAAB7QEBAAAAAe4BAQAAAAHvAQEAAAAB8AEBAAAAAfEBAQAAAAHyAQEAAAAB8wEBAAAAAfQBAQAAAAH1AQEAAAAB9gEBAAAAAfcBAQAAAAH4AQEAAAABARQAAIICADABFAAAggIAMBQHAACeAwAgygEBAIMDACHNAQEAgwMAIdwBIACGAwAh3QFAAIcDACHeAUAAhwMAId8BQACIAwAh7AEBAIUDACHtAQEAgwMAIe4BAQCDAwAh7wEBAIMDACHwAQEAgwMAIfEBAQCDAwAh8gEBAIMDACHzAQEAgwMAIfQBAQCDAwAh9QEBAIMDACH2AQEAgwMAIfcBAQCDAwAh-AEBAIMDACECAAAA-QEAIBQAAIUCACATygEBAIMDACHNAQEAgwMAIdwBIACGAwAh3QFAAIcDACHeAUAAhwMAId8BQACIAwAh7AEBAIUDACHtAQEAgwMAIe4BAQCDAwAh7wEBAIMDACHwAQEAgwMAIfEBAQCDAwAh8gEBAIMDACHzAQEAgwMAIfQBAQCDAwAh9QEBAIMDACH2AQEAgwMAIfcBAQCDAwAh-AEBAIMDACECAAAAEgAgFAAAhwIAIAIAAAASACAUAACHAgAgAwAAAPkBACAbAACAAgAgHAAAhQIAIAEAAAD5AQAgAQAAABIAIAULAACbAwAgIQAAnQMAICIAAJwDACDfAQAA_wIAIOwBAAD_AgAgFscBAAC8AgAwyAEAAI4CABDJAQAAvAIAMMoBAQCoAgAhzQEBAKgCACHcASAAqwIAId0BQACsAgAh3gFAAKwCACHfAUAArQIAIewBAQCqAgAh7QEBAKgCACHuAQEAqAIAIe8BAQCoAgAh8AEBAKgCACHxAQEAqAIAIfIBAQCoAgAh8wEBAKgCACH0AQEAqAIAIfUBAQCoAgAh9gEBAKgCACH3AQEAqAIAIfgBAQCoAgAhAwAAABIAIAEAAI0CADAgAACOAgAgAwAAABIAIAEAAPwBADACAAD5AQAgAQAAABUAIAEAAAAVACADAAAADwAgAQAAFAAwAgAAFQAgAwAAAA8AIAEAABQAMAIAABUAIAMAAAAPACABAAAUADACAAAVACAZBgAAmAMAIAgAAJkDACAMAACaAwAgygEBAAAAAcsBAQAAAAHMAQEAAAABzQEBAAAAAc4BAQAAAAHPAQEAAAAB0AEBAAAAAdEBAQAAAAHTAQAAANMBAtQBAQAAAAHVAQEAAAAB1gEBAAAAAdcBAQAAAAHYAQEAAAAB2QEBAAAAAdoBAQAAAAHbAQEAAAAB3AEgAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAeABAQAAAAEBFAAAlgIAIBbKAQEAAAABywEBAAAAAcwBAQAAAAHNAQEAAAABzgEBAAAAAc8BAQAAAAHQAQEAAAAB0QEBAAAAAdMBAAAA0wEC1AEBAAAAAdUBAQAAAAHWAQEAAAAB1wEBAAAAAdgBAQAAAAHZAQEAAAAB2gEBAAAAAdsBAQAAAAHcASAAAAAB3QFAAAAAAd4BQAAAAAHfAUAAAAAB4AEBAAAAAQEUAACYAgAwARQAAJgCADAZBgAAiQMAIAgAAIoDACAMAACLAwAgygEBAIMDACHLAQEAgwMAIcwBAQCDAwAhzQEBAIMDACHOAQEAgwMAIc8BAQCDAwAh0AEBAIMDACHRAQEAgwMAIdMBAACEA9MBItQBAQCDAwAh1QEBAIMDACHWAQEAgwMAIdcBAQCFAwAh2AEBAIUDACHZAQEAhQMAIdoBAQCFAwAh2wEBAIMDACHcASAAhgMAId0BQACHAwAh3gFAAIcDACHfAUAAiAMAIeABAQCDAwAhAgAAABUAIBQAAJsCACAWygEBAIMDACHLAQEAgwMAIcwBAQCDAwAhzQEBAIMDACHOAQEAgwMAIc8BAQCDAwAh0AEBAIMDACHRAQEAgwMAIdMBAACEA9MBItQBAQCDAwAh1QEBAIMDACHWAQEAgwMAIdcBAQCFAwAh2AEBAIUDACHZAQEAhQMAIdoBAQCFAwAh2wEBAIMDACHcASAAhgMAId0BQACHAwAh3gFAAIcDACHfAUAAiAMAIeABAQCDAwAhAgAAAA8AIBQAAJ0CACACAAAADwAgFAAAnQIAIAMAAAAVACAbAACWAgAgHAAAmwIAIAEAAAAVACABAAAADwAgCAsAAIADACAhAACCAwAgIgAAgQMAINcBAAD_AgAg2AEAAP8CACDZAQAA_wIAINoBAAD_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_AgAh3AEgAMACACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHsAQEAvgIAIe0BAQC_AgAh7gEBAL8CACHvAQEAvwIAIfABAQC_AgAh8QEBAL8CACHyAQEAvwIAIfMBAQC_AgAh9AEBAL8CACH1AQEAvwIAIfYBAQC_AgAh9wEBAL8CACH4AQEAvwIAIQvhAQEAAAAB4gEBAAAABeMBAQAAAAXkAQEAAAAB5QEBAAAAAeYBAQAAAAHnAQEAAAAB6AEBALcCACHpAQEAAAAB6gEBAAAAAesBAQAAAAEL4QEBAAAAAeIBAQAAAATjAQEAAAAE5AEBAAAAAeUBAQAAAAHmAQEAAAAB5wEBAAAAAegBAQC7AgAh6QEBAAAAAeoBAQAAAAHrAQEAAAABAuEBIAAAAAHoASAAtQIAIQjhAUAAAAAB4gFAAAAABOMBQAAAAATkAUAAAAAB5QFAAAAAAeYBQAAAAAHnAUAAAAAB6AFAALMCACEI4QFAAAAAAeIBQAAAAAXjAUAAAAAF5AFAAAAAAeUBQAAAAAHmAUAAAAAB5wFAAAAAAegBQACwAgAhHgYAAOICACAIAAD7AgAgDAAA_AIAIMcBAAD6AgAwyAEAAA8AEMkBAAD6AgAwygEBAL8CACHLAQEAvwIAIcwBAQC_AgAhzQEBAL8CACHOAQEAvwIAIc8BAQC_AgAh0AEBAL8CACHRAQEAvwIAIdMBAADfAtMBItQBAQC_AgAh1QEBAL8CACHWAQEAvwIAIdcBAQC-AgAh2AEBAL4CACHZAQEAvgIAIdoBAQC-AgAh2wEBAL8CACHcASAAwAIAId0BQADBAgAh3gFAAMECACHfAUAAwgIAIeABAQC_AgAhvAIAAA8AIL0CAAAPACAFxwEAAMQCADDIAQAA9gEAEMkBAADEAgAwygEBAKgCACH5AQIAxQIAIQ0LAACyAgAgIQAAsgIAICIAALICACBzAADHAgAgdAAAsgIAIOEBAgAAAAHiAQIAAAAE4wECAAAABOQBAgAAAAHlAQIAAAAB5gECAAAAAecBAgAAAAHoAQIAxgIAIQ0LAACyAgAgIQAAsgIAICIAALICACBzAADHAgAgdAAAsgIAIOEBAgAAAAHiAQIAAAAE4wECAAAABOQBAgAAAAHlAQIAAAAB5gECAAAAAecBAgAAAAHoAQIAxgIAIQjhAQgAAAAB4gEIAAAABOMBCAAAAATkAQgAAAAB5QEIAAAAAeYBCAAAAAHnAQgAAAAB6AEIAMcCACEFxwEAAMgCADDIAQAA4wEAEMkBAADIAgAwygEBAL8CACH5AQIAyQIAIQjhAQIAAAAB4gECAAAABOMBAgAAAATkAQIAAAAB5QECAAAAAeYBAgAAAAHnAQIAAAAB6AECALICACESxwEAAMoCADDIAQAA3QEAEMkBAADKAgAwygEBAKgCACHNAQEAqgIAId0BQACsAgAh3gFAAKwCACHfAUAArQIAIfoBAQCqAgAh-wEBAKoCACH8AQEAqgIAIf0BAQCqAgAh_gEBAKoCACH_AQEAqgIAIYACAQCqAgAhgQIBAKoCACGCAgEAqgIAIYMCIACrAgAhFAcAAMwCACAJAADNAgAgxwEAAMsCADDIAQAADQAQyQEAAMsCADDKAQEAvwIAIc0BAQC-AgAh3QFAAMECACHeAUAAwQIAId8BQADCAgAh-gEBAL4CACH7AQEAvgIAIfwBAQC-AgAh_QEBAL4CACH-AQEAvgIAIf8BAQC-AgAhgAIBAL4CACGBAgEAvgIAIYICAQC-AgAhgwIgAMACACEeBgAA4gIAIAgAAPsCACAMAAD8AgAgxwEAAPoCADDIAQAADwAQyQEAAPoCADDKAQEAvwIAIcsBAQC_AgAhzAEBAL8CACHNAQEAvwIAIc4BAQC_AgAhzwEBAL8CACHQAQEAvwIAIdEBAQC_AgAh0wEAAN8C0wEi1AEBAL8CACHVAQEAvwIAIdYBAQC_AgAh1wEBAL4CACHYAQEAvgIAIdkBAQC-AgAh2gEBAL4CACHbAQEAvwIAIdwBIADAAgAh3QFAAMECACHeAUAAwQIAId8BQADCAgAh4AEBAL8CACG8AgAADwAgvQIAAA8AICsDAADhAgAgBgAA4gIAIA0AAOMCACDHAQAA2wIAMMgBAAALABDJAQAA2wIAMMoBAQC_AgAhywEBAL8CACHOAQEAvwIAIdMBAADfAtMBItsBAQC_AgAh3AEgAMACACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHtAQEAvwIAIfEBAQC_AgAh-gEBAL8CACGHAgEAvwIAIYgCAQC_AgAhiQIBAL4CACGKAggA3AIAIYsCAQC-AgAhjAIBAL4CACGNAgEAvgIAIY4CAQC-AgAhjwIBAL4CACGQAgEAvgIAIZECAQC-AgAhkgIBAL4CACGTAgEAvwIAIZQCAQC-AgAhlQIBAL4CACGWAgEAvwIAIZcCAQC_AgAhmAIBAL4CACGZAgEAvgIAIZsCAADdApsCIp0CAADeAp0CIp8CAADgAp8CIqACAQC_AgAhvAIAAAsAIL0CAAALACALxwEAAM4CADDIAQAAwQEAEMkBAADOAgAwygEBAKgCACHdAUAArAIAId4BQACsAgAh3wFAAK0CACGDAiAAqwIAIYQCAQCoAgAhhQIIAM8CACGGAgEAqAIAIQ0LAACyAgAgIQAAxwIAICIAAMcCACBzAADHAgAgdAAAxwIAIOEBCAAAAAHiAQgAAAAE4wEIAAAABOQBCAAAAAHlAQgAAAAB5gEIAAAAAecBCAAAAAHoAQgA0AIAIQ0LAACyAgAgIQAAxwIAICIAAMcCACBzAADHAgAgdAAAxwIAIOEBCAAAAAHiAQgAAAAE4wEIAAAABOQBCAAAAAHlAQgAAAAB5gEIAAAAAecBCAAAAAHoAQgA0AIAISbHAQAA0QIAMMgBAACrAQAQyQEAANECADDKAQEAqAIAIcsBAQCoAgAhzgEBAKgCACHTAQAAqQLTASLbAQEAqAIAIdwBIACrAgAh3QFAAKwCACHeAUAArAIAId8BQACtAgAh7QEBAKgCACHxAQEAqAIAIfoBAQCoAgAhhwIBAKgCACGIAgEAqAIAIYkCAQCqAgAhigIIAM8CACGLAgEAqgIAIYwCAQCqAgAhjQIBAKoCACGOAgEAqgIAIY8CAQCqAgAhkAIBAKoCACGRAgEAqgIAIZICAQCqAgAhkwIBAKgCACGUAgEAqgIAIZUCAQCqAgAhlgIBAKgCACGXAgEAqAIAIZgCAQCqAgAhmQIBAKoCACGbAgAA0gKbAiKdAgAA0wKdAiKfAgAA1AKfAiKgAgEAqAIAIQcLAACyAgAgIQAA2gIAICIAANoCACDhAQAAAJsCAuIBAAAAmwII4wEAAACbAgjoAQAA2QKbAiIHCwAAsgIAICEAANgCACAiAADYAgAg4QEAAACdAgLiAQAAAJ0CCOMBAAAAnQII6AEAANcCnQIiBwsAALICACAhAADWAgAgIgAA1gIAIOEBAAAAnwIC4gEAAACfAgjjAQAAAJ8CCOgBAADVAp8CIgcLAACyAgAgIQAA1gIAICIAANYCACDhAQAAAJ8CAuIBAAAAnwII4wEAAACfAgjoAQAA1QKfAiIE4QEAAACfAgLiAQAAAJ8CCOMBAAAAnwII6AEAANYCnwIiBwsAALICACAhAADYAgAgIgAA2AIAIOEBAAAAnQIC4gEAAACdAgjjAQAAAJ0CCOgBAADXAp0CIgThAQAAAJ0CAuIBAAAAnQII4wEAAACdAgjoAQAA2AKdAiIHCwAAsgIAICEAANoCACAiAADaAgAg4QEAAACbAgLiAQAAAJsCCOMBAAAAmwII6AEAANkCmwIiBOEBAAAAmwIC4gEAAACbAgjjAQAAAJsCCOgBAADaApsCIikDAADhAgAgBgAA4gIAIA0AAOMCACDHAQAA2wIAMMgBAAALABDJAQAA2wIAMMoBAQC_AgAhywEBAL8CACHOAQEAvwIAIdMBAADfAtMBItsBAQC_AgAh3AEgAMACACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHtAQEAvwIAIfEBAQC_AgAh-gEBAL8CACGHAgEAvwIAIYgCAQC_AgAhiQIBAL4CACGKAggA3AIAIYsCAQC-AgAhjAIBAL4CACGNAgEAvgIAIY4CAQC-AgAhjwIBAL4CACGQAgEAvgIAIZECAQC-AgAhkgIBAL4CACGTAgEAvwIAIZQCAQC-AgAhlQIBAL4CACGWAgEAvwIAIZcCAQC_AgAhmAIBAL4CACGZAgEAvgIAIZsCAADdApsCIp0CAADeAp0CIp8CAADgAp8CIqACAQC_AgAhCOEBCAAAAAHiAQgAAAAE4wEIAAAABOQBCAAAAAHlAQgAAAAB5gEIAAAAAecBCAAAAAHoAQgAxwIAIQThAQAAAJsCAuIBAAAAmwII4wEAAACbAgjoAQAA2gKbAiIE4QEAAACdAgLiAQAAAJ0CCOMBAAAAnQII6AEAANgCnQIiBOEBAAAA0wEC4gEAAADTAQjjAQAAANMBCOgBAAC5AtMBIgThAQAAAJ8CAuIBAAAAnwII4wEAAACfAgjoAQAA1gKfAiIVBAAA9AIAIAUAAPUCACAJAADNAgAgDgAA9gIAIMcBAADxAgAwyAEAACMAEMkBAADxAgAwygEBAL8CACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHsAQEAvwIAIYMCIADAAgAhhAIBAL8CACG2AgAA8gK2AiK4AgAA8wK4AiK5AiAAwAIAIboCIADAAgAhuwIBAL4CACG8AgAAIwAgvQIAACMAIBYHAADMAgAgCQAAzQIAIMcBAADLAgAwyAEAAA0AEMkBAADLAgAwygEBAL8CACHNAQEAvgIAId0BQADBAgAh3gFAAMECACHfAUAAwgIAIfoBAQC-AgAh-wEBAL4CACH8AQEAvgIAIf0BAQC-AgAh_gEBAL4CACH_AQEAvgIAIYACAQC-AgAhgQIBAL4CACGCAgEAvgIAIYMCIADAAgAhvAIAAA0AIL0CAAANACADoQIAABkAIKICAAAZACCjAgAAGQAgDccBAADkAgAwyAEAAJMBABDJAQAA5AIAMMoBAQCoAgAhywEBAKgCACHdAUAArAIAId4BQACsAgAh3wFAAK0CACHsAQEAqAIAIYMCIACrAgAhhAIBAKgCACGkAgEAqgIAIaUCAQCqAgAhDgMAAOECACDHAQAA5QIAMMgBAAAeABDJAQAA5QIAMMoBAQC_AgAhywEBAL8CACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHsAQEAvwIAIYMCIADAAgAhhAIBAL8CACGkAgEAvgIAIaUCAQC-AgAhCccBAADmAgAwyAEAAHsAEMkBAADmAgAwygEBAKgCACHdAUAArAIAId4BQACsAgAhpgIBAKgCACGnAgEAqAIAIagCQACsAgAhCccBAADnAgAwyAEAAGgAEMkBAADnAgAwygEBAL8CACHdAUAAwQIAId4BQADBAgAhpgIBAL8CACGnAgEAvwIAIagCQADBAgAhEMcBAADoAgAwyAEAAGIAEMkBAADoAgAwygEBAKgCACHLAQEAqAIAId0BQACsAgAh3gFAAKwCACGpAgEAqAIAIaoCAQCoAgAhqwIBAKoCACGsAgEAqgIAIa0CAQCqAgAhrgJAAK0CACGvAkAArQIAIbACAQCqAgAhsQIBAKoCACELxwEAAOkCADDIAQAATAAQyQEAAOkCADDKAQEAqAIAIcsBAQCoAgAh3QFAAKwCACHeAUAArAIAIagCQACsAgAhsgIBAKgCACGzAgEAqgIAIbQCAQCqAgAhD8cBAADqAgAwyAEAADYAEMkBAADqAgAwygEBAKgCACHdAUAArAIAId4BQACsAgAh3wFAAK0CACHsAQEAqAIAIYMCIACrAgAhhAIBAKgCACG2AgAA6wK2AiK4AgAA7AK4AiK5AiAAqwIAIboCIACrAgAhuwIBAKoCACEHCwAAsgIAICEAAPACACAiAADwAgAg4QEAAAC2AgLiAQAAALYCCOMBAAAAtgII6AEAAO8CtgIiBwsAALICACAhAADuAgAgIgAA7gIAIOEBAAAAuAIC4gEAAAC4AgjjAQAAALgCCOgBAADtArgCIgcLAACyAgAgIQAA7gIAICIAAO4CACDhAQAAALgCAuIBAAAAuAII4wEAAAC4AgjoAQAA7QK4AiIE4QEAAAC4AgLiAQAAALgCCOMBAAAAuAII6AEAAO4CuAIiBwsAALICACAhAADwAgAgIgAA8AIAIOEBAAAAtgIC4gEAAAC2AgjjAQAAALYCCOgBAADvArYCIgThAQAAALYCAuIBAAAAtgII4wEAAAC2AgjoAQAA8AK2AiITBAAA9AIAIAUAAPUCACAJAADNAgAgDgAA9gIAIMcBAADxAgAwyAEAACMAEMkBAADxAgAwygEBAL8CACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHsAQEAvwIAIYMCIADAAgAhhAIBAL8CACG2AgAA8gK2AiK4AgAA8wK4AiK5AiAAwAIAIboCIADAAgAhuwIBAL4CACEE4QEAAAC2AgLiAQAAALYCCOMBAAAAtgII6AEAAPACtgIiBOEBAAAAuAIC4gEAAAC4AgjjAQAAALgCCOgBAADuArgCIgOhAgAAAwAgogIAAAMAIKMCAAADACADoQIAAAcAIKICAAAHACCjAgAABwAgEAMAAOECACDHAQAA5QIAMMgBAAAeABDJAQAA5QIAMMoBAQC_AgAhywEBAL8CACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHsAQEAvwIAIYMCIADAAgAhhAIBAL8CACGkAgEAvgIAIaUCAQC-AgAhvAIAAB4AIL0CAAAeACANCQAA-AIAIAoAAPkCACDHAQAA9wIAMMgBAAAZABDJAQAA9wIAMMoBAQC_AgAh3QFAAMECACHeAUAAwQIAId8BQADCAgAhgwIgAMACACGEAgEAvwIAIYUCCADcAgAhhgIBAL8CACErAwAA4QIAIAYAAOICACANAADjAgAgxwEAANsCADDIAQAACwAQyQEAANsCADDKAQEAvwIAIcsBAQC_AgAhzgEBAL8CACHTAQAA3wLTASLbAQEAvwIAIdwBIADAAgAh3QFAAMECACHeAUAAwQIAId8BQADCAgAh7QEBAL8CACHxAQEAvwIAIfoBAQC_AgAhhwIBAL8CACGIAgEAvwIAIYkCAQC-AgAhigIIANwCACGLAgEAvgIAIYwCAQC-AgAhjQIBAL4CACGOAgEAvgIAIY8CAQC-AgAhkAIBAL4CACGRAgEAvgIAIZICAQC-AgAhkwIBAL8CACGUAgEAvgIAIZUCAQC-AgAhlgIBAL8CACGXAgEAvwIAIZgCAQC-AgAhmQIBAL4CACGbAgAA3QKbAiKdAgAA3gKdAiKfAgAA4AKfAiKgAgEAvwIAIbwCAAALACC9AgAACwAgA6ECAAAPACCiAgAADwAgowIAAA8AIBwGAADiAgAgCAAA-wIAIAwAAPwCACDHAQAA-gIAMMgBAAAPABDJAQAA-gIAMMoBAQC_AgAhywEBAL8CACHMAQEAvwIAIc0BAQC_AgAhzgEBAL8CACHPAQEAvwIAIdABAQC_AgAh0QEBAL8CACHTAQAA3wLTASLUAQEAvwIAIdUBAQC_AgAh1gEBAL8CACHXAQEAvgIAIdgBAQC-AgAh2QEBAL4CACHaAQEAvgIAIdsBAQC_AgAh3AEgAMACACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHgAQEAvwIAIRkHAADDAgAgxwEAAL0CADDIAQAAEgAQyQEAAL0CADDKAQEAvwIAIc0BAQC_AgAh3AEgAMACACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHsAQEAvgIAIe0BAQC_AgAh7gEBAL8CACHvAQEAvwIAIfABAQC_AgAh8QEBAL8CACHyAQEAvwIAIfMBAQC_AgAh9AEBAL8CACH1AQEAvwIAIfYBAQC_AgAh9wEBAL8CACH4AQEAvwIAIbwCAAASACC9AgAAEgAgDwkAAPgCACAKAAD5AgAgxwEAAPcCADDIAQAAGQAQyQEAAPcCADDKAQEAvwIAId0BQADBAgAh3gFAAMECACHfAUAAwgIAIYMCIADAAgAhhAIBAL8CACGFAggA3AIAIYYCAQC_AgAhvAIAABkAIL0CAAAZACARAwAA4QIAIMcBAAD9AgAwyAEAAAcAEMkBAAD9AgAwygEBAL8CACHLAQEAvwIAId0BQADBAgAh3gFAAMECACGpAgEAvwIAIaoCAQC_AgAhqwIBAL4CACGsAgEAvgIAIa0CAQC-AgAhrgJAAMICACGvAkAAwgIAIbACAQC-AgAhsQIBAL4CACEMAwAA4QIAIMcBAAD-AgAwyAEAAAMAEMkBAAD-AgAwygEBAL8CACHLAQEAvwIAId0BQADBAgAh3gFAAMECACGoAkAAwQIAIbICAQC_AgAhswIBAL4CACG0AgEAvgIAIQAAAAABxAIBAAAAAQHEAgAAANMBAgHEAgEAAAABAcQCIAAAAAEBxAJAAAAAAQHEAkAAAAABBxsAAJEDACAcAACUAwAgvgIAAJIDACC_AgAAkwMAIMACAAANACDBAgAADQAgwgIAAMQBACAHGwAAjAMAIBwAAI8DACC-AgAAjQMAIL8CAACOAwAgwAIAABIAIMECAAASACDCAgAA-QEAIAUbAADTBAAgHAAA2wQAIL4CAADUBAAgvwIAANoEACDCAgAAGwAgEsoBAQAAAAHcASAAAAAB3QFAAAAAAd4BQAAAAAHfAUAAAAAB7AEBAAAAAe0BAQAAAAHuAQEAAAAB7wEBAAAAAfABAQAAAAHxAQEAAAAB8gEBAAAAAfMBAQAAAAH0AQEAAAAB9QEBAAAAAfYBAQAAAAH3AQEAAAAB-AEBAAAAAQIAAAD5AQAgGwAAjAMAIAMAAAASACAbAACMAwAgHAAAkAMAIBQAAAASACAUAACQAwAgygEBAIMDACHcASAAhgMAId0BQACHAwAh3gFAAIcDACHfAUAAiAMAIewBAQCFAwAh7QEBAIMDACHuAQEAgwMAIe8BAQCDAwAh8AEBAIMDACHxAQEAgwMAIfIBAQCDAwAh8wEBAIMDACH0AQEAgwMAIfUBAQCDAwAh9gEBAIMDACH3AQEAgwMAIfgBAQCDAwAhEsoBAQCDAwAh3AEgAIYDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACHsAQEAhQMAIe0BAQCDAwAh7gEBAIMDACHvAQEAgwMAIfABAQCDAwAh8QEBAIMDACHyAQEAgwMAIfMBAQCDAwAh9AEBAIMDACH1AQEAgwMAIfYBAQCDAwAh9wEBAIMDACH4AQEAgwMAIQ8JAACXAwAgygEBAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAfoBAQAAAAH7AQEAAAAB_AEBAAAAAf0BAQAAAAH-AQEAAAAB_wEBAAAAAYACAQAAAAGBAgEAAAABggIBAAAAAYMCIAAAAAECAAAAxAEAIBsAAJEDACADAAAADQAgGwAAkQMAIBwAAJUDACARAAAADQAgCQAAlgMAIBQAAJUDACDKAQEAgwMAId0BQACHAwAh3gFAAIcDACHfAUAAiAMAIfoBAQCFAwAh-wEBAIUDACH8AQEAhQMAIf0BAQCFAwAh_gEBAIUDACH_AQEAhQMAIYACAQCFAwAhgQIBAIUDACGCAgEAhQMAIYMCIACGAwAhDwkAAJYDACDKAQEAgwMAId0BQACHAwAh3gFAAIcDACHfAUAAiAMAIfoBAQCFAwAh-wEBAIUDACH8AQEAhQMAIf0BAQCFAwAh_gEBAIUDACH_AQEAhQMAIYACAQCFAwAhgQIBAIUDACGCAgEAhQMAIYMCIACGAwAhBxsAANUEACAcAADYBAAgvgIAANYEACC_AgAA1wQAIMACAAALACDBAgAACwAgwgIAAJYBACADGwAA1QQAIL4CAADWBAAgwgIAAJYBACADGwAAkQMAIL4CAACSAwAgwgIAAMQBACADGwAAjAMAIL4CAACNAwAgwgIAAPkBACADGwAA0wQAIL4CAADUBAAgwgIAABsAIAAAAAUbAADOBAAgHAAA0QQAIL4CAADPBAAgvwIAANAEACDCAgAAFQAgAxsAAM4EACC-AgAAzwQAIMICAAAVACAIBgAA4wMAIAgAAKoEACAMAACrBAAg1wEAAP8CACDYAQAA_wIAINkBAAD_AgAg2gEAAP8CACDfAQAA_wIAIAAAAAAABcQCAgAAAAHHAgIAAAAByAICAAAAAckCAgAAAAHKAgIAAAABAAAABxsAAMkEACAcAADMBAAgvgIAAMoEACC_AgAAywQAIMACAAAPACDBAgAADwAgwgIAABUAIAMbAADJBAAgvgIAAMoEACDCAgAAFQAgEQMAAOIDACAGAADjAwAgDQAA5AMAIN8BAAD_AgAgiQIAAP8CACCLAgAA_wIAIIwCAAD_AgAgjQIAAP8CACCOAgAA_wIAII8CAAD_AgAgkAIAAP8CACCRAgAA_wIAIJICAAD_AgAglAIAAP8CACCVAgAA_wIAIJgCAAD_AgAgmQIAAP8CACAAAAAAAAXEAggAAAABxwIIAAAAAcgCCAAAAAHJAggAAAABygIIAAAAAQUbAADDBAAgHAAAxwQAIL4CAADEBAAgvwIAAMYEACDCAgAAlgEAIAsbAAC1AwAwHAAAugMAML4CAAC2AwAwvwIAALcDADDAAgAAuQMAMMECAAC5AwAwwgIAALkDADDDAgAAuAMAIMQCAAC5AwAwxQIAALsDADDGAgAAvAMAMBcGAACYAwAgCAAAmQMAIMoBAQAAAAHLAQEAAAABzQEBAAAAAc4BAQAAAAHPAQEAAAAB0AEBAAAAAdEBAQAAAAHTAQAAANMBAtQBAQAAAAHVAQEAAAAB1gEBAAAAAdcBAQAAAAHYAQEAAAAB2QEBAAAAAdoBAQAAAAHbAQEAAAAB3AEgAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAeABAQAAAAECAAAAFQAgGwAAwAMAIAMAAAAVACAbAADAAwAgHAAAvwMAIAEUAADFBAAwHAYAAOICACAIAAD7AgAgDAAA_AIAIMcBAAD6AgAwyAEAAA8AEMkBAAD6AgAwygEBAAAAAcsBAQC_AgAhzAEBAL8CACHNAQEAAAABzgEBAL8CACHPAQEAvwIAIdABAQC_AgAh0QEBAL8CACHTAQAA3wLTASLUAQEAvwIAIdUBAQC_AgAh1gEBAL8CACHXAQEAvgIAIdgBAQC-AgAh2QEBAL4CACHaAQEAvgIAIdsBAQC_AgAh3AEgAMACACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHgAQEAvwIAIQIAAAAVACAUAAC_AwAgAgAAAL0DACAUAAC-AwAgGccBAAC8AwAwyAEAAL0DABDJAQAAvAMAMMoBAQC_AgAhywEBAL8CACHMAQEAvwIAIc0BAQC_AgAhzgEBAL8CACHPAQEAvwIAIdABAQC_AgAh0QEBAL8CACHTAQAA3wLTASLUAQEAvwIAIdUBAQC_AgAh1gEBAL8CACHXAQEAvgIAIdgBAQC-AgAh2QEBAL4CACHaAQEAvgIAIdsBAQC_AgAh3AEgAMACACHdAUAAwQIAId4BQADBAgAh3wFAAMICACHgAQEAvwIAIRnHAQAAvAMAMMgBAAC9AwAQyQEAALwDADDKAQEAvwIAIcsBAQC_AgAhzAEBAL8CACHNAQEAvwIAIc4BAQC_AgAhzwEBAL8CACHQAQEAvwIAIdEBAQC_AgAh0wEAAN8C0wEi1AEBAL8CACHVAQEAvwIAIdYBAQC_AgAh1wEBAL4CACHYAQEAvgIAIdkBAQC-AgAh2gEBAL4CACHbAQEAvwIAIdwBIADAAgAh3QFAAMECACHeAUAAwQIAId8BQADCAgAh4AEBAL8CACEVygEBAIMDACHLAQEAgwMAIc0BAQCDAwAhzgEBAIMDACHPAQEAgwMAIdABAQCDAwAh0QEBAIMDACHTAQAAhAPTASLUAQEAgwMAIdUBAQCDAwAh1gEBAIMDACHXAQEAhQMAIdgBAQCFAwAh2QEBAIUDACHaAQEAhQMAIdsBAQCDAwAh3AEgAIYDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACHgAQEAgwMAIRcGAACJAwAgCAAAigMAIMoBAQCDAwAhywEBAIMDACHNAQEAgwMAIc4BAQCDAwAhzwEBAIMDACHQAQEAgwMAIdEBAQCDAwAh0wEAAIQD0wEi1AEBAIMDACHVAQEAgwMAIdYBAQCDAwAh1wEBAIUDACHYAQEAhQMAIdkBAQCFAwAh2gEBAIUDACHbAQEAgwMAIdwBIACGAwAh3QFAAIcDACHeAUAAhwMAId8BQACIAwAh4AEBAIMDACEXBgAAmAMAIAgAAJkDACDKAQEAAAABywEBAAAAAc0BAQAAAAHOAQEAAAABzwEBAAAAAdABAQAAAAHRAQEAAAAB0wEAAADTAQLUAQEAAAAB1QEBAAAAAdYBAQAAAAHXAQEAAAAB2AEBAAAAAdkBAQAAAAHaAQEAAAAB2wEBAAAAAdwBIAAAAAHdAUAAAAAB3gFAAAAAAd8BQAAAAAHgAQEAAAABAxsAAMMEACC-AgAAxAQAIMICAACWAQAgBBsAALUDADC-AgAAtgMAMMICAAC5AwAwwwIAALgDACAAAAAAAAHEAgAAAJsCAgHEAgAAAJ0CAgHEAgAAAJ8CAgUbAAC9BAAgHAAAwQQAIL4CAAC-BAAgvwIAAMAEACDCAgAAAQAgBxsAANoDACAcAADdAwAgvgIAANsDACC_AgAA3AMAIMACAAANACDBAgAADQAgwgIAAMQBACALGwAAzgMAMBwAANMDADC-AgAAzwMAML8CAADQAwAwwAIAANIDADDBAgAA0gMAMMICAADSAwAwwwIAANEDACDEAgAA0gMAMMUCAADUAwAwxgIAANUDADAICgAAwgMAIMoBAQAAAAHdAUAAAAAB3gFAAAAAAd8BQAAAAAGDAiAAAAABhAIBAAAAAYUCCAAAAAECAAAAGwAgGwAA2QMAIAMAAAAbACAbAADZAwAgHAAA2AMAIAEUAAC_BAAwDQkAAPgCACAKAAD5AgAgxwEAAPcCADDIAQAAGQAQyQEAAPcCADDKAQEAAAAB3QFAAMECACHeAUAAwQIAId8BQADCAgAhgwIgAMACACGEAgEAvwIAIYUCCADcAgAhhgIBAL8CACECAAAAGwAgFAAA2AMAIAIAAADWAwAgFAAA1wMAIAvHAQAA1QMAMMgBAADWAwAQyQEAANUDADDKAQEAvwIAId0BQADBAgAh3gFAAMECACHfAUAAwgIAIYMCIADAAgAhhAIBAL8CACGFAggA3AIAIYYCAQC_AgAhC8cBAADVAwAwyAEAANYDABDJAQAA1QMAMMoBAQC_AgAh3QFAAMECACHeAUAAwQIAId8BQADCAgAhgwIgAMACACGEAgEAvwIAIYUCCADcAgAhhgIBAL8CACEHygEBAIMDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACGDAiAAhgMAIYQCAQCDAwAhhQIIALIDACEICgAAtAMAIMoBAQCDAwAh3QFAAIcDACHeAUAAhwMAId8BQACIAwAhgwIgAIYDACGEAgEAgwMAIYUCCACyAwAhCAoAAMIDACDKAQEAAAAB3QFAAAAAAd4BQAAAAAHfAUAAAAABgwIgAAAAAYQCAQAAAAGFAggAAAABDwcAAKsDACDKAQEAAAABzQEBAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAfsBAQAAAAH8AQEAAAAB_QEBAAAAAf4BAQAAAAH_AQEAAAABgAIBAAAAAYECAQAAAAGCAgEAAAABgwIgAAAAAQIAAADEAQAgGwAA2gMAIAMAAAANACAbAADaAwAgHAAA3gMAIBEAAAANACAHAACqAwAgFAAA3gMAIMoBAQCDAwAhzQEBAIUDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACH7AQEAhQMAIfwBAQCFAwAh_QEBAIUDACH-AQEAhQMAIf8BAQCFAwAhgAIBAIUDACGBAgEAhQMAIYICAQCFAwAhgwIgAIYDACEPBwAAqgMAIMoBAQCDAwAhzQEBAIUDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACH7AQEAhQMAIfwBAQCFAwAh_QEBAIUDACH-AQEAhQMAIf8BAQCFAwAhgAIBAIUDACGBAgEAhQMAIYICAQCFAwAhgwIgAIYDACEDGwAAvQQAIL4CAAC-BAAgwgIAAAEAIAMbAADaAwAgvgIAANsDACDCAgAAxAEAIAQbAADOAwAwvgIAAM8DADDCAgAA0gMAMMMCAADRAwAgBgQAAKYEACAFAACnBAAgCQAArAMAIA4AAKgEACDfAQAA_wIAILsCAAD_AgAgDQcAAKADACAJAACsAwAgzQEAAP8CACDfAQAA_wIAIPoBAAD_AgAg-wEAAP8CACD8AQAA_wIAIP0BAAD_AgAg_gEAAP8CACD_AQAA_wIAIIACAAD_AgAggQIAAP8CACCCAgAA_wIAIAAAAAAFGwAAuAQAIBwAALsEACC-AgAAuQQAIL8CAAC6BAAgwgIAAAEAIAMbAAC4BAAgvgIAALkEACDCAgAAAQAgAAAAAAAABRsAALMEACAcAAC2BAAgvgIAALQEACC_AgAAtQQAIMICAAABACADGwAAswQAIL4CAAC0BAAgwgIAAAEAIAAAAAUbAACuBAAgHAAAsQQAIL4CAACvBAAgvwIAALAEACDCAgAAAQAgAxsAAK4EACC-AgAArwQAIMICAAABACAAAAABxAIAAAC2AgIBxAIAAAC4AgILGwAAlgQAMBwAAJsEADC-AgAAlwQAML8CAACYBAAwwAIAAJoEADDBAgAAmgQAMMICAACaBAAwwwIAAJkEACDEAgAAmgQAMMUCAACcBAAwxgIAAJ0EADALGwAAigQAMBwAAI8EADC-AgAAiwQAML8CAACMBAAwwAIAAI4EADDBAgAAjgQAMMICAACOBAAwwwIAAI0EACDEAgAAjgQAMMUCAACQBAAwxgIAAJEEADAHGwAAhQQAIBwAAIgEACC-AgAAhgQAIL8CAACHBAAgwAIAAAsAIMECAAALACDCAgAAlgEAIAcbAACABAAgHAAAgwQAIL4CAACBBAAgvwIAAIIEACDAAgAAHgAgwQIAAB4AIMICAAB-ACAJygEBAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAewBAQAAAAGDAiAAAAABhAIBAAAAAaQCAQAAAAGlAgEAAAABAgAAAH4AIBsAAIAEACADAAAAHgAgGwAAgAQAIBwAAIQEACALAAAAHgAgFAAAhAQAIMoBAQCDAwAh3QFAAIcDACHeAUAAhwMAId8BQACIAwAh7AEBAIMDACGDAiAAhgMAIYQCAQCDAwAhpAIBAIUDACGlAgEAhQMAIQnKAQEAgwMAId0BQACHAwAh3gFAAIcDACHfAUAAiAMAIewBAQCDAwAhgwIgAIYDACGEAgEAgwMAIaQCAQCFAwAhpQIBAIUDACEkBgAA4AMAIA0AAOEDACDKAQEAAAABzgEBAAAAAdMBAAAA0wEC2wEBAAAAAdwBIAAAAAHdAUAAAAAB3gFAAAAAAd8BQAAAAAHtAQEAAAAB8QEBAAAAAfoBAQAAAAGHAgEAAAABiAIBAAAAAYkCAQAAAAGKAggAAAABiwIBAAAAAYwCAQAAAAGNAgEAAAABjgIBAAAAAY8CAQAAAAGQAgEAAAABkQIBAAAAAZICAQAAAAGTAgEAAAABlAIBAAAAAZUCAQAAAAGWAgEAAAABlwIBAAAAAZgCAQAAAAGZAgEAAAABmwIAAACbAgKdAgAAAJ0CAp8CAAAAnwICoAIBAAAAAQIAAACWAQAgGwAAhQQAIAMAAAALACAbAACFBAAgHAAAiQQAICYAAAALACAGAADMAwAgDQAAzQMAIBQAAIkEACDKAQEAgwMAIc4BAQCDAwAh0wEAAIQD0wEi2wEBAIMDACHcASAAhgMAId0BQACHAwAh3gFAAIcDACHfAUAAiAMAIe0BAQCDAwAh8QEBAIMDACH6AQEAgwMAIYcCAQCDAwAhiAIBAIMDACGJAgEAhQMAIYoCCACyAwAhiwIBAIUDACGMAgEAhQMAIY0CAQCFAwAhjgIBAIUDACGPAgEAhQMAIZACAQCFAwAhkQIBAIUDACGSAgEAhQMAIZMCAQCDAwAhlAIBAIUDACGVAgEAhQMAIZYCAQCDAwAhlwIBAIMDACGYAgEAhQMAIZkCAQCFAwAhmwIAAMgDmwIinQIAAMkDnQIinwIAAMoDnwIioAIBAIMDACEkBgAAzAMAIA0AAM0DACDKAQEAgwMAIc4BAQCDAwAh0wEAAIQD0wEi2wEBAIMDACHcASAAhgMAId0BQACHAwAh3gFAAIcDACHfAUAAiAMAIe0BAQCDAwAh8QEBAIMDACH6AQEAgwMAIYcCAQCDAwAhiAIBAIMDACGJAgEAhQMAIYoCCACyAwAhiwIBAIUDACGMAgEAhQMAIY0CAQCFAwAhjgIBAIUDACGPAgEAhQMAIZACAQCFAwAhkQIBAIUDACGSAgEAhQMAIZMCAQCDAwAhlAIBAIUDACGVAgEAhQMAIZYCAQCDAwAhlwIBAIMDACGYAgEAhQMAIZkCAQCFAwAhmwIAAMgDmwIinQIAAMkDnQIinwIAAMoDnwIioAIBAIMDACEMygEBAAAAAd0BQAAAAAHeAUAAAAABqQIBAAAAAaoCAQAAAAGrAgEAAAABrAIBAAAAAa0CAQAAAAGuAkAAAAABrwJAAAAAAbACAQAAAAGxAgEAAAABAgAAAAkAIBsAAJUEACADAAAACQAgGwAAlQQAIBwAAJQEACABFAAArQQAMBEDAADhAgAgxwEAAP0CADDIAQAABwAQyQEAAP0CADDKAQEAAAABywEBAL8CACHdAUAAwQIAId4BQADBAgAhqQIBAL8CACGqAgEAvwIAIasCAQC-AgAhrAIBAL4CACGtAgEAvgIAIa4CQADCAgAhrwJAAMICACGwAgEAvgIAIbECAQC-AgAhAgAAAAkAIBQAAJQEACACAAAAkgQAIBQAAJMEACAQxwEAAJEEADDIAQAAkgQAEMkBAACRBAAwygEBAL8CACHLAQEAvwIAId0BQADBAgAh3gFAAMECACGpAgEAvwIAIaoCAQC_AgAhqwIBAL4CACGsAgEAvgIAIa0CAQC-AgAhrgJAAMICACGvAkAAwgIAIbACAQC-AgAhsQIBAL4CACEQxwEAAJEEADDIAQAAkgQAEMkBAACRBAAwygEBAL8CACHLAQEAvwIAId0BQADBAgAh3gFAAMECACGpAgEAvwIAIaoCAQC_AgAhqwIBAL4CACGsAgEAvgIAIa0CAQC-AgAhrgJAAMICACGvAkAAwgIAIbACAQC-AgAhsQIBAL4CACEMygEBAIMDACHdAUAAhwMAId4BQACHAwAhqQIBAIMDACGqAgEAgwMAIasCAQCFAwAhrAIBAIUDACGtAgEAhQMAIa4CQACIAwAhrwJAAIgDACGwAgEAhQMAIbECAQCFAwAhDMoBAQCDAwAh3QFAAIcDACHeAUAAhwMAIakCAQCDAwAhqgIBAIMDACGrAgEAhQMAIawCAQCFAwAhrQIBAIUDACGuAkAAiAMAIa8CQACIAwAhsAIBAIUDACGxAgEAhQMAIQzKAQEAAAAB3QFAAAAAAd4BQAAAAAGpAgEAAAABqgIBAAAAAasCAQAAAAGsAgEAAAABrQIBAAAAAa4CQAAAAAGvAkAAAAABsAIBAAAAAbECAQAAAAEHygEBAAAAAd0BQAAAAAHeAUAAAAABqAJAAAAAAbICAQAAAAGzAgEAAAABtAIBAAAAAQIAAAAFACAbAAChBAAgAwAAAAUAIBsAAKEEACAcAACgBAAgARQAAKwEADAMAwAA4QIAIMcBAAD-AgAwyAEAAAMAEMkBAAD-AgAwygEBAAAAAcsBAQC_AgAh3QFAAMECACHeAUAAwQIAIagCQADBAgAhsgIBAAAAAbMCAQC-AgAhtAIBAL4CACECAAAABQAgFAAAoAQAIAIAAACeBAAgFAAAnwQAIAvHAQAAnQQAMMgBAACeBAAQyQEAAJ0EADDKAQEAvwIAIcsBAQC_AgAh3QFAAMECACHeAUAAwQIAIagCQADBAgAhsgIBAL8CACGzAgEAvgIAIbQCAQC-AgAhC8cBAACdBAAwyAEAAJ4EABDJAQAAnQQAMMoBAQC_AgAhywEBAL8CACHdAUAAwQIAId4BQADBAgAhqAJAAMECACGyAgEAvwIAIbMCAQC-AgAhtAIBAL4CACEHygEBAIMDACHdAUAAhwMAId4BQACHAwAhqAJAAIcDACGyAgEAgwMAIbMCAQCFAwAhtAIBAIUDACEHygEBAIMDACHdAUAAhwMAId4BQACHAwAhqAJAAIcDACGyAgEAgwMAIbMCAQCFAwAhtAIBAIUDACEHygEBAAAAAd0BQAAAAAHeAUAAAAABqAJAAAAAAbICAQAAAAGzAgEAAAABtAIBAAAAAQQbAACWBAAwvgIAAJcEADDCAgAAmgQAMMMCAACZBAAgBBsAAIoEADC-AgAAiwQAMMICAACOBAAwwwIAAI0EACADGwAAhQQAIL4CAACGBAAgwgIAAJYBACADGwAAgAQAIL4CAACBBAAgwgIAAH4AIAAABAMAAOIDACDfAQAA_wIAIKQCAAD_AgAgpQIAAP8CACAAAwcAAKADACDfAQAA_wIAIOwBAAD_AgAgAwkAAKwDACAKAACpBAAg3wEAAP8CACAHygEBAAAAAd0BQAAAAAHeAUAAAAABqAJAAAAAAbICAQAAAAGzAgEAAAABtAIBAAAAAQzKAQEAAAAB3QFAAAAAAd4BQAAAAAGpAgEAAAABqgIBAAAAAasCAQAAAAGsAgEAAAABrQIBAAAAAa4CQAAAAAGvAkAAAAABsAIBAAAAAbECAQAAAAEPBQAAowQAIAkAAKQEACAOAAClBAAgygEBAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAewBAQAAAAGDAiAAAAABhAIBAAAAAbYCAAAAtgICuAIAAAC4AgK5AiAAAAABugIgAAAAAbsCAQAAAAECAAAAAQAgGwAArgQAIAMAAAAjACAbAACuBAAgHAAAsgQAIBEAAAAjACAFAAD9AwAgCQAA_gMAIA4AAP8DACAUAACyBAAgygEBAIMDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACHsAQEAgwMAIYMCIACGAwAhhAIBAIMDACG2AgAA-gO2AiK4AgAA-wO4AiK5AiAAhgMAIboCIACGAwAhuwIBAIUDACEPBQAA_QMAIAkAAP4DACAOAAD_AwAgygEBAIMDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACHsAQEAgwMAIYMCIACGAwAhhAIBAIMDACG2AgAA-gO2AiK4AgAA-wO4AiK5AiAAhgMAIboCIACGAwAhuwIBAIUDACEPBAAAogQAIAkAAKQEACAOAAClBAAgygEBAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAewBAQAAAAGDAiAAAAABhAIBAAAAAbYCAAAAtgICuAIAAAC4AgK5AiAAAAABugIgAAAAAbsCAQAAAAECAAAAAQAgGwAAswQAIAMAAAAjACAbAACzBAAgHAAAtwQAIBEAAAAjACAEAAD8AwAgCQAA_gMAIA4AAP8DACAUAAC3BAAgygEBAIMDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACHsAQEAgwMAIYMCIACGAwAhhAIBAIMDACG2AgAA-gO2AiK4AgAA-wO4AiK5AiAAhgMAIboCIACGAwAhuwIBAIUDACEPBAAA_AMAIAkAAP4DACAOAAD_AwAgygEBAIMDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACHsAQEAgwMAIYMCIACGAwAhhAIBAIMDACG2AgAA-gO2AiK4AgAA-wO4AiK5AiAAhgMAIboCIACGAwAhuwIBAIUDACEPBAAAogQAIAUAAKMEACAJAACkBAAgygEBAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAewBAQAAAAGDAiAAAAABhAIBAAAAAbYCAAAAtgICuAIAAAC4AgK5AiAAAAABugIgAAAAAbsCAQAAAAECAAAAAQAgGwAAuAQAIAMAAAAjACAbAAC4BAAgHAAAvAQAIBEAAAAjACAEAAD8AwAgBQAA_QMAIAkAAP4DACAUAAC8BAAgygEBAIMDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACHsAQEAgwMAIYMCIACGAwAhhAIBAIMDACG2AgAA-gO2AiK4AgAA-wO4AiK5AiAAhgMAIboCIACGAwAhuwIBAIUDACEPBAAA_AMAIAUAAP0DACAJAAD-AwAgygEBAIMDACHdAUAAhwMAId4BQACHAwAh3wFAAIgDACHsAQEAgwMAIYMCIACGAwAhhAIBAIMDACG2AgAA-gO2AiK4AgAA-wO4AiK5AiAAhgMAIboCIACGAwAhuwIBAIUDACEPBAAAogQAIAUAAKMEACAOAAClBAAgygEBAAAAAd0BQAAAAAHeAUAAAAAB3wFAAAAAAewBAQAAAAGDAiAAAAABhAIBAAAAAbYCAAAAtgICuAIAAAC4AgK5AiAAAAABugIgAAAAAbsCAQAAAAECAAAAAQAgGwAAvQQAIAfKAQEAAAAB3QFAAAAAAd4BQAAAAAHfAUAAAAABgwIgAAAAAYQCAQAAAAGFAggAAAABAwAAACMAIBsAAL0EACAcAADCBAAgEQAAACMAIAQAAPwDACAFAAD9AwAgDgAA_wMAIBQAAMIEACDKAQEAgwMAId0BQACHAwAh3gFAAIcDACHfAUAAiAMAIewBAQCDAwAhgwIgAIYDACGEAgEAgwMAIbYCAAD6A7YCIrgCAAD7A7gCIrkCIACGAwAhugIgAIYDACG7AgEAhQMAIQ8EAAD8AwAgBQAA_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-twE7f7kBCIABuwENgQG8ATyCAb0BCIMBvgEIhAG_AQ2FAcIBPYYBwwFDhwHFAQWIAcYBBYkByAEFigHJAQWLAcoBBYwBzAEFjQHOAQ2OAc8BRI8B0wEFkAHVAQ2RAdYBRZIB2QEFkwHaAQWUAdsBDZUB3gFGlgHfAUqXAeEBS5gB4gFLmQHlAUuaAeYBS5sB5wFLnAHpAUudAesBDZ4B7AFMnwHuAUugAfABDaEB8QFNogHyAUujAfMBS6QB9AENpQH3AU6mAfgBVKcB-gEHqAH7AQepAf0BB6oB_gEHqwH_AQesAYECB60BgwINrgGEAlWvAYYCB7ABiAINsQGJAlayAYoCB7MBiwIHtAGMAg21AY8CV7YBkAJbtwGRAga4AZICBrkBkwIGugGUAga7AZUCBrwBlwIGvQGZAg2-AZoCXL8BnAIGwAGeAg3BAZ8CXcIBoAIGwwGhAgbEAaICDcUBpQJexgGmAmI"
 };
 async function decodeBase64AsWasm(wasmBase64) {
   const { Buffer: Buffer2 } = await import("buffer");
@@ -267,6 +267,7 @@ __export(prismaNamespace_exports, {
   DbNull: () => DbNull2,
   Decimal: () => Decimal2,
   EmployeeScalarFieldEnum: () => EmployeeScalarFieldEnum,
+  GuardianInfoScalarFieldEnum: () => GuardianInfoScalarFieldEnum,
   JsonNull: () => JsonNull2,
   ModelName: () => ModelName,
   NullTypes: () => NullTypes2,
@@ -281,6 +282,7 @@ __export(prismaNamespace_exports, {
   SessionScalarFieldEnum: () => SessionScalarFieldEnum,
   SortOrder: () => SortOrder,
   Sql: () => Sql2,
+  StudentScalarFieldEnum: () => StudentScalarFieldEnum,
   TransactionIsolationLevel: () => TransactionIsolationLevel,
   UserScalarFieldEnum: () => UserScalarFieldEnum,
   VerificationScalarFieldEnum: () => VerificationScalarFieldEnum,
@@ -326,7 +328,9 @@ var ModelName = {
   Employee: "Employee",
   Class: "Class",
   Address: "Address",
-  Sequence: "Sequence"
+  Sequence: "Sequence",
+  GuardianInfo: "GuardianInfo",
+  Student: "Student"
 };
 var TransactionIsolationLevel = runtime2.makeStrictEnum({
   ReadUncommitted: "ReadUncommitted",
@@ -460,6 +464,51 @@ var AddressScalarFieldEnum = {
 var SequenceScalarFieldEnum = {
   id: "id",
   current: "current"
+};
+var GuardianInfoScalarFieldEnum = {
+  id: "id",
+  studentId: "studentId",
+  email: "email",
+  fatherName: "fatherName",
+  fatherNameBangla: "fatherNameBangla",
+  whatsappNumber: "whatsappNumber",
+  fatherOccupation: "fatherOccupation",
+  motherName: "motherName",
+  motherNameBangla: "motherNameBangla",
+  motherMobileNumber: "motherMobileNumber",
+  motherOccupation: "motherOccupation",
+  nameOfLocalGuardian: "nameOfLocalGuardian",
+  relationShipOfStudent: "relationShipOfStudent",
+  GuardianMobileNumber: "GuardianMobileNumber",
+  GuardianSign: "GuardianSign",
+  isdeleted: "isdeleted",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+  deletedAt: "deletedAt"
+};
+var StudentScalarFieldEnum = {
+  id: "id",
+  userId: "userId",
+  classId: "classId",
+  studentId: "studentId",
+  fullName: "fullName",
+  fullNameBangla: "fullNameBangla",
+  dateOfBirth: "dateOfBirth",
+  birthRegistrationNumber: "birthRegistrationNumber",
+  religion: "religion",
+  studentSign: "studentSign",
+  admissionTotalFees: "admissionTotalFees",
+  admissionDate: "admissionDate",
+  previousInstituteName: "previousInstituteName",
+  endingClass: "endingClass",
+  result: "result",
+  testimonialNumber: "testimonialNumber",
+  authoritySign: "authoritySign",
+  isdeleted: "isdeleted",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+  deletedAt: "deletedAt",
+  guardianInfoId: "guardianInfoId"
 };
 var SortOrder = {
   asc: "asc",
@@ -1368,314 +1417,6 @@ import status11 from "http-status";
 
 // src/app/modules/classes/classes.services.ts
 import status10 from "http-status";
-var getAllTeachers = async () => {
-  const teachers = await prisma.employee.findMany({
-    where: {
-      isdeleted: false,
-      user: {
-        role: {
-          in: ["TEACHER", "PRINCIPAL"]
-        }
-      }
-    },
-    select: {
-      id: true,
-      fullName: true
-    }
-  });
-  const formattedTeachers = teachers.map((teacher) => ({
-    label: teacher.fullName,
-    value: teacher.id
-  }));
-  return formattedTeachers;
-};
-var createClass = async (payload) => {
-  const newClass = await prisma.class.create({
-    data: {
-      name: payload.className,
-      monthlyTuitionFee: payload.tuitionFee,
-      classTeacher: payload.classTeacher
-    },
-    include: {
-      employee: true
-    }
-  });
-  return newClass;
-};
-var updateClass = async (id, payload) => {
-  const existingClass = await prisma.class.findUnique({
-    where: {
-      id
-    }
-  });
-  console.log(existingClass);
-  if (!existingClass) {
-    throw new AppError_default(status10.NOT_FOUND, "Class not found");
-  }
-  if (payload.classTeacher !== void 0) {
-    const employee = await prisma.employee.findFirst({
-      where: {
-        id: payload.classTeacher,
-        isdeleted: false
-      }
-    });
-    if (!employee) {
-      throw new AppError_default(status10.NOT_FOUND, "Class teacher not found");
-    }
-  }
-  const updateClass2 = await prisma.class.update({
-    where: { id },
-    data: {
-      ...payload.className !== void 0 && {
-        name: payload.className
-      },
-      ...payload.tuitionFee !== void 0 && {
-        monthlyTutionFee: payload.tuitionFee
-      },
-      ...payload.classTeacher !== void 0 && {
-        classTeacher: payload.classTeacher
-      }
-    },
-    include: {
-      employee: true
-    }
-  });
-  return updateClass2;
-};
-var ClassesService = {
-  getAllTeachers,
-  createClass,
-  updateClass
-};
-
-// src/app/modules/classes/classes.validation.ts
-import z2 from "zod";
-var createClassSchema = z2.object({
-  className: z2.string({ error: "Class Name is required" }).min(1, "Class Name can't be empty"),
-  classTeacher: z2.string({ error: "Class Teacher is required" }).min(1, "Class Teacher can't be empty"),
-  tuitionFee: z2.coerce.number({ error: "Tuition Fee is required" }).min(0, "Tuition Fee cannot be negative")
-});
-var updateClassSchema = z2.object({
-  className: z2.string().min(1, "Class Name can't be empty").optional(),
-  classTeacher: z2.string().min(1, "Class Teacher can't be empty").optional(),
-  tuitionFee: z2.coerce.number().min(0, "Tuition Fee cannot be negative").optional()
-});
-
-// src/app/modules/classes/classes.controller.ts
-var getAllTeachers2 = async (req, res) => {
-  const result = await ClassesService.getAllTeachers();
-  sendResponse(res, {
-    httpStatusCode: status11.OK,
-    success: true,
-    message: "Teachers fetched successfully",
-    data: result
-  });
-};
-var createClass2 = async (req, res) => {
-  const payload = createClassSchema.parse(req.body);
-  const createdClass = await ClassesService.createClass(payload);
-  sendResponse(res, {
-    httpStatusCode: status11.OK,
-    success: true,
-    message: "Class Created Successfully",
-    data: createdClass
-  });
-};
-var udpateClass = async (req, res) => {
-  const { id } = req.params;
-  const payload = updateClassSchema.parse(req.body);
-  const updatedClass = await ClassesService.updateClass(
-    id,
-    payload
-  );
-  sendResponse(res, {
-    httpStatusCode: status11.OK,
-    success: true,
-    message: "Class Updated Succssfully",
-    data: updatedClass
-  });
-};
-var ClassesController = {
-  getAllTeachers: getAllTeachers2,
-  createClass: createClass2,
-  udpateClass
-};
-
-// src/app/modules/classes/classes.routes.ts
-var router2 = Router2();
-router2.get(
-  "/teachers",
-  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  ClassesController.getAllTeachers
-);
-router2.post(
-  "/",
-  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  ClassesController.createClass
-);
-router2.patch(
-  "/:id",
-  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  ClassesController.udpateClass
-);
-var ClassesRoutes = router2;
-
-// src/app/modules/employees/employees.routes.ts
-import { Router as Router3 } from "express";
-
-// src/generated/internal/prismaNamespaceBrowser.ts
-import * as runtime3 from "@prisma/client/runtime/index-browser";
-var NullTypes4 = {
-  DbNull: runtime3.NullTypes.DbNull,
-  JsonNull: runtime3.NullTypes.JsonNull,
-  AnyNull: runtime3.NullTypes.AnyNull
-};
-var TransactionIsolationLevel2 = runtime3.makeStrictEnum({
-  ReadUncommitted: "ReadUncommitted",
-  ReadCommitted: "ReadCommitted",
-  RepeatableRead: "RepeatableRead",
-  Serializable: "Serializable"
-});
-
-// src/app/middleware/upload.ts
-import multer from "multer";
-var upload = multer({
-  storage: multer.memoryStorage()
-});
-
-// src/app/modules/employees/employees.controller.ts
-import status13 from "http-status";
-
-// src/app/modules/employees/employees.validation.ts
-import { z as z3 } from "zod";
-var presentAddressSchema = z3.object({
-  village: z3.string({ error: "Present address village is required" }).min(1, { error: "Present address village cannot be empty" }),
-  postOffice: z3.string({ error: "Present address post office is required" }).min(1, { error: "Present address post office cannot be empty" }),
-  postCode: z3.string({ error: "Present address post code is required" }).min(1, { error: "Present address post code cannot be empty" }),
-  district: z3.string({ error: "Present address district is required" }).min(1, { error: "Present address district cannot be empty" })
-});
-var permanentAddressSchema = z3.object({
-  village: z3.string({ error: "Permanent address village is required" }).min(1, { error: "Permanent address village cannot be empty" }),
-  postOffice: z3.string({ error: "Permanent address post office is required" }).min(1, { error: "Permanent address post office cannot be empty" }),
-  postCode: z3.string({ error: "Permanent address post code is required" }).min(1, { error: "Permanent address post code cannot be empty" }),
-  district: z3.string({ error: "Permanent address district is required" }).min(1, { error: "Permanent address district cannot be empty" })
-});
-var createEmployeeSchema = z3.object({
-  fullName: z3.string({ error: "Full name is required" }).min(1, { error: "Full name cannot be empty" }),
-  fatherName: z3.string({ error: "Father's name is required" }).min(1, { error: "Father's name cannot be empty" }),
-  motherName: z3.string({ error: "Mother's name is required" }).min(1, { error: "Mother's name cannot be empty" }),
-  phone: z3.string({ error: "Phone number is required" }).min(11, { error: "Phone number must be at least 11 digits" }),
-  gender: z3.enum(Gender, {
-    error: "Gender must be one of: " + Object.values(Gender).join(", ")
-  }),
-  bloodGroup: z3.enum(BloodGroup, {
-    error: "Blood group must be one of: " + Object.values(BloodGroup).join(", ")
-  }),
-  religion: z3.enum(Religion, {
-    error: "Religion must be one of: " + Object.values(Religion).join(", ")
-  }),
-  employeeRole: z3.enum(EmployeeRole, {
-    error: "Employee role must be one of: " + Object.values(UserRole).join(", ")
-  }),
-  emergencyContact: z3.string().min(11, { error: "Emergency contact must be at least 11 digits" }).optional(),
-  dateOfJoining: z3.string().min(1, { error: "Date of joining is required" }),
-  monthlySalary: z3.coerce.number({
-    error: "Monthly salary must be a valid number"
-  }),
-  email: z3.email({ error: "Please provide a valid email address" }),
-  nid: z3.string({ error: "NID is required" }).min(1, { error: "NID cannot be empty" }),
-  birthRegistrationNumber: z3.string().optional(),
-  address: z3.object({
-    present: presentAddressSchema,
-    permanent: permanentAddressSchema
-  })
-});
-var updateEmployeeSchema = z3.object({
-  fullName: z3.string().optional(),
-  fatherName: z3.string().optional(),
-  motherName: z3.string().optional(),
-  phone: z3.string().optional(),
-  gender: z3.enum(Gender).optional(),
-  bloodGroup: z3.enum(BloodGroup).optional(),
-  religion: z3.enum(Religion).optional(),
-  employeeRole: z3.enum(EmployeeRole).optional(),
-  emergencyContact: z3.string().optional(),
-  monthlySalary: z3.coerce.number().optional(),
-  dateOfJoining: z3.string().optional(),
-  nid: z3.string().optional(),
-  address: z3.object({
-    present: presentAddressSchema.partial().optional(),
-    permanent: permanentAddressSchema.partial().optional()
-  }).optional()
-});
-
-// src/app/modules/employees/employess.service.ts
-import status12 from "http-status";
-
-// src/services/cloudinary/cloudinary.service.ts
-import streamifier from "streamifier";
-
-// src/app/config/cloudinary.ts
-import { v2 as cloudinary } from "cloudinary";
-cloudinary.config({
-  cloud_name: envVars.CLOUDINARY.CLOUDINARY_CLOUD_NAME,
-  api_key: envVars.CLOUDINARY.CLOUDINARY_API_KEY,
-  api_secret: envVars.CLOUDINARY.CLOUDINARY_API_SECRET
-});
-var cloudinary_default = cloudinary;
-
-// src/services/cloudinary/cloudinary.service.ts
-var CloudinaryService = class {
-  async upload(file, options = {}) {
-    const uploadOptions = {
-      resource_type: options.resourceType ?? "image"
-    };
-    if (options.folder) {
-      uploadOptions.folder = options.folder;
-    }
-    if (options.publicId) {
-      uploadOptions.public_id = options.publicId;
-    }
-    if (options.overwrite !== void 0) {
-      uploadOptions.overwrite = options.overwrite;
-    }
-    return new Promise((resolve, reject) => {
-      const stream = cloudinary_default.uploader.upload_stream(
-        uploadOptions,
-        (error, result) => {
-          if (error) {
-            return reject(error);
-          }
-          if (!result) {
-            return reject(new Error("Cloudinary upload failed."));
-          }
-          resolve(result);
-        }
-      );
-      streamifier.createReadStream(file.buffer).pipe(stream);
-    });
-  }
-  async delete(publicId) {
-    return cloudinary_default.uploader.destroy(publicId);
-  }
-};
-var cloudinary_service_default = new CloudinaryService();
-
-// src/app/config/cloudinary.folders.ts
-var ROOT = "school-management-system";
-var CloudinaryFolders = {
-  employee: {
-    profile: `${ROOT}/employees/profile`,
-    authoritySign: `${ROOT}/employees/AuthoritySign`,
-    employeeSign: `${ROOT}/employees/EmoloyeeSign`,
-    experience: `${ROOT}/employees/Experience`
-  },
-  student: {
-    profile: `${ROOT}/students/profile`,
-    documents: `${ROOT}/students/documents`
-  }
-  // add more as your project grows
-};
 
 // src/app/utils/QueryBuilder.ts
 var QueryBuilder = class {
@@ -2054,6 +1795,432 @@ var QueryBuilder = class {
     });
     return Object.keys(rangeQuery).length > 0 ? rangeQuery : value;
   }
+};
+
+// src/app/modules/classes/classes.services.ts
+var getAllTeachers = async () => {
+  const teachers = await prisma.employee.findMany({
+    where: {
+      isdeleted: false,
+      user: {
+        role: {
+          in: ["TEACHER", "PRINCIPAL"]
+        }
+      }
+    },
+    select: {
+      id: true,
+      fullName: true,
+      employeeId: true
+    }
+  });
+  const formattedTeachers = teachers.map((teacher) => ({
+    label: `${teacher.fullName} [${teacher.employeeId}]`,
+    value: teacher.id
+  }));
+  return formattedTeachers;
+};
+var getAllClass = async (query) => {
+  const queryBuilder = new QueryBuilder(prisma.class, query);
+  const result = await queryBuilder.where({
+    isDeleted: false
+  }).select({
+    id: true,
+    name: true
+  }).paginate().sort().execute();
+  const data = result.data.map((classItem) => {
+    const totalStudents = 25;
+    const boys = Math.floor(Math.random() * (totalStudents + 1));
+    const girls = totalStudents - boys;
+    return {
+      ...classItem,
+      totalStudents,
+      boys,
+      girls
+    };
+  });
+  return {
+    data,
+    meta: result.meta
+  };
+};
+var getSingleClass = async (id) => {
+  const result = await prisma.class.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      monthlyTuitionFee: true,
+      classTeacher: true
+    }
+  });
+  const formattedResult = {
+    id: result?.id,
+    className: result?.name,
+    tuitionFee: result?.monthlyTuitionFee,
+    classTeacher: result?.classTeacher
+  };
+  return formattedResult;
+};
+var createClass = async (payload) => {
+  const newClass = await prisma.class.create({
+    data: {
+      name: payload.className,
+      monthlyTuitionFee: payload.tuitionFee,
+      classTeacher: payload.classTeacher
+    },
+    include: {
+      employee: true
+    }
+  });
+  return {
+    ...newClass,
+    totalStudents: 0,
+    boys: 0,
+    girls: 0
+  };
+};
+var updateClass = async (id, payload) => {
+  const existingClass = await prisma.class.findUnique({
+    where: {
+      id
+    }
+  });
+  console.log(existingClass);
+  if (!existingClass) {
+    throw new AppError_default(status10.NOT_FOUND, "Class not found");
+  }
+  if (payload.classTeacher !== void 0) {
+    const employee = await prisma.employee.findFirst({
+      where: {
+        id: payload.classTeacher,
+        isdeleted: false
+      }
+    });
+    if (!employee) {
+      throw new AppError_default(status10.NOT_FOUND, "Class teacher not found");
+    }
+  }
+  const updateClass2 = await prisma.class.update({
+    where: { id },
+    data: {
+      ...payload.className !== void 0 && {
+        name: payload.className
+      },
+      ...payload.tuitionFee !== void 0 && {
+        monthlyTuitionFee: payload.tuitionFee
+      },
+      ...payload.classTeacher !== void 0 && {
+        classTeacher: payload.classTeacher
+      }
+    },
+    include: {
+      employee: true
+    }
+  });
+  return {
+    ...updateClass2,
+    totalStudents: 0,
+    boys: 0,
+    girls: 0
+  };
+};
+var deleteClass = async (id) => {
+  const result = await prisma.class.update({
+    where: { id },
+    data: {
+      isDeleted: true
+    }
+  });
+  return result;
+};
+var ClassesService = {
+  getAllTeachers,
+  getAllClass,
+  getSingleClass,
+  createClass,
+  updateClass,
+  deleteClass
+};
+
+// src/app/modules/classes/classes.validation.ts
+import z2 from "zod";
+var createClassSchema = z2.object({
+  className: z2.string({ error: "Class Name is required" }).min(1, "Class Name can't be empty"),
+  classTeacher: z2.string({ error: "Class Teacher is required" }).min(1, "Class Teacher can't be empty"),
+  tuitionFee: z2.coerce.number({ error: "Tuition Fee is required" }).min(0, "Tuition Fee cannot be negative")
+});
+var updateClassSchema = z2.object({
+  className: z2.string().min(1, "Class Name can't be empty").optional(),
+  classTeacher: z2.string().min(1, "Class Teacher can't be empty").optional(),
+  tuitionFee: z2.coerce.number().min(0, "Tuition Fee cannot be negative").optional()
+});
+
+// src/app/modules/classes/classes.controller.ts
+var getAllTeachers2 = async (req, res) => {
+  const result = await ClassesService.getAllTeachers();
+  sendResponse(res, {
+    httpStatusCode: status11.OK,
+    success: true,
+    message: "Teachers fetched successfully",
+    data: result
+  });
+};
+var getAllClass2 = async (req, res) => {
+  const query = req.query;
+  const result = await ClassesService.getAllClass(query);
+  sendResponse(res, {
+    httpStatusCode: status11.OK,
+    success: true,
+    message: "Classes fetched successfully",
+    data: result.data,
+    meta: result.meta
+  });
+};
+var getSingleClass2 = async (req, res) => {
+  const { id } = req.params;
+  const result = await ClassesService.getSingleClass(id);
+  sendResponse(res, {
+    httpStatusCode: status11.OK,
+    success: true,
+    message: "Class fetched Successfully",
+    data: result
+  });
+};
+var createClass2 = async (req, res) => {
+  const payload = createClassSchema.parse(req.body);
+  const createdClass = await ClassesService.createClass(payload);
+  sendResponse(res, {
+    httpStatusCode: status11.OK,
+    success: true,
+    message: "Class Created Successfully",
+    data: createdClass
+  });
+};
+var udpateClass = async (req, res) => {
+  const { id } = req.params;
+  const payload = updateClassSchema.parse(req.body);
+  const updatedClass = await ClassesService.updateClass(
+    id,
+    payload
+  );
+  sendResponse(res, {
+    httpStatusCode: status11.OK,
+    success: true,
+    message: "Class Updated Succssfully",
+    data: updatedClass
+  });
+};
+var deleteClass2 = async (req, res) => {
+  const { id } = req.params;
+  const deletedClass = await ClassesService.deleteClass(id);
+  sendResponse(res, {
+    httpStatusCode: status11.OK,
+    success: true,
+    message: "Class Deleted Successfully",
+    data: deletedClass
+  });
+};
+var ClassesController = {
+  getAllTeachers: getAllTeachers2,
+  getAllClass: getAllClass2,
+  getSingleClass: getSingleClass2,
+  createClass: createClass2,
+  udpateClass,
+  deleteClass: deleteClass2
+};
+
+// src/app/modules/classes/classes.routes.ts
+var router2 = Router2();
+router2.get(
+  "/teachers",
+  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  ClassesController.getAllTeachers
+);
+router2.get(
+  "/",
+  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  ClassesController.getAllClass
+);
+router2.get(
+  "/:id",
+  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  ClassesController.getSingleClass
+);
+router2.post(
+  "/",
+  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  ClassesController.createClass
+);
+router2.patch(
+  "/:id",
+  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  ClassesController.udpateClass
+);
+router2.delete(
+  "/:id",
+  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  ClassesController.deleteClass
+);
+var ClassesRoutes = router2;
+
+// src/app/modules/employees/employees.routes.ts
+import { Router as Router3 } from "express";
+
+// src/generated/internal/prismaNamespaceBrowser.ts
+import * as runtime3 from "@prisma/client/runtime/index-browser";
+var NullTypes4 = {
+  DbNull: runtime3.NullTypes.DbNull,
+  JsonNull: runtime3.NullTypes.JsonNull,
+  AnyNull: runtime3.NullTypes.AnyNull
+};
+var TransactionIsolationLevel2 = runtime3.makeStrictEnum({
+  ReadUncommitted: "ReadUncommitted",
+  ReadCommitted: "ReadCommitted",
+  RepeatableRead: "RepeatableRead",
+  Serializable: "Serializable"
+});
+
+// src/app/middleware/upload.ts
+import multer from "multer";
+var upload = multer({
+  storage: multer.memoryStorage()
+});
+
+// src/app/modules/employees/employees.controller.ts
+import status13 from "http-status";
+
+// src/app/modules/employees/employees.validation.ts
+import { z as z3 } from "zod";
+var presentAddressSchema = z3.object({
+  village: z3.string({ error: "Present address village is required" }).min(1, { error: "Present address village cannot be empty" }),
+  postOffice: z3.string({ error: "Present address post office is required" }).min(1, { error: "Present address post office cannot be empty" }),
+  postCode: z3.string({ error: "Present address post code is required" }).min(1, { error: "Present address post code cannot be empty" }),
+  district: z3.string({ error: "Present address district is required" }).min(1, { error: "Present address district cannot be empty" })
+});
+var permanentAddressSchema = z3.object({
+  village: z3.string({ error: "Permanent address village is required" }).min(1, { error: "Permanent address village cannot be empty" }),
+  postOffice: z3.string({ error: "Permanent address post office is required" }).min(1, { error: "Permanent address post office cannot be empty" }),
+  postCode: z3.string({ error: "Permanent address post code is required" }).min(1, { error: "Permanent address post code cannot be empty" }),
+  district: z3.string({ error: "Permanent address district is required" }).min(1, { error: "Permanent address district cannot be empty" })
+});
+var createEmployeeSchema = z3.object({
+  fullName: z3.string({ error: "Full name is required" }).min(1, { error: "Full name cannot be empty" }),
+  fatherName: z3.string({ error: "Father's name is required" }).min(1, { error: "Father's name cannot be empty" }),
+  motherName: z3.string({ error: "Mother's name is required" }).min(1, { error: "Mother's name cannot be empty" }),
+  phone: z3.string({ error: "Phone number is required" }).min(11, { error: "Phone number must be at least 11 digits" }),
+  gender: z3.enum(Gender, {
+    error: "Gender must be one of: " + Object.values(Gender).join(", ")
+  }),
+  bloodGroup: z3.enum(BloodGroup, {
+    error: "Blood group must be one of: " + Object.values(BloodGroup).join(", ")
+  }),
+  religion: z3.enum(Religion, {
+    error: "Religion must be one of: " + Object.values(Religion).join(", ")
+  }),
+  employeeRole: z3.enum(EmployeeRole, {
+    error: "Employee role must be one of: " + Object.values(UserRole).join(", ")
+  }),
+  emergencyContact: z3.string().min(11, { error: "Emergency contact must be at least 11 digits" }).optional(),
+  dateOfJoining: z3.string().min(1, { error: "Date of joining is required" }),
+  monthlySalary: z3.coerce.number({
+    error: "Monthly salary must be a valid number"
+  }),
+  email: z3.email({ error: "Please provide a valid email address" }),
+  nid: z3.string({ error: "NID is required" }).min(1, { error: "NID cannot be empty" }),
+  birthRegistrationNumber: z3.string().optional(),
+  address: z3.object({
+    present: presentAddressSchema,
+    permanent: permanentAddressSchema
+  })
+});
+var updateEmployeeSchema = z3.object({
+  fullName: z3.string().optional(),
+  fatherName: z3.string().optional(),
+  motherName: z3.string().optional(),
+  phone: z3.string().optional(),
+  gender: z3.enum(Gender).optional(),
+  bloodGroup: z3.enum(BloodGroup).optional(),
+  religion: z3.enum(Religion).optional(),
+  employeeRole: z3.enum(EmployeeRole).optional(),
+  emergencyContact: z3.string().optional(),
+  monthlySalary: z3.coerce.number().optional(),
+  dateOfJoining: z3.string().optional(),
+  nid: z3.string().optional(),
+  address: z3.object({
+    present: presentAddressSchema.partial().optional(),
+    permanent: permanentAddressSchema.partial().optional()
+  }).optional()
+});
+
+// src/app/modules/employees/employess.service.ts
+import status12 from "http-status";
+
+// src/services/cloudinary/cloudinary.service.ts
+import streamifier from "streamifier";
+
+// src/app/config/cloudinary.ts
+import { v2 as cloudinary } from "cloudinary";
+cloudinary.config({
+  cloud_name: envVars.CLOUDINARY.CLOUDINARY_CLOUD_NAME,
+  api_key: envVars.CLOUDINARY.CLOUDINARY_API_KEY,
+  api_secret: envVars.CLOUDINARY.CLOUDINARY_API_SECRET
+});
+var cloudinary_default = cloudinary;
+
+// src/services/cloudinary/cloudinary.service.ts
+var CloudinaryService = class {
+  async upload(file, options = {}) {
+    const uploadOptions = {
+      resource_type: options.resourceType ?? "image"
+    };
+    if (options.folder) {
+      uploadOptions.folder = options.folder;
+    }
+    if (options.publicId) {
+      uploadOptions.public_id = options.publicId;
+    }
+    if (options.overwrite !== void 0) {
+      uploadOptions.overwrite = options.overwrite;
+    }
+    return new Promise((resolve, reject) => {
+      const stream = cloudinary_default.uploader.upload_stream(
+        uploadOptions,
+        (error, result) => {
+          if (error) {
+            return reject(error);
+          }
+          if (!result) {
+            return reject(new Error("Cloudinary upload failed."));
+          }
+          resolve(result);
+        }
+      );
+      streamifier.createReadStream(file.buffer).pipe(stream);
+    });
+  }
+  async delete(publicId) {
+    return cloudinary_default.uploader.destroy(publicId);
+  }
+};
+var cloudinary_service_default = new CloudinaryService();
+
+// src/app/config/cloudinary.folders.ts
+var ROOT = "school-management-system";
+var CloudinaryFolders = {
+  employee: {
+    profile: `${ROOT}/employees/profile`,
+    authoritySign: `${ROOT}/employees/AuthoritySign`,
+    employeeSign: `${ROOT}/employees/EmoloyeeSign`,
+    experience: `${ROOT}/employees/Experience`
+  },
+  student: {
+    profile: `${ROOT}/students/profile`,
+    studentSign: `${ROOT}/students/studentSign`,
+    guardianSign: `${ROOT}/students/guardianSign`,
+    authoritySign: `${ROOT}/employees/AuthoritySign`
+  }
+  // add more as your project grows
 };
 
 // src/app/modules/employees/employees.constant.ts

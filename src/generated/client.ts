@@ -86,3 +86,13 @@ export type Address = Prisma.AddressModel
  * 
  */
 export type Sequence = Prisma.SequenceModel
+/**
+ * Model GuardianInfo
+ * 
+ */
+export type GuardianInfo = Prisma.GuardianInfoModel
+/**
+ * Model Student
+ * 
+ */
+export type Student = Prisma.StudentModel
