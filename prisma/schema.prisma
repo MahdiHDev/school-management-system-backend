@@ -276,22 +276,24 @@ model Sequence {
 }
 
 model GuardianInfo {
-    id               String  @id @default(uuid())
-    studentId        String  @unique
-    email            String?
-    fatherName       String
-    fatherNameBangla String
-    whatsappNumber   String
-    fatherOccupation String
+    id             String  @id @default(uuid())
+    studentId      String  @unique
+    email          String?
+    whatsappNumber String
+
+    fatherName         String
+    fatherNameBangla   String
+    fatherMobileNumber String?
+    fatherOccupation   String
 
     motherName         String
     motherNameBangla   String
-    motherMobileNumber String
+    motherMobileNumber String?
     motherOccupation   String
 
-    nameOfLocalGuardian   String?
-    relationShipOfStudent String?
-    GuardianMobileNumber  String?
+    nameOfLocalGuardian   String
+    relationShipOfStudent String
+    GuardianMobileNumber  String
 
     student Student @relation(fields: [studentId], references: [id])
 
@@ -311,7 +313,7 @@ model Student {
     dateOfBirth             String
     birthRegistrationNumber String
     religion                Religion
-    admissionTotalFees      String
+    admissionTotalFees      Int
     admissionDate           String
     previousInstituteName   String?
     endingClass             String?

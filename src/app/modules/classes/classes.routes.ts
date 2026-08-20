@@ -17,6 +17,11 @@ router.get(
     ClassesController.getAllClass,
 );
 router.get(
+    "/classes-for-update",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    ClassesController.getAllClassForUpdate,
+);
+router.get(
     "/:id",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
     ClassesController.getSingleClass,

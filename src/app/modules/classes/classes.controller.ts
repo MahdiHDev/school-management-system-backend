@@ -30,6 +30,17 @@ const getAllClass = async (req: Request, res: Response) => {
     });
 };
 
+const getAllClassForUpdate = async (req: Request, res: Response) => {
+    const result = await ClassesService.getAllClassForUpdate();
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Class for update fetched successfully",
+        data: result,
+    });
+};
+
 const getSingleClass = async (req: Request, res: Response) => {
     const { id } = req.params;
 
@@ -90,6 +101,7 @@ export const ClassesController = {
     getAllTeachers,
     getAllClass,
     getSingleClass,
+    getAllClassForUpdate,
     createClass,
     udpateClass,
     deleteClass,

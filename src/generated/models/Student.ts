@@ -20,8 +20,18 @@ export type StudentModel = runtime.Types.Result.DefaultSelection<Prisma.$Student
 
 export type AggregateStudent = {
   _count: StudentCountAggregateOutputType | null
+  _avg: StudentAvgAggregateOutputType | null
+  _sum: StudentSumAggregateOutputType | null
   _min: StudentMinAggregateOutputType | null
   _max: StudentMaxAggregateOutputType | null
+}
+
+export type StudentAvgAggregateOutputType = {
+  admissionTotalFees: number | null
+}
+
+export type StudentSumAggregateOutputType = {
+  admissionTotalFees: number | null
 }
 
 export type StudentMinAggregateOutputType = {
@@ -34,7 +44,7 @@ export type StudentMinAggregateOutputType = {
   dateOfBirth: string | null
   birthRegistrationNumber: string | null
   religion: $Enums.Religion | null
-  admissionTotalFees: string | null
+  admissionTotalFees: number | null
   admissionDate: string | null
   previousInstituteName: string | null
   endingClass: string | null
@@ -72,7 +82,7 @@ export type StudentMaxAggregateOutputType = {
   dateOfBirth: string | null
   birthRegistrationNumber: string | null
   religion: $Enums.Religion | null
-  admissionTotalFees: string | null
+  admissionTotalFees: number | null
   admissionDate: string | null
   previousInstituteName: string | null
   endingClass: string | null
@@ -139,6 +149,14 @@ export type StudentCountAggregateOutputType = {
   _all: number
 }
 
+
+export type StudentAvgAggregateInputType = {
+  admissionTotalFees?: true
+}
+
+export type StudentSumAggregateInputType = {
+  admissionTotalFees?: true
+}
 
 export type StudentMinAggregateInputType = {
   id?: true
@@ -293,6 +311,18 @@ export type StudentAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: StudentAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: StudentSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: StudentMinAggregateInputType
@@ -323,6 +353,8 @@ export type StudentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: StudentCountAggregateInputType | true
+  _avg?: StudentAvgAggregateInputType
+  _sum?: StudentSumAggregateInputType
   _min?: StudentMinAggregateInputType
   _max?: StudentMaxAggregateInputType
 }
@@ -337,7 +369,7 @@ export type StudentGroupByOutputType = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName: string | null
   endingClass: string | null
@@ -364,6 +396,8 @@ export type StudentGroupByOutputType = {
   updatedAt: Date
   deletedAt: Date | null
   _count: StudentCountAggregateOutputType | null
+  _avg: StudentAvgAggregateOutputType | null
+  _sum: StudentSumAggregateOutputType | null
   _min: StudentMinAggregateOutputType | null
   _max: StudentMaxAggregateOutputType | null
 }
@@ -396,7 +430,7 @@ export type StudentWhereInput = {
   dateOfBirth?: Prisma.StringFilter<"Student"> | string
   birthRegistrationNumber?: Prisma.StringFilter<"Student"> | string
   religion?: Prisma.EnumReligionFilter<"Student"> | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFilter<"Student"> | string
+  admissionTotalFees?: Prisma.IntFilter<"Student"> | number
   admissionDate?: Prisma.StringFilter<"Student"> | string
   previousInstituteName?: Prisma.StringNullableFilter<"Student"> | string | null
   endingClass?: Prisma.StringNullableFilter<"Student"> | string | null
@@ -483,7 +517,7 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
   dateOfBirth?: Prisma.StringFilter<"Student"> | string
   birthRegistrationNumber?: Prisma.StringFilter<"Student"> | string
   religion?: Prisma.EnumReligionFilter<"Student"> | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFilter<"Student"> | string
+  admissionTotalFees?: Prisma.IntFilter<"Student"> | number
   admissionDate?: Prisma.StringFilter<"Student"> | string
   previousInstituteName?: Prisma.StringNullableFilter<"Student"> | string | null
   endingClass?: Prisma.StringNullableFilter<"Student"> | string | null
@@ -552,8 +586,10 @@ export type StudentOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.StudentCountOrderByAggregateInput
+  _avg?: Prisma.StudentAvgOrderByAggregateInput
   _max?: Prisma.StudentMaxOrderByAggregateInput
   _min?: Prisma.StudentMinOrderByAggregateInput
+  _sum?: Prisma.StudentSumOrderByAggregateInput
 }
 
 export type StudentScalarWhereWithAggregatesInput = {
@@ -569,7 +605,7 @@ export type StudentScalarWhereWithAggregatesInput = {
   dateOfBirth?: Prisma.StringWithAggregatesFilter<"Student"> | string
   birthRegistrationNumber?: Prisma.StringWithAggregatesFilter<"Student"> | string
   religion?: Prisma.EnumReligionWithAggregatesFilter<"Student"> | $Enums.Religion
-  admissionTotalFees?: Prisma.StringWithAggregatesFilter<"Student"> | string
+  admissionTotalFees?: Prisma.IntWithAggregatesFilter<"Student"> | number
   admissionDate?: Prisma.StringWithAggregatesFilter<"Student"> | string
   previousInstituteName?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
   endingClass?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
@@ -605,7 +641,7 @@ export type StudentCreateInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -647,7 +683,7 @@ export type StudentUncheckedCreateInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -685,7 +721,7 @@ export type StudentUpdateInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -727,7 +763,7 @@ export type StudentUncheckedUpdateInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -767,7 +803,7 @@ export type StudentCreateManyInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -803,7 +839,7 @@ export type StudentUpdateManyMutationInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -841,7 +877,7 @@ export type StudentUncheckedUpdateManyInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -927,6 +963,10 @@ export type StudentCountOrderByAggregateInput = {
   deletedAt?: Prisma.SortOrder
 }
 
+export type StudentAvgOrderByAggregateInput = {
+  admissionTotalFees?: Prisma.SortOrder
+}
+
 export type StudentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -1001,6 +1041,10 @@ export type StudentMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type StudentSumOrderByAggregateInput = {
+  admissionTotalFees?: Prisma.SortOrder
 }
 
 export type StudentCreateNestedManyWithoutUserInput = {
@@ -1125,7 +1169,7 @@ export type StudentCreateWithoutUserInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -1165,7 +1209,7 @@ export type StudentUncheckedCreateWithoutUserInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -1234,7 +1278,7 @@ export type StudentScalarWhereInput = {
   dateOfBirth?: Prisma.StringFilter<"Student"> | string
   birthRegistrationNumber?: Prisma.StringFilter<"Student"> | string
   religion?: Prisma.EnumReligionFilter<"Student"> | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFilter<"Student"> | string
+  admissionTotalFees?: Prisma.IntFilter<"Student"> | number
   admissionDate?: Prisma.StringFilter<"Student"> | string
   previousInstituteName?: Prisma.StringNullableFilter<"Student"> | string | null
   endingClass?: Prisma.StringNullableFilter<"Student"> | string | null
@@ -1270,7 +1314,7 @@ export type StudentCreateWithoutClassInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -1310,7 +1354,7 @@ export type StudentUncheckedCreateWithoutClassInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -1374,7 +1418,7 @@ export type StudentCreateWithoutAddressInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -1415,7 +1459,7 @@ export type StudentUncheckedCreateWithoutAddressInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -1468,7 +1512,7 @@ export type StudentUpdateWithoutAddressInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1509,7 +1553,7 @@ export type StudentUncheckedUpdateWithoutAddressInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1546,7 +1590,7 @@ export type StudentCreateWithoutGuardianInfoInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -1587,7 +1631,7 @@ export type StudentUncheckedCreateWithoutGuardianInfoInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -1640,7 +1684,7 @@ export type StudentUpdateWithoutGuardianInfoInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1681,7 +1725,7 @@ export type StudentUncheckedUpdateWithoutGuardianInfoInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1719,7 +1763,7 @@ export type StudentCreateManyUserInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -1755,7 +1799,7 @@ export type StudentUpdateWithoutUserInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1795,7 +1839,7 @@ export type StudentUncheckedUpdateWithoutUserInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1834,7 +1878,7 @@ export type StudentUncheckedUpdateManyWithoutUserInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1871,7 +1915,7 @@ export type StudentCreateManyClassInput = {
   dateOfBirth: string
   birthRegistrationNumber: string
   religion: $Enums.Religion
-  admissionTotalFees: string
+  admissionTotalFees: number
   admissionDate: string
   previousInstituteName?: string | null
   endingClass?: string | null
@@ -1907,7 +1951,7 @@ export type StudentUpdateWithoutClassInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1947,7 +1991,7 @@ export type StudentUncheckedUpdateWithoutClassInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1986,7 +2030,7 @@ export type StudentUncheckedUpdateManyWithoutClassInput = {
   dateOfBirth?: Prisma.StringFieldUpdateOperationsInput | string
   birthRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  admissionTotalFees?: Prisma.StringFieldUpdateOperationsInput | string
+  admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2210,7 +2254,7 @@ export type $StudentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     dateOfBirth: string
     birthRegistrationNumber: string
     religion: $Enums.Religion
-    admissionTotalFees: string
+    admissionTotalFees: number
     admissionDate: string
     previousInstituteName: string | null
     endingClass: string | null
@@ -2672,7 +2716,7 @@ export interface StudentFieldRefs {
   readonly dateOfBirth: Prisma.FieldRef<"Student", 'String'>
   readonly birthRegistrationNumber: Prisma.FieldRef<"Student", 'String'>
   readonly religion: Prisma.FieldRef<"Student", 'Religion'>
-  readonly admissionTotalFees: Prisma.FieldRef<"Student", 'String'>
+  readonly admissionTotalFees: Prisma.FieldRef<"Student", 'Int'>
   readonly admissionDate: Prisma.FieldRef<"Student", 'String'>
   readonly previousInstituteName: Prisma.FieldRef<"Student", 'String'>
   readonly endingClass: Prisma.FieldRef<"Student", 'String'>

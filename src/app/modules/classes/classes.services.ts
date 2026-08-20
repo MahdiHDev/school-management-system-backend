@@ -76,6 +76,25 @@ const getAllClass = async (query: IQueryParams) => {
     };
 };
 
+const getAllClassForUpdate = async () => {
+    const classes = await prisma.class.findMany({
+        where: { isDeleted: false },
+        select: {
+            id: true,
+            name: true,
+        },
+    });
+
+    const data = classes.map((classItem) => {
+        return {
+            label: classItem.name,
+            value: classItem.id,
+        };
+    });
+
+    return data;
+};
+
 const getSingleClass = async (id: string) => {
     const result = await prisma.class.findUnique({
         where: { id },
@@ -186,6 +205,7 @@ export const ClassesService = {
     getAllTeachers,
     getAllClass,
     getSingleClass,
+    getAllClassForUpdate,
     createClass,
     updateClass,
     deleteClass,

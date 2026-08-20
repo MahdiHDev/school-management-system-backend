@@ -6,10 +6,10 @@ import { CloudinaryFolders } from "../../config/cloudinary.folders";
 import AppError from "../../errorHelpers/AppError";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
-import { ICreateStudentPayload } from "./student.interface";
+import { EmployeePayload } from "./student.validation";
 
 const createStudent = async (
-    payload: ICreateStudentPayload,
+    payload: EmployeePayload,
     files: Record<string, UploadFile[]>,
 ) => {
     // Check for existing email BEFORE any uploads — fail fast, no wasted work
@@ -143,14 +143,15 @@ const createStudent = async (
                             fatherOccupation: payload.fatherOccupation,
                             motherName: payload.mothersName,
                             motherNameBangla: payload.mothersNameBangla,
-                            motherMobileNumber: payload.motherMobileNumber,
+                            motherMobileNumber:
+                                payload.motherMobileNumber ?? null,
+                            fatherMobileNumber:
+                                payload.fatherMobileNumber ?? null,
                             motherOccupation: payload.motherOccupation,
 
-                            nameOfLocalGuardian: payload.guardianName ?? null,
-                            GuardianMobileNumber:
-                                payload.guardianMobile ?? null,
-                            relationShipOfStudent:
-                                payload.guardianRelationship ?? null,
+                            nameOfLocalGuardian: payload.guardianName,
+                            GuardianMobileNumber: payload.guardianMobile,
+                            relationShipOfStudent: payload.guardianRelationship,
                         },
                     },
 

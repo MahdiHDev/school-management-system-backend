@@ -7,7 +7,7 @@ import {
     UserRole,
 } from "../../../generated/enums";
 
-const presentAddressSchema = z.object({
+export const presentAddressSchema = z.object({
     village: z
         .string({ error: "Present address village is required" })
         .min(1, { error: "Present address village cannot be empty" }),
@@ -25,7 +25,7 @@ const presentAddressSchema = z.object({
         .min(1, { error: "Present address district cannot be empty" }),
 });
 
-const permanentAddressSchema = z.object({
+export const permanentAddressSchema = z.object({
     village: z
         .string({ error: "Permanent address village is required" })
         .min(1, { error: "Permanent address village cannot be empty" }),

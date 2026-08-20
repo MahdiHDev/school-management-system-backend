@@ -26,12 +26,12 @@ export interface ICreateStudentPayload {
     guardianName?: string;
     guardianRelationship?: string;
     guardianMobile?: string;
-    admissionTotalFees: string;
+    admissionTotalFees: number;
     admissionDate: string;
-    prviousInstitute: string;
-    endingClass: string;
-    result: string;
-    testimonialNumber: string;
+    prviousInstitute?: string;
+    endingClass?: string;
+    result?: string;
+    testimonialNumber?: string;
     address: {
         present: Address;
         permanent: Address;
