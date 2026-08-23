@@ -6,11 +6,11 @@ import { studentController } from "./student.controller";
 
 const router = Router();
 
-// router.get(
-//     "/",
-//     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-//     EmployeeController.getAllEmployees,
-// );
+router.get(
+    "/",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    studentController.getAllStudent,
+);
 
 router.post(
     "/",

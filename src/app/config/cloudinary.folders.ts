@@ -13,7 +13,7 @@ export const CloudinaryFolders = {
         profile: `${ROOT}/students/profile`,
         studentSign: `${ROOT}/students/studentSign`,
         guardianSign: `${ROOT}/students/guardianSign`,
-        authoritySign: `${ROOT}/employees/AuthoritySign`,
+        authoritySign: `${ROOT}/students/AuthoritySign`,
     },
     // add more as your project grows
 } as const;

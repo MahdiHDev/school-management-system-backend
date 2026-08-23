@@ -1,5 +1,5 @@
 import z from "zod";
-import { Religion } from "../../../generated/enums";
+import { Gender, Religion } from "../../../generated/enums";
 import {
     permanentAddressSchema,
     presentAddressSchema,
@@ -21,6 +21,9 @@ export const createStudentSchema = z.object({
     religion: z.enum(Religion, {
         error: "Religion must be one of: " + Object.values(Religion).join(", "),
     }),
+    gender: z.enum(Gender, {
+        error: "Gender must be one of: " + Object.values(Gender).join(", "),
+    }),
     classId: z
         .string({ error: "Class Id is required" })
         .min(1, { error: "Class Id can't be empty" }),
@@ -30,9 +33,7 @@ export const createStudentSchema = z.object({
     fatherNameBangla: z
         .string({ error: "Father name Bangla is required" })
         .min(1, { error: "Father Name Bangla can't be empty" }),
-    fatherMobileNumber: z
-        .string({ error: "Father Mobile Number is required" })
-        .optional(),
+    fatherMobileNumber: z.string({ error: "Father Mobile Number is required" }),
     whatsappNumber: z
         .string({ error: "Whatsapp number is required" })
         .min(1, { error: "Whatsup Number can't be empty" }),
@@ -45,9 +46,7 @@ export const createStudentSchema = z.object({
     mothersNameBangla: z
         .string({ error: "Mother Name Bangla is required" })
         .min(1, { error: "Mother Name Bangla can't be empty" }),
-    motherMobileNumber: z
-        .string({ error: "Mother Mobile Number is required" })
-        .optional(),
+    motherMobileNumber: z.string({ error: "Mother Mobile Number is required" }),
     motherOccupation: z
         .string({ error: "Mother Occupation is required" })
         .min(1, { error: "Mother Occupation can't be empty" }),

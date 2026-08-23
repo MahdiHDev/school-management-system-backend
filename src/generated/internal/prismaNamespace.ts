@@ -1446,7 +1446,6 @@ export type SequenceScalarFieldEnum = (typeof SequenceScalarFieldEnum)[keyof typ
 export const GuardianInfoScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
-  email: 'email',
   whatsappNumber: 'whatsappNumber',
   fatherName: 'fatherName',
   fatherNameBangla: 'fatherNameBangla',
@@ -1480,6 +1479,8 @@ export const StudentScalarFieldEnum = {
   religion: 'religion',
   admissionTotalFees: 'admissionTotalFees',
   admissionDate: 'admissionDate',
+  gender: 'gender',
+  bloodGroup: 'bloodGroup',
   previousInstituteName: 'previousInstituteName',
   endingClass: 'endingClass',
   result: 'result',

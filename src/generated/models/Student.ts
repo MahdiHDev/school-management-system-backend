@@ -46,6 +46,8 @@ export type StudentMinAggregateOutputType = {
   religion: $Enums.Religion | null
   admissionTotalFees: number | null
   admissionDate: string | null
+  gender: $Enums.Gender | null
+  bloodGroup: $Enums.BloodGroup | null
   previousInstituteName: string | null
   endingClass: string | null
   result: string | null
@@ -84,6 +86,8 @@ export type StudentMaxAggregateOutputType = {
   religion: $Enums.Religion | null
   admissionTotalFees: number | null
   admissionDate: string | null
+  gender: $Enums.Gender | null
+  bloodGroup: $Enums.BloodGroup | null
   previousInstituteName: string | null
   endingClass: string | null
   result: string | null
@@ -122,6 +126,8 @@ export type StudentCountAggregateOutputType = {
   religion: number
   admissionTotalFees: number
   admissionDate: number
+  gender: number
+  bloodGroup: number
   previousInstituteName: number
   endingClass: number
   result: number
@@ -170,6 +176,8 @@ export type StudentMinAggregateInputType = {
   religion?: true
   admissionTotalFees?: true
   admissionDate?: true
+  gender?: true
+  bloodGroup?: true
   previousInstituteName?: true
   endingClass?: true
   result?: true
@@ -208,6 +216,8 @@ export type StudentMaxAggregateInputType = {
   religion?: true
   admissionTotalFees?: true
   admissionDate?: true
+  gender?: true
+  bloodGroup?: true
   previousInstituteName?: true
   endingClass?: true
   result?: true
@@ -246,6 +256,8 @@ export type StudentCountAggregateInputType = {
   religion?: true
   admissionTotalFees?: true
   admissionDate?: true
+  gender?: true
+  bloodGroup?: true
   previousInstituteName?: true
   endingClass?: true
   result?: true
@@ -371,6 +383,8 @@ export type StudentGroupByOutputType = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup: $Enums.BloodGroup | null
   previousInstituteName: string | null
   endingClass: string | null
   result: string | null
@@ -432,6 +446,8 @@ export type StudentWhereInput = {
   religion?: Prisma.EnumReligionFilter<"Student"> | $Enums.Religion
   admissionTotalFees?: Prisma.IntFilter<"Student"> | number
   admissionDate?: Prisma.StringFilter<"Student"> | string
+  gender?: Prisma.EnumGenderFilter<"Student"> | $Enums.Gender
+  bloodGroup?: Prisma.EnumBloodGroupNullableFilter<"Student"> | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.StringNullableFilter<"Student"> | string | null
   endingClass?: Prisma.StringNullableFilter<"Student"> | string | null
   result?: Prisma.StringNullableFilter<"Student"> | string | null
@@ -474,6 +490,8 @@ export type StudentOrderByWithRelationInput = {
   religion?: Prisma.SortOrder
   admissionTotalFees?: Prisma.SortOrder
   admissionDate?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  bloodGroup?: Prisma.SortOrderInput | Prisma.SortOrder
   previousInstituteName?: Prisma.SortOrderInput | Prisma.SortOrder
   endingClass?: Prisma.SortOrderInput | Prisma.SortOrder
   result?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -507,6 +525,7 @@ export type StudentOrderByWithRelationInput = {
 export type StudentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   studentId?: string
+  birthRegistrationNumber?: string
   AND?: Prisma.StudentWhereInput | Prisma.StudentWhereInput[]
   OR?: Prisma.StudentWhereInput[]
   NOT?: Prisma.StudentWhereInput | Prisma.StudentWhereInput[]
@@ -515,10 +534,11 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
   fullName?: Prisma.StringFilter<"Student"> | string
   fullNameBangla?: Prisma.StringFilter<"Student"> | string
   dateOfBirth?: Prisma.StringFilter<"Student"> | string
-  birthRegistrationNumber?: Prisma.StringFilter<"Student"> | string
   religion?: Prisma.EnumReligionFilter<"Student"> | $Enums.Religion
   admissionTotalFees?: Prisma.IntFilter<"Student"> | number
   admissionDate?: Prisma.StringFilter<"Student"> | string
+  gender?: Prisma.EnumGenderFilter<"Student"> | $Enums.Gender
+  bloodGroup?: Prisma.EnumBloodGroupNullableFilter<"Student"> | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.StringNullableFilter<"Student"> | string | null
   endingClass?: Prisma.StringNullableFilter<"Student"> | string | null
   result?: Prisma.StringNullableFilter<"Student"> | string | null
@@ -547,7 +567,7 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
   guardianInfo?: Prisma.XOR<Prisma.GuardianInfoNullableScalarRelationFilter, Prisma.GuardianInfoWhereInput> | null
   class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "studentId">
+}, "id" | "studentId" | "birthRegistrationNumber">
 
 export type StudentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -561,6 +581,8 @@ export type StudentOrderByWithAggregationInput = {
   religion?: Prisma.SortOrder
   admissionTotalFees?: Prisma.SortOrder
   admissionDate?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  bloodGroup?: Prisma.SortOrderInput | Prisma.SortOrder
   previousInstituteName?: Prisma.SortOrderInput | Prisma.SortOrder
   endingClass?: Prisma.SortOrderInput | Prisma.SortOrder
   result?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -607,6 +629,8 @@ export type StudentScalarWhereWithAggregatesInput = {
   religion?: Prisma.EnumReligionWithAggregatesFilter<"Student"> | $Enums.Religion
   admissionTotalFees?: Prisma.IntWithAggregatesFilter<"Student"> | number
   admissionDate?: Prisma.StringWithAggregatesFilter<"Student"> | string
+  gender?: Prisma.EnumGenderWithAggregatesFilter<"Student"> | $Enums.Gender
+  bloodGroup?: Prisma.EnumBloodGroupNullableWithAggregatesFilter<"Student"> | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
   endingClass?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
   result?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
@@ -643,6 +667,8 @@ export type StudentCreateInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -685,6 +711,8 @@ export type StudentUncheckedCreateInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -723,6 +751,8 @@ export type StudentUpdateInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -765,6 +795,8 @@ export type StudentUncheckedUpdateInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -805,6 +837,8 @@ export type StudentCreateManyInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -841,6 +875,8 @@ export type StudentUpdateManyMutationInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -879,6 +915,8 @@ export type StudentUncheckedUpdateManyInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -937,6 +975,8 @@ export type StudentCountOrderByAggregateInput = {
   religion?: Prisma.SortOrder
   admissionTotalFees?: Prisma.SortOrder
   admissionDate?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  bloodGroup?: Prisma.SortOrder
   previousInstituteName?: Prisma.SortOrder
   endingClass?: Prisma.SortOrder
   result?: Prisma.SortOrder
@@ -979,6 +1019,8 @@ export type StudentMaxOrderByAggregateInput = {
   religion?: Prisma.SortOrder
   admissionTotalFees?: Prisma.SortOrder
   admissionDate?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  bloodGroup?: Prisma.SortOrder
   previousInstituteName?: Prisma.SortOrder
   endingClass?: Prisma.SortOrder
   result?: Prisma.SortOrder
@@ -1017,6 +1059,8 @@ export type StudentMinOrderByAggregateInput = {
   religion?: Prisma.SortOrder
   admissionTotalFees?: Prisma.SortOrder
   admissionDate?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  bloodGroup?: Prisma.SortOrder
   previousInstituteName?: Prisma.SortOrder
   endingClass?: Prisma.SortOrder
   result?: Prisma.SortOrder
@@ -1161,6 +1205,10 @@ export type StudentUpdateOneRequiredWithoutGuardianInfoNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StudentUpdateToOneWithWhereWithoutGuardianInfoInput, Prisma.StudentUpdateWithoutGuardianInfoInput>, Prisma.StudentUncheckedUpdateWithoutGuardianInfoInput>
 }
 
+export type NullableEnumBloodGroupFieldUpdateOperationsInput = {
+  set?: $Enums.BloodGroup | null
+}
+
 export type StudentCreateWithoutUserInput = {
   id?: string
   studentId: string
@@ -1171,6 +1219,8 @@ export type StudentCreateWithoutUserInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -1211,6 +1261,8 @@ export type StudentUncheckedCreateWithoutUserInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -1280,6 +1332,8 @@ export type StudentScalarWhereInput = {
   religion?: Prisma.EnumReligionFilter<"Student"> | $Enums.Religion
   admissionTotalFees?: Prisma.IntFilter<"Student"> | number
   admissionDate?: Prisma.StringFilter<"Student"> | string
+  gender?: Prisma.EnumGenderFilter<"Student"> | $Enums.Gender
+  bloodGroup?: Prisma.EnumBloodGroupNullableFilter<"Student"> | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.StringNullableFilter<"Student"> | string | null
   endingClass?: Prisma.StringNullableFilter<"Student"> | string | null
   result?: Prisma.StringNullableFilter<"Student"> | string | null
@@ -1316,6 +1370,8 @@ export type StudentCreateWithoutClassInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -1356,6 +1412,8 @@ export type StudentUncheckedCreateWithoutClassInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -1420,6 +1478,8 @@ export type StudentCreateWithoutAddressInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -1461,6 +1521,8 @@ export type StudentUncheckedCreateWithoutAddressInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -1514,6 +1576,8 @@ export type StudentUpdateWithoutAddressInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1555,6 +1619,8 @@ export type StudentUncheckedUpdateWithoutAddressInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1592,6 +1658,8 @@ export type StudentCreateWithoutGuardianInfoInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -1633,6 +1701,8 @@ export type StudentUncheckedCreateWithoutGuardianInfoInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -1686,6 +1756,8 @@ export type StudentUpdateWithoutGuardianInfoInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1727,6 +1799,8 @@ export type StudentUncheckedUpdateWithoutGuardianInfoInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1765,6 +1839,8 @@ export type StudentCreateManyUserInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -1801,6 +1877,8 @@ export type StudentUpdateWithoutUserInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1841,6 +1919,8 @@ export type StudentUncheckedUpdateWithoutUserInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1880,6 +1960,8 @@ export type StudentUncheckedUpdateManyWithoutUserInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1917,6 +1999,8 @@ export type StudentCreateManyClassInput = {
   religion: $Enums.Religion
   admissionTotalFees: number
   admissionDate: string
+  gender: $Enums.Gender
+  bloodGroup?: $Enums.BloodGroup | null
   previousInstituteName?: string | null
   endingClass?: string | null
   result?: string | null
@@ -1953,6 +2037,8 @@ export type StudentUpdateWithoutClassInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1993,6 +2079,8 @@ export type StudentUncheckedUpdateWithoutClassInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2032,6 +2120,8 @@ export type StudentUncheckedUpdateManyWithoutClassInput = {
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
   admissionTotalFees?: Prisma.IntFieldUpdateOperationsInput | number
   admissionDate?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   previousInstituteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endingClass?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   result?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2072,6 +2162,8 @@ export type StudentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   religion?: boolean
   admissionTotalFees?: boolean
   admissionDate?: boolean
+  gender?: boolean
+  bloodGroup?: boolean
   previousInstituteName?: boolean
   endingClass?: boolean
   result?: boolean
@@ -2114,6 +2206,8 @@ export type StudentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   religion?: boolean
   admissionTotalFees?: boolean
   admissionDate?: boolean
+  gender?: boolean
+  bloodGroup?: boolean
   previousInstituteName?: boolean
   endingClass?: boolean
   result?: boolean
@@ -2154,6 +2248,8 @@ export type StudentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   religion?: boolean
   admissionTotalFees?: boolean
   admissionDate?: boolean
+  gender?: boolean
+  bloodGroup?: boolean
   previousInstituteName?: boolean
   endingClass?: boolean
   result?: boolean
@@ -2194,6 +2290,8 @@ export type StudentSelectScalar = {
   religion?: boolean
   admissionTotalFees?: boolean
   admissionDate?: boolean
+  gender?: boolean
+  bloodGroup?: boolean
   previousInstituteName?: boolean
   endingClass?: boolean
   result?: boolean
@@ -2220,7 +2318,7 @@ export type StudentSelectScalar = {
   deletedAt?: boolean
 }
 
-export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "classId" | "studentId" | "fullName" | "fullNameBangla" | "dateOfBirth" | "birthRegistrationNumber" | "religion" | "admissionTotalFees" | "admissionDate" | "previousInstituteName" | "endingClass" | "result" | "testimonialNumber" | "studentSign" | "studentSignPublicId" | "studentsignName" | "studentSignType" | "authoritySign" | "authoritySignPublicId" | "authoritySignName" | "authoritySignType" | "guardianSign" | "guardianSignPublicId" | "guardianSignName" | "guardianSignType" | "picture" | "picturePublicId" | "pictureName" | "pictureType" | "isdeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["student"]>
+export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "classId" | "studentId" | "fullName" | "fullNameBangla" | "dateOfBirth" | "birthRegistrationNumber" | "religion" | "admissionTotalFees" | "admissionDate" | "gender" | "bloodGroup" | "previousInstituteName" | "endingClass" | "result" | "testimonialNumber" | "studentSign" | "studentSignPublicId" | "studentsignName" | "studentSignType" | "authoritySign" | "authoritySignPublicId" | "authoritySignName" | "authoritySignType" | "guardianSign" | "guardianSignPublicId" | "guardianSignName" | "guardianSignType" | "picture" | "picturePublicId" | "pictureName" | "pictureType" | "isdeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["student"]>
 export type StudentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   address?: boolean | Prisma.Student$addressArgs<ExtArgs>
   guardianInfo?: boolean | Prisma.Student$guardianInfoArgs<ExtArgs>
@@ -2256,6 +2354,8 @@ export type $StudentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     religion: $Enums.Religion
     admissionTotalFees: number
     admissionDate: string
+    gender: $Enums.Gender
+    bloodGroup: $Enums.BloodGroup | null
     previousInstituteName: string | null
     endingClass: string | null
     result: string | null
@@ -2718,6 +2818,8 @@ export interface StudentFieldRefs {
   readonly religion: Prisma.FieldRef<"Student", 'Religion'>
   readonly admissionTotalFees: Prisma.FieldRef<"Student", 'Int'>
   readonly admissionDate: Prisma.FieldRef<"Student", 'String'>
+  readonly gender: Prisma.FieldRef<"Student", 'Gender'>
+  readonly bloodGroup: Prisma.FieldRef<"Student", 'BloodGroup'>
   readonly previousInstituteName: Prisma.FieldRef<"Student", 'String'>
   readonly endingClass: Prisma.FieldRef<"Student", 'String'>
   readonly result: Prisma.FieldRef<"Student", 'String'>

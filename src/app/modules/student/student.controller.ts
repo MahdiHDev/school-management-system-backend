@@ -6,6 +6,17 @@ import { sendResponse } from "../../shared/sendResponse";
 import { StudentService } from "./student.service";
 import { createStudentSchema } from "./student.validation";
 
+const getAllStudent = async (req: Request, res: Response) => {
+    const result = await StudentService.getAllStudent();
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Students Fetched Successfully",
+        data: result,
+    });
+};
+
 const createStudent = async (req: Request, res: Response) => {
     const payload = createStudentSchema.parse(JSON.parse(req.body.data));
     const files = req.files as Record<string, UploadFile[]>;
@@ -27,13 +38,11 @@ const createStudent = async (req: Request, res: Response) => {
     const student = await StudentService.createStudent(payload, files);
 
     sendResponse(res, {
-        httpStatusCode: status.OK,
+        httpStatusCode: status.CREATED,
         success: true,
         message: "Student profile created successfully",
         data: student,
     });
 };
 
-export const studentController = {
-    createStudent,
-};
+export const studentController = { getAllStudent, createStudent };

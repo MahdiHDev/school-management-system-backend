@@ -27,7 +27,6 @@ export type AggregateGuardianInfo = {
 export type GuardianInfoMinAggregateOutputType = {
   id: string | null
   studentId: string | null
-  email: string | null
   whatsappNumber: string | null
   fatherName: string | null
   fatherNameBangla: string | null
@@ -49,7 +48,6 @@ export type GuardianInfoMinAggregateOutputType = {
 export type GuardianInfoMaxAggregateOutputType = {
   id: string | null
   studentId: string | null
-  email: string | null
   whatsappNumber: string | null
   fatherName: string | null
   fatherNameBangla: string | null
@@ -71,7 +69,6 @@ export type GuardianInfoMaxAggregateOutputType = {
 export type GuardianInfoCountAggregateOutputType = {
   id: number
   studentId: number
-  email: number
   whatsappNumber: number
   fatherName: number
   fatherNameBangla: number
@@ -95,7 +92,6 @@ export type GuardianInfoCountAggregateOutputType = {
 export type GuardianInfoMinAggregateInputType = {
   id?: true
   studentId?: true
-  email?: true
   whatsappNumber?: true
   fatherName?: true
   fatherNameBangla?: true
@@ -117,7 +113,6 @@ export type GuardianInfoMinAggregateInputType = {
 export type GuardianInfoMaxAggregateInputType = {
   id?: true
   studentId?: true
-  email?: true
   whatsappNumber?: true
   fatherName?: true
   fatherNameBangla?: true
@@ -139,7 +134,6 @@ export type GuardianInfoMaxAggregateInputType = {
 export type GuardianInfoCountAggregateInputType = {
   id?: true
   studentId?: true
-  email?: true
   whatsappNumber?: true
   fatherName?: true
   fatherNameBangla?: true
@@ -234,15 +228,14 @@ export type GuardianInfoGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type GuardianInfoGroupByOutputType = {
   id: string
   studentId: string
-  email: string | null
   whatsappNumber: string
   fatherName: string
   fatherNameBangla: string
-  fatherMobileNumber: string | null
+  fatherMobileNumber: string
   fatherOccupation: string
   motherName: string
   motherNameBangla: string
-  motherMobileNumber: string | null
+  motherMobileNumber: string
   motherOccupation: string
   nameOfLocalGuardian: string
   relationShipOfStudent: string
@@ -277,15 +270,14 @@ export type GuardianInfoWhereInput = {
   NOT?: Prisma.GuardianInfoWhereInput | Prisma.GuardianInfoWhereInput[]
   id?: Prisma.StringFilter<"GuardianInfo"> | string
   studentId?: Prisma.StringFilter<"GuardianInfo"> | string
-  email?: Prisma.StringNullableFilter<"GuardianInfo"> | string | null
   whatsappNumber?: Prisma.StringFilter<"GuardianInfo"> | string
   fatherName?: Prisma.StringFilter<"GuardianInfo"> | string
   fatherNameBangla?: Prisma.StringFilter<"GuardianInfo"> | string
-  fatherMobileNumber?: Prisma.StringNullableFilter<"GuardianInfo"> | string | null
+  fatherMobileNumber?: Prisma.StringFilter<"GuardianInfo"> | string
   fatherOccupation?: Prisma.StringFilter<"GuardianInfo"> | string
   motherName?: Prisma.StringFilter<"GuardianInfo"> | string
   motherNameBangla?: Prisma.StringFilter<"GuardianInfo"> | string
-  motherMobileNumber?: Prisma.StringNullableFilter<"GuardianInfo"> | string | null
+  motherMobileNumber?: Prisma.StringFilter<"GuardianInfo"> | string
   motherOccupation?: Prisma.StringFilter<"GuardianInfo"> | string
   nameOfLocalGuardian?: Prisma.StringFilter<"GuardianInfo"> | string
   relationShipOfStudent?: Prisma.StringFilter<"GuardianInfo"> | string
@@ -300,15 +292,14 @@ export type GuardianInfoWhereInput = {
 export type GuardianInfoOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
-  email?: Prisma.SortOrderInput | Prisma.SortOrder
   whatsappNumber?: Prisma.SortOrder
   fatherName?: Prisma.SortOrder
   fatherNameBangla?: Prisma.SortOrder
-  fatherMobileNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  fatherMobileNumber?: Prisma.SortOrder
   fatherOccupation?: Prisma.SortOrder
   motherName?: Prisma.SortOrder
   motherNameBangla?: Prisma.SortOrder
-  motherMobileNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  motherMobileNumber?: Prisma.SortOrder
   motherOccupation?: Prisma.SortOrder
   nameOfLocalGuardian?: Prisma.SortOrder
   relationShipOfStudent?: Prisma.SortOrder
@@ -326,15 +317,14 @@ export type GuardianInfoWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.GuardianInfoWhereInput | Prisma.GuardianInfoWhereInput[]
   OR?: Prisma.GuardianInfoWhereInput[]
   NOT?: Prisma.GuardianInfoWhereInput | Prisma.GuardianInfoWhereInput[]
-  email?: Prisma.StringNullableFilter<"GuardianInfo"> | string | null
   whatsappNumber?: Prisma.StringFilter<"GuardianInfo"> | string
   fatherName?: Prisma.StringFilter<"GuardianInfo"> | string
   fatherNameBangla?: Prisma.StringFilter<"GuardianInfo"> | string
-  fatherMobileNumber?: Prisma.StringNullableFilter<"GuardianInfo"> | string | null
+  fatherMobileNumber?: Prisma.StringFilter<"GuardianInfo"> | string
   fatherOccupation?: Prisma.StringFilter<"GuardianInfo"> | string
   motherName?: Prisma.StringFilter<"GuardianInfo"> | string
   motherNameBangla?: Prisma.StringFilter<"GuardianInfo"> | string
-  motherMobileNumber?: Prisma.StringNullableFilter<"GuardianInfo"> | string | null
+  motherMobileNumber?: Prisma.StringFilter<"GuardianInfo"> | string
   motherOccupation?: Prisma.StringFilter<"GuardianInfo"> | string
   nameOfLocalGuardian?: Prisma.StringFilter<"GuardianInfo"> | string
   relationShipOfStudent?: Prisma.StringFilter<"GuardianInfo"> | string
@@ -349,15 +339,14 @@ export type GuardianInfoWhereUniqueInput = Prisma.AtLeast<{
 export type GuardianInfoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
-  email?: Prisma.SortOrderInput | Prisma.SortOrder
   whatsappNumber?: Prisma.SortOrder
   fatherName?: Prisma.SortOrder
   fatherNameBangla?: Prisma.SortOrder
-  fatherMobileNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  fatherMobileNumber?: Prisma.SortOrder
   fatherOccupation?: Prisma.SortOrder
   motherName?: Prisma.SortOrder
   motherNameBangla?: Prisma.SortOrder
-  motherMobileNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  motherMobileNumber?: Prisma.SortOrder
   motherOccupation?: Prisma.SortOrder
   nameOfLocalGuardian?: Prisma.SortOrder
   relationShipOfStudent?: Prisma.SortOrder
@@ -377,15 +366,14 @@ export type GuardianInfoScalarWhereWithAggregatesInput = {
   NOT?: Prisma.GuardianInfoScalarWhereWithAggregatesInput | Prisma.GuardianInfoScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
   studentId?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
-  email?: Prisma.StringNullableWithAggregatesFilter<"GuardianInfo"> | string | null
   whatsappNumber?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
   fatherName?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
   fatherNameBangla?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
-  fatherMobileNumber?: Prisma.StringNullableWithAggregatesFilter<"GuardianInfo"> | string | null
+  fatherMobileNumber?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
   fatherOccupation?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
   motherName?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
   motherNameBangla?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
-  motherMobileNumber?: Prisma.StringNullableWithAggregatesFilter<"GuardianInfo"> | string | null
+  motherMobileNumber?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
   motherOccupation?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
   nameOfLocalGuardian?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
   relationShipOfStudent?: Prisma.StringWithAggregatesFilter<"GuardianInfo"> | string
@@ -398,15 +386,14 @@ export type GuardianInfoScalarWhereWithAggregatesInput = {
 
 export type GuardianInfoCreateInput = {
   id?: string
-  email?: string | null
   whatsappNumber: string
   fatherName: string
   fatherNameBangla: string
-  fatherMobileNumber?: string | null
+  fatherMobileNumber: string
   fatherOccupation: string
   motherName: string
   motherNameBangla: string
-  motherMobileNumber?: string | null
+  motherMobileNumber: string
   motherOccupation: string
   nameOfLocalGuardian: string
   relationShipOfStudent: string
@@ -421,15 +408,14 @@ export type GuardianInfoCreateInput = {
 export type GuardianInfoUncheckedCreateInput = {
   id?: string
   studentId: string
-  email?: string | null
   whatsappNumber: string
   fatherName: string
   fatherNameBangla: string
-  fatherMobileNumber?: string | null
+  fatherMobileNumber: string
   fatherOccupation: string
   motherName: string
   motherNameBangla: string
-  motherMobileNumber?: string | null
+  motherMobileNumber: string
   motherOccupation: string
   nameOfLocalGuardian: string
   relationShipOfStudent: string
@@ -442,15 +428,14 @@ export type GuardianInfoUncheckedCreateInput = {
 
 export type GuardianInfoUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappNumber?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   fatherNameBangla?: Prisma.StringFieldUpdateOperationsInput | string
-  fatherMobileNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherMobileNumber?: Prisma.StringFieldUpdateOperationsInput | string
   fatherOccupation?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherNameBangla?: Prisma.StringFieldUpdateOperationsInput | string
-  motherMobileNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherMobileNumber?: Prisma.StringFieldUpdateOperationsInput | string
   motherOccupation?: Prisma.StringFieldUpdateOperationsInput | string
   nameOfLocalGuardian?: Prisma.StringFieldUpdateOperationsInput | string
   relationShipOfStudent?: Prisma.StringFieldUpdateOperationsInput | string
@@ -465,15 +450,14 @@ export type GuardianInfoUpdateInput = {
 export type GuardianInfoUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappNumber?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   fatherNameBangla?: Prisma.StringFieldUpdateOperationsInput | string
-  fatherMobileNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherMobileNumber?: Prisma.StringFieldUpdateOperationsInput | string
   fatherOccupation?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherNameBangla?: Prisma.StringFieldUpdateOperationsInput | string
-  motherMobileNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherMobileNumber?: Prisma.StringFieldUpdateOperationsInput | string
   motherOccupation?: Prisma.StringFieldUpdateOperationsInput | string
   nameOfLocalGuardian?: Prisma.StringFieldUpdateOperationsInput | string
   relationShipOfStudent?: Prisma.StringFieldUpdateOperationsInput | string
@@ -487,15 +471,14 @@ export type GuardianInfoUncheckedUpdateInput = {
 export type GuardianInfoCreateManyInput = {
   id?: string
   studentId: string
-  email?: string | null
   whatsappNumber: string
   fatherName: string
   fatherNameBangla: string
-  fatherMobileNumber?: string | null
+  fatherMobileNumber: string
   fatherOccupation: string
   motherName: string
   motherNameBangla: string
-  motherMobileNumber?: string | null
+  motherMobileNumber: string
   motherOccupation: string
   nameOfLocalGuardian: string
   relationShipOfStudent: string
@@ -508,15 +491,14 @@ export type GuardianInfoCreateManyInput = {
 
 export type GuardianInfoUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappNumber?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   fatherNameBangla?: Prisma.StringFieldUpdateOperationsInput | string
-  fatherMobileNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherMobileNumber?: Prisma.StringFieldUpdateOperationsInput | string
   fatherOccupation?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherNameBangla?: Prisma.StringFieldUpdateOperationsInput | string
-  motherMobileNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherMobileNumber?: Prisma.StringFieldUpdateOperationsInput | string
   motherOccupation?: Prisma.StringFieldUpdateOperationsInput | string
   nameOfLocalGuardian?: Prisma.StringFieldUpdateOperationsInput | string
   relationShipOfStudent?: Prisma.StringFieldUpdateOperationsInput | string
@@ -530,15 +512,14 @@ export type GuardianInfoUpdateManyMutationInput = {
 export type GuardianInfoUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappNumber?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   fatherNameBangla?: Prisma.StringFieldUpdateOperationsInput | string
-  fatherMobileNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherMobileNumber?: Prisma.StringFieldUpdateOperationsInput | string
   fatherOccupation?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherNameBangla?: Prisma.StringFieldUpdateOperationsInput | string
-  motherMobileNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherMobileNumber?: Prisma.StringFieldUpdateOperationsInput | string
   motherOccupation?: Prisma.StringFieldUpdateOperationsInput | string
   nameOfLocalGuardian?: Prisma.StringFieldUpdateOperationsInput | string
   relationShipOfStudent?: Prisma.StringFieldUpdateOperationsInput | string
@@ -552,7 +533,6 @@ export type GuardianInfoUncheckedUpdateManyInput = {
 export type GuardianInfoCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
-  email?: Prisma.SortOrder
   whatsappNumber?: Prisma.SortOrder
   fatherName?: Prisma.SortOrder
   fatherNameBangla?: Prisma.SortOrder
@@ -574,7 +554,6 @@ export type GuardianInfoCountOrderByAggregateInput = {
 export type GuardianInfoMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
-  email?: Prisma.SortOrder
   whatsappNumber?: Prisma.SortOrder
   fatherName?: Prisma.SortOrder
   fatherNameBangla?: Prisma.SortOrder
@@ -596,7 +575,6 @@ export type GuardianInfoMaxOrderByAggregateInput = {
 export type GuardianInfoMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   studentId?: Prisma.SortOrder
-  email?: Prisma.SortOrder
   whatsappNumber?: Prisma.SortOrder
   fatherName?: Prisma.SortOrder
   fatherNameBangla?: Prisma.SortOrder
@@ -654,15 +632,14 @@ export type GuardianInfoUncheckedUpdateOneWithoutStudentNestedInput = {
 
 export type GuardianInfoCreateWithoutStudentInput = {
   id?: string
-  email?: string | null
   whatsappNumber: string
   fatherName: string
   fatherNameBangla: string
-  fatherMobileNumber?: string | null
+  fatherMobileNumber: string
   fatherOccupation: string
   motherName: string
   motherNameBangla: string
-  motherMobileNumber?: string | null
+  motherMobileNumber: string
   motherOccupation: string
   nameOfLocalGuardian: string
   relationShipOfStudent: string
@@ -675,15 +652,14 @@ export type GuardianInfoCreateWithoutStudentInput = {
 
 export type GuardianInfoUncheckedCreateWithoutStudentInput = {
   id?: string
-  email?: string | null
   whatsappNumber: string
   fatherName: string
   fatherNameBangla: string
-  fatherMobileNumber?: string | null
+  fatherMobileNumber: string
   fatherOccupation: string
   motherName: string
   motherNameBangla: string
-  motherMobileNumber?: string | null
+  motherMobileNumber: string
   motherOccupation: string
   nameOfLocalGuardian: string
   relationShipOfStudent: string
@@ -712,15 +688,14 @@ export type GuardianInfoUpdateToOneWithWhereWithoutStudentInput = {
 
 export type GuardianInfoUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappNumber?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   fatherNameBangla?: Prisma.StringFieldUpdateOperationsInput | string
-  fatherMobileNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherMobileNumber?: Prisma.StringFieldUpdateOperationsInput | string
   fatherOccupation?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherNameBangla?: Prisma.StringFieldUpdateOperationsInput | string
-  motherMobileNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherMobileNumber?: Prisma.StringFieldUpdateOperationsInput | string
   motherOccupation?: Prisma.StringFieldUpdateOperationsInput | string
   nameOfLocalGuardian?: Prisma.StringFieldUpdateOperationsInput | string
   relationShipOfStudent?: Prisma.StringFieldUpdateOperationsInput | string
@@ -733,15 +708,14 @@ export type GuardianInfoUpdateWithoutStudentInput = {
 
 export type GuardianInfoUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappNumber?: Prisma.StringFieldUpdateOperationsInput | string
   fatherName?: Prisma.StringFieldUpdateOperationsInput | string
   fatherNameBangla?: Prisma.StringFieldUpdateOperationsInput | string
-  fatherMobileNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherMobileNumber?: Prisma.StringFieldUpdateOperationsInput | string
   fatherOccupation?: Prisma.StringFieldUpdateOperationsInput | string
   motherName?: Prisma.StringFieldUpdateOperationsInput | string
   motherNameBangla?: Prisma.StringFieldUpdateOperationsInput | string
-  motherMobileNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherMobileNumber?: Prisma.StringFieldUpdateOperationsInput | string
   motherOccupation?: Prisma.StringFieldUpdateOperationsInput | string
   nameOfLocalGuardian?: Prisma.StringFieldUpdateOperationsInput | string
   relationShipOfStudent?: Prisma.StringFieldUpdateOperationsInput | string
@@ -757,7 +731,6 @@ export type GuardianInfoUncheckedUpdateWithoutStudentInput = {
 export type GuardianInfoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   studentId?: boolean
-  email?: boolean
   whatsappNumber?: boolean
   fatherName?: boolean
   fatherNameBangla?: boolean
@@ -780,7 +753,6 @@ export type GuardianInfoSelect<ExtArgs extends runtime.Types.Extensions.Internal
 export type GuardianInfoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   studentId?: boolean
-  email?: boolean
   whatsappNumber?: boolean
   fatherName?: boolean
   fatherNameBangla?: boolean
@@ -803,7 +775,6 @@ export type GuardianInfoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
 export type GuardianInfoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   studentId?: boolean
-  email?: boolean
   whatsappNumber?: boolean
   fatherName?: boolean
   fatherNameBangla?: boolean
@@ -826,7 +797,6 @@ export type GuardianInfoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
 export type GuardianInfoSelectScalar = {
   id?: boolean
   studentId?: boolean
-  email?: boolean
   whatsappNumber?: boolean
   fatherName?: boolean
   fatherNameBangla?: boolean
@@ -845,7 +815,7 @@ export type GuardianInfoSelectScalar = {
   deletedAt?: boolean
 }
 
-export type GuardianInfoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "email" | "whatsappNumber" | "fatherName" | "fatherNameBangla" | "fatherMobileNumber" | "fatherOccupation" | "motherName" | "motherNameBangla" | "motherMobileNumber" | "motherOccupation" | "nameOfLocalGuardian" | "relationShipOfStudent" | "GuardianMobileNumber" | "isdeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["guardianInfo"]>
+export type GuardianInfoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "whatsappNumber" | "fatherName" | "fatherNameBangla" | "fatherMobileNumber" | "fatherOccupation" | "motherName" | "motherNameBangla" | "motherMobileNumber" | "motherOccupation" | "nameOfLocalGuardian" | "relationShipOfStudent" | "GuardianMobileNumber" | "isdeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["guardianInfo"]>
 export type GuardianInfoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
 }
@@ -864,15 +834,14 @@ export type $GuardianInfoPayload<ExtArgs extends runtime.Types.Extensions.Intern
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     studentId: string
-    email: string | null
     whatsappNumber: string
     fatherName: string
     fatherNameBangla: string
-    fatherMobileNumber: string | null
+    fatherMobileNumber: string
     fatherOccupation: string
     motherName: string
     motherNameBangla: string
-    motherMobileNumber: string | null
+    motherMobileNumber: string
     motherOccupation: string
     nameOfLocalGuardian: string
     relationShipOfStudent: string
@@ -1307,7 +1276,6 @@ export interface Prisma__GuardianInfoClient<T, Null = never, ExtArgs extends run
 export interface GuardianInfoFieldRefs {
   readonly id: Prisma.FieldRef<"GuardianInfo", 'String'>
   readonly studentId: Prisma.FieldRef<"GuardianInfo", 'String'>
-  readonly email: Prisma.FieldRef<"GuardianInfo", 'String'>
   readonly whatsappNumber: Prisma.FieldRef<"GuardianInfo", 'String'>
   readonly fatherName: Prisma.FieldRef<"GuardianInfo", 'String'>
   readonly fatherNameBangla: Prisma.FieldRef<"GuardianInfo", 'String'>

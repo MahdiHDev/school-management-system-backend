@@ -8,6 +8,22 @@ import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
 import { EmployeePayload } from "./student.validation";
 
+const getAllStudent = async () => {
+    const student = prisma.student.findMany({
+        where: {
+            isdeleted: false,
+        },
+        include: {
+            address: true,
+            class: true,
+            guardianInfo: true,
+            user: true,
+        },
+    });
+
+    return student;
+};
+
 const createStudent = async (
     payload: EmployeePayload,
     files: Record<string, UploadFile[]>,
@@ -119,6 +135,7 @@ const createStudent = async (
                     dateOfBirth: payload.dateOfBirth,
                     birthRegistrationNumber: payload.birthRegistrationNumber,
                     religion: payload.religion,
+                    gender: payload.gender,
                     classId: payload.classId,
                     admissionTotalFees: payload.admissionTotalFees,
                     admissionDate: payload.admissionDate,
@@ -143,10 +160,8 @@ const createStudent = async (
                             fatherOccupation: payload.fatherOccupation,
                             motherName: payload.mothersName,
                             motherNameBangla: payload.mothersNameBangla,
-                            motherMobileNumber:
-                                payload.motherMobileNumber ?? null,
-                            fatherMobileNumber:
-                                payload.fatherMobileNumber ?? null,
+                            motherMobileNumber: payload.motherMobileNumber,
+                            fatherMobileNumber: payload.fatherMobileNumber,
                             motherOccupation: payload.motherOccupation,
 
                             nameOfLocalGuardian: payload.guardianName,
@@ -179,6 +194,8 @@ const createStudent = async (
                 },
             });
         });
+
+        return student;
     } catch (error: any) {
         console.log("Transaction error : ", error);
 
@@ -207,4 +224,4 @@ const createStudent = async (
     }
 };
 
-export const StudentService = { createStudent };
+export const StudentService = { getAllStudent, createStudent };
