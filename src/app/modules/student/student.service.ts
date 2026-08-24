@@ -1,31 +1,78 @@
 import status from "http-status";
+import { Prisma } from "../../../generated/client";
 import { UserRole } from "../../../generated/enums";
 import { CloudinaryService } from "../../../services/cloudinary";
 import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
 import { CloudinaryFolders } from "../../config/cloudinary.folders";
 import AppError from "../../errorHelpers/AppError";
+import { IQueryParams } from "../../interfaces/query.interface";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
-import { EmployeePayload } from "./student.validation";
+import { QueryBuilder } from "../../utils/QueryBuilder";
+import {
+    studentFilterableFields,
+    studentSearchableFields,
+} from "./student.constant";
+import { IUpdateStudentPayload, StudentPayload } from "./student.validation";
 
-const getAllStudent = async () => {
-    const student = prisma.student.findMany({
-        where: {
-            isdeleted: false,
-        },
-        include: {
-            address: true,
-            class: true,
-            guardianInfo: true,
-            user: true,
-        },
+type StudentListItem = Prisma.StudentGetPayload<{
+    select: {
+        id: true;
+        fullName: true;
+        birthRegistrationNumber: true;
+        gender: true;
+        picture: true;
+        user: {
+            select: {
+                email: true;
+            };
+        };
+    };
+}>;
+
+const getAllStudent = async (query: IQueryParams) => {
+    const queryBuilder = new QueryBuilder<
+        StudentListItem,
+        Prisma.StudentWhereInput,
+        Prisma.StudentInclude
+    >(prisma.student, query, {
+        searchableFields: studentSearchableFields,
+        filterableFields: studentFilterableFields,
     });
 
-    return student;
+    const result = await queryBuilder
+        .search()
+        .filter()
+        .where({ isdeleted: false })
+        .select({
+            id: true,
+            birthRegistrationNumber: true,
+            fullName: true,
+            gender: true,
+            picture: true,
+            user: {
+                select: {
+                    email: true,
+                },
+            },
+        })
+        .paginate()
+        .sort()
+        .execute();
+
+    const data = result.data as unknown as StudentListItem[];
+
+    return {
+        ...result,
+        data: data.map(({ user, ...student }) => ({
+            ...student,
+            email: user.email,
+        })),
+    };
 };
 
 const createStudent = async (
-    payload: EmployeePayload,
+    payload: StudentPayload,
     files: Record<string, UploadFile[]>,
 ) => {
     // Check for existing email BEFORE any uploads — fail fast, no wasted work
@@ -139,9 +186,17 @@ const createStudent = async (
                     classId: payload.classId,
                     admissionTotalFees: payload.admissionTotalFees,
                     admissionDate: payload.admissionDate,
+                    testimonialNumber: payload.testimonialNumber ?? null,
+                    previousInstituteName: payload.previousInstitute ?? null,
+                    endingClass: payload.endingClass ?? null,
+                    result: payload.result ?? null,
+                    bloodGroup: payload.bloodGroup ?? null,
 
                     authoritySign: authoritySign.secure_url,
                     authoritySignPublicId: authoritySign.public_id,
+                    authoritySignName: authoritySignFile.originalname,
+                    authoritySignType: authoritySignFile.mimetype,
+
                     studentSign: studentSign.secure_url,
                     studentSignPublicId: studentSign.public_id,
                     studentsignName: studentSignFile.originalname,
@@ -158,8 +213,8 @@ const createStudent = async (
                             fatherNameBangla: payload.fatherNameBangla,
                             whatsappNumber: payload.whatsappNumber,
                             fatherOccupation: payload.fatherOccupation,
-                            motherName: payload.mothersName,
-                            motherNameBangla: payload.mothersNameBangla,
+                            motherName: payload.motherName,
+                            motherNameBangla: payload.motherNameBangla,
                             motherMobileNumber: payload.motherMobileNumber,
                             fatherMobileNumber: payload.fatherMobileNumber,
                             motherOccupation: payload.motherOccupation,
@@ -224,4 +279,18 @@ const createStudent = async (
     }
 };
 
-export const StudentService = { getAllStudent, createStudent };
+const updateStudent = async (
+    id: string,
+    payload: IUpdateStudentPayload,
+    files: Record<string, UploadFile[]>,
+) => {
+    const student = await prisma.student.findUnique({
+        where: { id },
+    });
+
+    if (!student) {
+        throw new AppError(status.NOT_FOUND, "Student Not found");
+    }
+};
+
+export const StudentService = { getAllStudent, createStudent, updateStudent };

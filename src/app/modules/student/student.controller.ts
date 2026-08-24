@@ -2,12 +2,15 @@ import { Request, Response } from "express";
 import status from "http-status";
 import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
 import AppError from "../../errorHelpers/AppError";
+import { IQueryParams } from "../../interfaces/query.interface";
 import { sendResponse } from "../../shared/sendResponse";
 import { StudentService } from "./student.service";
 import { createStudentSchema } from "./student.validation";
 
 const getAllStudent = async (req: Request, res: Response) => {
-    const result = await StudentService.getAllStudent();
+    const query = req.query;
+
+    const result = await StudentService.getAllStudent(query as IQueryParams);
 
     sendResponse(res, {
         httpStatusCode: status.OK,

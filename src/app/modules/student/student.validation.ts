@@ -1,5 +1,5 @@
 import z from "zod";
-import { Gender, Religion } from "../../../generated/enums";
+import { BloodGroup, Gender, Religion } from "../../../generated/enums";
 import {
     permanentAddressSchema,
     presentAddressSchema,
@@ -24,6 +24,13 @@ export const createStudentSchema = z.object({
     gender: z.enum(Gender, {
         error: "Gender must be one of: " + Object.values(Gender).join(", "),
     }),
+    bloodGroup: z
+        .enum(BloodGroup, {
+            error:
+                "BloodGroup must be one of: " +
+                Object.values(BloodGroup).join(", "),
+        })
+        .optional(),
     classId: z
         .string({ error: "Class Id is required" })
         .min(1, { error: "Class Id can't be empty" }),
@@ -36,14 +43,14 @@ export const createStudentSchema = z.object({
     fatherMobileNumber: z.string({ error: "Father Mobile Number is required" }),
     whatsappNumber: z
         .string({ error: "Whatsapp number is required" })
-        .min(1, { error: "Whatsup Number can't be empty" }),
+        .min(1, { error: "Whatsapp Number can't be empty" }),
     fatherOccupation: z
         .string({ error: "Father Occupation is required" })
         .min(1, { error: "Father Occupation can't be empty" }),
-    mothersName: z
+    motherName: z
         .string({ error: "Mother Name is required" })
         .min(1, { error: "Mother Name Bangla can't be empty" }),
-    mothersNameBangla: z
+    motherNameBangla: z
         .string({ error: "Mother Name Bangla is required" })
         .min(1, { error: "Mother Name Bangla can't be empty" }),
     motherMobileNumber: z.string({ error: "Mother Mobile Number is required" }),
@@ -68,24 +75,75 @@ export const createStudentSchema = z.object({
     }),
     admissionDate: z
         .string({ error: "Admission date is required" })
-        .min(1, "Admission date can't be emptry"),
-    prviousInstitute: z
-        .string()
-        .min(1, "Previous Institution Can't be Empty")
-        .optional(),
-    endingClass: z
-        .string()
-        .min(1, { error: "Ending Class can't be empty" })
-        .optional(),
-    result: z.string().min(1, { error: "Result can't be empty" }).optional(),
-    testimonialNumber: z
-        .string()
-        .min(1, { error: "Testimonial Number can't be empty" })
-        .optional(),
+        .min(1, "Admission date can't be empty"),
+    previousInstitute: z.string().optional(),
+    endingClass: z.string().optional(),
+    result: z.string().optional(),
+    testimonialNumber: z.string().optional(),
     address: z.object({
         present: presentAddressSchema,
         permanent: permanentAddressSchema,
     }),
 });
 
-export type EmployeePayload = z.infer<typeof createStudentSchema>;
+export type StudentPayload = z.infer<typeof createStudentSchema>;
+
+export const updateStudentSchema = z.object({
+    fullName: z.string().optional(),
+
+    fullNameBangla: z.string().optional(),
+    dateOfBirth: z.string().optional(),
+    birthRegistrationNumber: z.string().optional(),
+    religion: z
+        .enum(Religion, {
+            error:
+                "Religion must be one of: " +
+                Object.values(Religion).join(", "),
+        })
+        .optional(),
+    gender: z
+        .enum(Gender, {
+            error: "Gender must be one of: " + Object.values(Gender).join(", "),
+        })
+        .optional(),
+    bloodGroup: z
+        .enum(BloodGroup, {
+            error:
+                "BloodGroup must be one of: " +
+                Object.values(BloodGroup).join(", "),
+        })
+        .optional(),
+    classId: z.string().optional,
+    fatherName: z.string().optional(),
+    fatherNameBangla: z.string().optional(),
+    fatherMobileNumber: z.string().optional(),
+    whatsappNumber: z.string().optional(),
+    fatherOccupation: z.string().optional(),
+    motherName: z.string().optional(),
+    motherNameBangla: z.string().optional(),
+    motherMobileNumber: z.string().optional(),
+    motherOccupation: z.string().optional(),
+    email: z
+        .email({ error: "Please provide a valid email address" })
+        .optional(),
+    guardianName: z.string().optional(),
+
+    guardianRelationship: z.string().optional(),
+
+    guardianMobile: z.string().optional(),
+
+    admissionTotalFees: z.coerce.number().optional(),
+    admissionDate: z.string().optional(),
+    previousInstitute: z.string().optional(),
+    endingClass: z.string().optional(),
+    result: z.string().optional(),
+    testimonialNumber: z.string().optional(),
+    address: z
+        .object({
+            present: presentAddressSchema.partial().optional(),
+            permanent: permanentAddressSchema.partial().optional(),
+        })
+        .optional(),
+});
+
+export type IUpdateStudentPayload = z.infer<typeof updateStudentSchema>;
