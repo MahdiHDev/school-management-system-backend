@@ -64,7 +64,7 @@ export type EmployeeMinAggregateOutputType = {
   gender: $Enums.Gender | null
   bloodGroup: $Enums.BloodGroup | null
   religion: $Enums.Religion | null
-  employeeRole: $Enums.EmployeeRole | null
+  employeeRole: $Enums.UserRole | null
   dateOfJoining: string | null
   isdeleted: boolean | null
   createdAt: Date | null
@@ -102,7 +102,7 @@ export type EmployeeMaxAggregateOutputType = {
   gender: $Enums.Gender | null
   bloodGroup: $Enums.BloodGroup | null
   religion: $Enums.Religion | null
-  employeeRole: $Enums.EmployeeRole | null
+  employeeRole: $Enums.UserRole | null
   dateOfJoining: string | null
   isdeleted: boolean | null
   createdAt: Date | null
@@ -389,7 +389,7 @@ export type EmployeeGroupByOutputType = {
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
-  employeeRole: $Enums.EmployeeRole
+  employeeRole: $Enums.UserRole
   dateOfJoining: string
   isdeleted: boolean
   createdAt: Date
@@ -450,7 +450,7 @@ export type EmployeeWhereInput = {
   gender?: Prisma.EnumGenderFilter<"Employee"> | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFilter<"Employee"> | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFilter<"Employee"> | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleFilter<"Employee"> | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleFilter<"Employee"> | $Enums.UserRole
   dateOfJoining?: Prisma.StringFilter<"Employee"> | string
   isdeleted?: Prisma.BoolFilter<"Employee"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
@@ -535,7 +535,7 @@ export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
   gender?: Prisma.EnumGenderFilter<"Employee"> | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFilter<"Employee"> | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFilter<"Employee"> | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleFilter<"Employee"> | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleFilter<"Employee"> | $Enums.UserRole
   dateOfJoining?: Prisma.StringFilter<"Employee"> | string
   isdeleted?: Prisma.BoolFilter<"Employee"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
@@ -622,7 +622,7 @@ export type EmployeeScalarWhereWithAggregatesInput = {
   gender?: Prisma.EnumGenderWithAggregatesFilter<"Employee"> | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupWithAggregatesFilter<"Employee"> | $Enums.BloodGroup
   religion?: Prisma.EnumReligionWithAggregatesFilter<"Employee"> | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleWithAggregatesFilter<"Employee"> | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleWithAggregatesFilter<"Employee"> | $Enums.UserRole
   dateOfJoining?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   isdeleted?: Prisma.BoolWithAggregatesFilter<"Employee"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Employee"> | Date | string
@@ -659,7 +659,7 @@ export type EmployeeCreateInput = {
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
-  employeeRole: $Enums.EmployeeRole
+  employeeRole?: $Enums.UserRole
   dateOfJoining: string
   isdeleted?: boolean
   createdAt?: Date | string
@@ -700,7 +700,7 @@ export type EmployeeUncheckedCreateInput = {
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
-  employeeRole: $Enums.EmployeeRole
+  employeeRole?: $Enums.UserRole
   dateOfJoining: string
   isdeleted?: boolean
   createdAt?: Date | string
@@ -739,7 +739,7 @@ export type EmployeeUpdateInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -780,7 +780,7 @@ export type EmployeeUncheckedUpdateInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -820,7 +820,7 @@ export type EmployeeCreateManyInput = {
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
-  employeeRole: $Enums.EmployeeRole
+  employeeRole?: $Enums.UserRole
   dateOfJoining: string
   isdeleted?: boolean
   createdAt?: Date | string
@@ -857,7 +857,7 @@ export type EmployeeUpdateManyMutationInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -895,7 +895,7 @@ export type EmployeeUncheckedUpdateManyInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1087,10 +1087,6 @@ export type EnumReligionFieldUpdateOperationsInput = {
   set?: $Enums.Religion
 }
 
-export type EnumEmployeeRoleFieldUpdateOperationsInput = {
-  set?: $Enums.EmployeeRole
-}
-
 export type EmployeeCreateNestedOneWithoutClassesInput = {
   create?: Prisma.XOR<Prisma.EmployeeCreateWithoutClassesInput, Prisma.EmployeeUncheckedCreateWithoutClassesInput>
   connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutClassesInput
@@ -1150,7 +1146,7 @@ export type EmployeeCreateWithoutUserInput = {
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
-  employeeRole: $Enums.EmployeeRole
+  employeeRole?: $Enums.UserRole
   dateOfJoining: string
   isdeleted?: boolean
   createdAt?: Date | string
@@ -1189,7 +1185,7 @@ export type EmployeeUncheckedCreateWithoutUserInput = {
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
-  employeeRole: $Enums.EmployeeRole
+  employeeRole?: $Enums.UserRole
   dateOfJoining: string
   isdeleted?: boolean
   createdAt?: Date | string
@@ -1244,7 +1240,7 @@ export type EmployeeUpdateWithoutUserInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1283,7 +1279,7 @@ export type EmployeeUncheckedUpdateWithoutUserInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1322,7 +1318,7 @@ export type EmployeeCreateWithoutClassesInput = {
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
-  employeeRole: $Enums.EmployeeRole
+  employeeRole?: $Enums.UserRole
   dateOfJoining: string
   isdeleted?: boolean
   createdAt?: Date | string
@@ -1362,7 +1358,7 @@ export type EmployeeUncheckedCreateWithoutClassesInput = {
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
-  employeeRole: $Enums.EmployeeRole
+  employeeRole?: $Enums.UserRole
   dateOfJoining: string
   isdeleted?: boolean
   createdAt?: Date | string
@@ -1416,7 +1412,7 @@ export type EmployeeUpdateWithoutClassesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1456,7 +1452,7 @@ export type EmployeeUncheckedUpdateWithoutClassesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1494,7 +1490,7 @@ export type EmployeeCreateWithoutAddressInput = {
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
-  employeeRole: $Enums.EmployeeRole
+  employeeRole?: $Enums.UserRole
   dateOfJoining: string
   isdeleted?: boolean
   createdAt?: Date | string
@@ -1534,7 +1530,7 @@ export type EmployeeUncheckedCreateWithoutAddressInput = {
   gender: $Enums.Gender
   bloodGroup: $Enums.BloodGroup
   religion: $Enums.Religion
-  employeeRole: $Enums.EmployeeRole
+  employeeRole?: $Enums.UserRole
   dateOfJoining: string
   isdeleted?: boolean
   createdAt?: Date | string
@@ -1588,7 +1584,7 @@ export type EmployeeUpdateWithoutAddressInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1628,7 +1624,7 @@ export type EmployeeUncheckedUpdateWithoutAddressInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   bloodGroup?: Prisma.EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
   religion?: Prisma.EnumReligionFieldUpdateOperationsInput | $Enums.Religion
-  employeeRole?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  employeeRole?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   dateOfJoining?: Prisma.StringFieldUpdateOperationsInput | string
   isdeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1877,7 +1873,7 @@ export type $EmployeePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     gender: $Enums.Gender
     bloodGroup: $Enums.BloodGroup
     religion: $Enums.Religion
-    employeeRole: $Enums.EmployeeRole
+    employeeRole: $Enums.UserRole
     dateOfJoining: string
     isdeleted: boolean
     createdAt: Date
@@ -2338,7 +2334,7 @@ export interface EmployeeFieldRefs {
   readonly gender: Prisma.FieldRef<"Employee", 'Gender'>
   readonly bloodGroup: Prisma.FieldRef<"Employee", 'BloodGroup'>
   readonly religion: Prisma.FieldRef<"Employee", 'Religion'>
-  readonly employeeRole: Prisma.FieldRef<"Employee", 'EmployeeRole'>
+  readonly employeeRole: Prisma.FieldRef<"Employee", 'UserRole'>
   readonly dateOfJoining: Prisma.FieldRef<"Employee", 'String'>
   readonly isdeleted: Prisma.FieldRef<"Employee", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Employee", 'DateTime'>

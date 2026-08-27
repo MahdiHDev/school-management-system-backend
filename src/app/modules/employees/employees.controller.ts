@@ -105,8 +105,7 @@ const deleteEmployee = async (req: Request, res: Response) => {
     sendResponse(res, {
         httpStatusCode: status.OK,
         success: true,
-        message: "Employee Deleted Successfully",
-        data: result,
+        message: result.message || "Employee Deleted Successfully",
     });
 };
 

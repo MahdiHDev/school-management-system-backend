@@ -4,4 +4,4 @@ export const studentSearchableFields = [
     "birthRegistrationNumber",
 ];
 
-export const studentFilterableFields = ["user.role"];
+export const studentFilterableFields = ["user.role", "classId"];

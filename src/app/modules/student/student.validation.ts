@@ -113,7 +113,7 @@ export const updateStudentSchema = z.object({
                 Object.values(BloodGroup).join(", "),
         })
         .optional(),
-    classId: z.string().optional,
+    classId: z.string().optional(),
     fatherName: z.string().optional(),
     fatherNameBangla: z.string().optional(),
     fatherMobileNumber: z.string().optional(),

@@ -202,7 +202,7 @@ model Employee {
     gender        Gender
     bloodGroup    BloodGroup
     religion      Religion
-    employeeRole  EmployeeRole
+    employeeRole  UserRole   @default(OTHER)
     dateOfJoining String
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)

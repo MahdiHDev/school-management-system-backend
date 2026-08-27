@@ -1,7 +1,6 @@
 import { z } from "zod";
 import {
     BloodGroup,
-    EmployeeRole,
     Gender,
     Religion,
     UserRole,
@@ -74,7 +73,7 @@ export const createEmployeeSchema = z.object({
         error: "Religion must be one of: " + Object.values(Religion).join(", "),
     }),
 
-    employeeRole: z.enum(EmployeeRole, {
+    employeeRole: z.enum(UserRole, {
         error:
             "Employee role must be one of: " +
             Object.values(UserRole).join(", "),
@@ -115,7 +114,7 @@ export const updateEmployeeSchema = z.object({
     gender: z.enum(Gender).optional(),
     bloodGroup: z.enum(BloodGroup).optional(),
     religion: z.enum(Religion).optional(),
-    employeeRole: z.enum(EmployeeRole).optional(),
+    employeeRole: z.enum(UserRole).optional(),
     emergencyContact: z.string().optional(),
     monthlySalary: z.coerce.number().optional(),
     dateOfJoining: z.string().optional(),
