@@ -1,5 +1,5 @@
 import status from "http-status";
-import { Prisma } from "../../../generated/client";
+import { Gender, Prisma } from "../../../generated/client";
 import AppError from "../../errorHelpers/AppError";
 import { IQueryParams } from "../../interfaces/query.interface";
 import { prisma } from "../../lib/prisma";
@@ -57,10 +57,38 @@ const getAllClass = async (query: IQueryParams) => {
         .sort()
         .execute();
 
+    const classIds = result.data.map((classItem) => classItem.id);
+
+    const studentCounts = await prisma.student.groupBy({
+        by: ["classId", "gender"],
+        where: {
+            classId: {
+                in: classIds,
+            },
+            isdeleted: false,
+        },
+        _count: {
+            _all: true,
+        },
+    });
+
     const data = result.data.map((classItem) => {
-        const totalStudents = 25;
-        const boys = Math.floor(Math.random() * (totalStudents + 1));
-        const girls = totalStudents - boys;
+        const counts = studentCounts.filter(
+            (item) => item.classId === classItem.id,
+        );
+
+        const totalStudents = counts.reduce(
+            (total, item) => total + item._count._all,
+            0,
+        );
+
+        const boys =
+            counts.find((item) => item.gender === Gender.MALE)?._count._all ??
+            0;
+
+        const girls =
+            counts.find((item) => item.gender === Gender.FEMALE)?._count._all ??
+            0;
 
         return {
             ...classItem,

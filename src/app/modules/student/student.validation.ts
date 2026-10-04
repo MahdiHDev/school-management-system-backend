@@ -147,3 +147,19 @@ export const updateStudentSchema = z.object({
 });
 
 export type IUpdateStudentPayload = z.infer<typeof updateStudentSchema>;
+
+export const promoteStudentsSchema = z.object({
+    sourceClassId: z.uuid("Invalid source class ID"),
+
+    targetClassId: z.uuid("Invalid target class ID"),
+
+    studentIds: z
+        .array(z.uuid("Invalid student ID"))
+        .min(1, "Select at least one student")
+        .refine(
+            (ids) => new Set(ids).size === ids.length,
+            "Duplicate student IDs are not allowed",
+        ),
+});
+
+export type PromoteStudentsPayload = z.infer<typeof promoteStudentsSchema>;

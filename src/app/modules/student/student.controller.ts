@@ -81,6 +81,26 @@ const updateStudent = async (req: Request, res: Response) => {
     });
 };
 
+const promoteStudents = async (req: Request, res: Response) => {
+    console.log("🔥 PROMOTE CONTROLLER HIT");
+
+    const validatedData = req.body;
+    console.log(validatedData);
+
+    const result = await StudentService.promoteStudents(
+        validatedData.sourceClassId,
+        validatedData.targetClassId,
+        validatedData.studentIds,
+    );
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: result.message,
+        data: result,
+    });
+};
+
 const deleteStudent = async (req: Request, res: Response) => {
     const { id } = req.params;
 
@@ -98,5 +118,6 @@ export const studentController = {
     getStudentForUpdate,
     createStudent,
     updateStudent,
+    promoteStudents,
     deleteStudent,
 };

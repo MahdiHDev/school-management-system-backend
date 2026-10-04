@@ -89,6 +89,7 @@ const getStudentForUpdate = async (id: string) => {
             classId: true,
             admissionTotalFees: true,
             previousInstituteName: true,
+            admissionDate: true,
             endingClass: true,
             result: true,
             testimonialNumber: true,
@@ -164,12 +165,26 @@ const getStudentForUpdate = async (id: string) => {
         guardianSignName,
         guardianSignType,
         guardianInfo,
+        previousInstituteName,
         user: { email },
         ...studenData
     } = student;
+
+    const {
+        nameOfLocalGuardian,
+        relationShipOfStudent,
+        GuardianMobileNumber,
+        ...guardianData
+    } = guardianInfo ?? {};
+
     const formattedStudent = {
         ...studenData,
-        ...guardianInfo,
+        ...guardianData,
+
+        guardianName: nameOfLocalGuardian,
+        guardianRelationship: relationShipOfStudent,
+        guardianMobile: GuardianMobileNumber,
+        previousInstitute: previousInstituteName,
 
         picture: {
             uri: student.picture,
@@ -760,6 +775,103 @@ const updateStudent = async (
     }
 };
 
+const promoteStudents = async (
+    sourceClassId: string,
+    targetClassId: string,
+    studentIds: string[],
+) => {
+    // Validate the request
+    if (sourceClassId === targetClassId) {
+        throw new AppError(
+            status.BAD_REQUEST,
+            "Source and target classes cannot be the same",
+        );
+    }
+
+    const uniqueStudentIds = [...new Set(studentIds)];
+
+    if (uniqueStudentIds.length === 0) {
+        throw new AppError(
+            status.BAD_REQUEST,
+            "Please select at least one student",
+        );
+    }
+
+    return prisma.$transaction(async (tx) => {
+        //  Verify both classes exist and are active
+        const classes = await tx.class.findMany({
+            where: {
+                id: {
+                    in: [sourceClassId, targetClassId],
+                },
+                isDeleted: false,
+            },
+            select: {
+                id: true,
+                name: true,
+            },
+        });
+
+        if (classes.length !== 2) {
+            throw new AppError(
+                status.NOT_FOUND,
+                "Source or target class not found",
+            );
+        }
+
+        //  Verify every selected student belongs to the source class
+        const students = await tx.student.findMany({
+            where: {
+                id: {
+                    in: uniqueStudentIds,
+                },
+                classId: sourceClassId,
+                isdeleted: false,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (students.length !== uniqueStudentIds.length) {
+            throw new AppError(
+                status.BAD_REQUEST,
+                "Some students do not belong to the source class or are inactive",
+            );
+        }
+
+        // promote the students
+        const result = await tx.student.updateMany({
+            where: {
+                id: {
+                    in: uniqueStudentIds,
+                },
+                classId: sourceClassId,
+                isdeleted: false,
+            },
+            data: {
+                classId: targetClassId,
+            },
+        });
+
+        if (result.count !== uniqueStudentIds.length) {
+            throw new AppError(
+                status.CONFLICT,
+                "Some students could not be promoted. Please retry",
+            );
+        }
+
+        return {
+            message: "Students promoted successfully",
+            promotedCount: result.count,
+            sourceClass: classes.find((item) => item.id === sourceClassId)!
+                .name,
+            targetClass: classes.find((item) => item.id === targetClassId)!
+                .name,
+        };
+    });
+};
+
 const deleteStudent = async (id: string) => {
     const student = await prisma.student.findUnique({
         where: { id },
@@ -826,5 +938,6 @@ export const StudentService = {
     getStudentForUpdate,
     createStudent,
     updateStudent,
+    promoteStudents,
     deleteStudent,
 };

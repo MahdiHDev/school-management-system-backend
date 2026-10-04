@@ -42,6 +42,8 @@ router.post(
     studentController.createStudent,
 );
 
+router.patch("/promote", studentController.promoteStudents);
+
 router.patch(
     "/:id",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),

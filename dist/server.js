@@ -1833,10 +1833,29 @@ var getAllClass = async (query) => {
     id: true,
     name: true
   }).paginate().sort().execute();
+  const classIds = result.data.map((classItem) => classItem.id);
+  const studentCounts = await prisma.student.groupBy({
+    by: ["classId", "gender"],
+    where: {
+      classId: {
+        in: classIds
+      },
+      isdeleted: false
+    },
+    _count: {
+      _all: true
+    }
+  });
   const data = result.data.map((classItem) => {
-    const totalStudents = 25;
-    const boys = Math.floor(Math.random() * (totalStudents + 1));
-    const girls = totalStudents - boys;
+    const counts = studentCounts.filter(
+      (item) => item.classId === classItem.id
+    );
+    const totalStudents = counts.reduce(
+      (total, item) => total + item._count._all,
+      0
+    );
+    const boys = counts.find((item) => item.gender === Gender.MALE)?._count._all ?? 0;
+    const girls = counts.find((item) => item.gender === Gender.FEMALE)?._count._all ?? 0;
     return {
       ...classItem,
       totalStudents,
@@ -3081,6 +3100,7 @@ var getStudentForUpdate = async (id) => {
       classId: true,
       admissionTotalFees: true,
       previousInstituteName: true,
+      admissionDate: true,
       endingClass: true,
       result: true,
       testimonialNumber: true,
@@ -3147,12 +3167,23 @@ var getStudentForUpdate = async (id) => {
     guardianSignName,
     guardianSignType,
     guardianInfo,
+    previousInstituteName,
     user: { email },
     ...studenData
   } = student;
+  const {
+    nameOfLocalGuardian,
+    relationShipOfStudent,
+    GuardianMobileNumber,
+    ...guardianData
+  } = guardianInfo ?? {};
   const formattedStudent = {
     ...studenData,
-    ...guardianInfo,
+    ...guardianData,
+    guardianName: nameOfLocalGuardian,
+    guardianRelationship: relationShipOfStudent,
+    guardianMobile: GuardianMobileNumber,
+    previousInstitute: previousInstituteName,
     picture: {
       uri: student.picture,
       name: pictureName,
@@ -3597,6 +3628,83 @@ var updateStudent = async (id, payload, files) => {
     throw error;
   }
 };
+var promoteStudents = async (sourceClassId, targetClassId, studentIds) => {
+  if (sourceClassId === targetClassId) {
+    throw new AppError_default(
+      status14.BAD_REQUEST,
+      "Source and target classes cannot be the same"
+    );
+  }
+  const uniqueStudentIds = [...new Set(studentIds)];
+  if (uniqueStudentIds.length === 0) {
+    throw new AppError_default(
+      status14.BAD_REQUEST,
+      "Please select at least one student"
+    );
+  }
+  return prisma.$transaction(async (tx) => {
+    const classes = await tx.class.findMany({
+      where: {
+        id: {
+          in: [sourceClassId, targetClassId]
+        },
+        isDeleted: false
+      },
+      select: {
+        id: true,
+        name: true
+      }
+    });
+    if (classes.length !== 2) {
+      throw new AppError_default(
+        status14.NOT_FOUND,
+        "Source or target class not found"
+      );
+    }
+    const students = await tx.student.findMany({
+      where: {
+        id: {
+          in: uniqueStudentIds
+        },
+        classId: sourceClassId,
+        isdeleted: false
+      },
+      select: {
+        id: true
+      }
+    });
+    if (students.length !== uniqueStudentIds.length) {
+      throw new AppError_default(
+        status14.BAD_REQUEST,
+        "Some students do not belong to the source class or are inactive"
+      );
+    }
+    const result = await tx.student.updateMany({
+      where: {
+        id: {
+          in: uniqueStudentIds
+        },
+        classId: sourceClassId,
+        isdeleted: false
+      },
+      data: {
+        classId: targetClassId
+      }
+    });
+    if (result.count !== uniqueStudentIds.length) {
+      throw new AppError_default(
+        status14.CONFLICT,
+        "Some students could not be promoted. Please retry"
+      );
+    }
+    return {
+      message: "Students promoted successfully",
+      promotedCount: result.count,
+      sourceClass: classes.find((item) => item.id === sourceClassId).name,
+      targetClass: classes.find((item) => item.id === targetClassId).name
+    };
+  });
+};
 var deleteStudent = async (id) => {
   const student = await prisma.student.findUnique({
     where: { id },
@@ -3645,6 +3753,7 @@ var StudentService = {
   getStudentForUpdate,
   createStudent,
   updateStudent,
+  promoteStudents,
   deleteStudent
 };
 
@@ -3730,6 +3839,14 @@ var updateStudentSchema = z4.object({
     permanent: permanentAddressSchema.partial().optional()
   }).optional()
 });
+var promoteStudentsSchema = z4.object({
+  sourceClassId: z4.uuid("Invalid source class ID"),
+  targetClassId: z4.uuid("Invalid target class ID"),
+  studentIds: z4.array(z4.uuid("Invalid student ID")).min(1, "Select at least one student").refine(
+    (ids) => new Set(ids).size === ids.length,
+    "Duplicate student IDs are not allowed"
+  )
+});
 
 // src/app/modules/student/student.controller.ts
 var getAllStudent2 = async (req, res) => {
@@ -3792,6 +3909,22 @@ var updateStudent2 = async (req, res) => {
     data: student
   });
 };
+var promoteStudents2 = async (req, res) => {
+  console.log("\u{1F525} PROMOTE CONTROLLER HIT");
+  const validatedData = req.body;
+  console.log(validatedData);
+  const result = await StudentService.promoteStudents(
+    validatedData.sourceClassId,
+    validatedData.targetClassId,
+    validatedData.studentIds
+  );
+  sendResponse(res, {
+    httpStatusCode: status15.OK,
+    success: true,
+    message: result.message,
+    data: result
+  });
+};
 var deleteStudent2 = async (req, res) => {
   const { id } = req.params;
   const result = await StudentService.deleteStudent(id);
@@ -3806,6 +3939,7 @@ var studentController = {
   getStudentForUpdate: getStudentForUpdate2,
   createStudent: createStudent2,
   updateStudent: updateStudent2,
+  promoteStudents: promoteStudents2,
   deleteStudent: deleteStudent2
 };
 
@@ -3844,6 +3978,7 @@ router4.post(
   ]),
   studentController.createStudent
 );
+router4.patch("/promote", studentController.promoteStudents);
 router4.patch(
   "/:id",
   checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
