@@ -30,6 +30,47 @@ type StudentListItem = Prisma.StudentGetPayload<{
     };
 }>;
 
+// const getAllStudent = async (query: IQueryParams) => {
+//     const queryBuilder = new QueryBuilder<
+//         StudentListItem,
+//         Prisma.StudentWhereInput,
+//         Prisma.StudentInclude
+//     >(prisma.student, query, {
+//         searchableFields: studentSearchableFields,
+//         filterableFields: studentFilterableFields,
+//     });
+
+//     const result = await queryBuilder
+//         .search()
+//         .filter()
+//         .where({ isdeleted: false })
+//         .select({
+//             id: true,
+//             birthRegistrationNumber: true,
+//             fullName: true,
+//             gender: true,
+//             picture: true,
+//             user: {
+//                 select: {
+//                     email: true,
+//                 },
+//             },
+//         })
+//         .paginate()
+//         .sort()
+//         .execute();
+
+//     const data = result.data as unknown as StudentListItem[];
+
+//     return {
+//         ...result,
+//         data: data.map(({ user, ...student }) => ({
+//             ...student,
+//             email: user.email,
+//         })),
+//     };
+// };
+
 const getAllStudent = async (query: IQueryParams) => {
     const queryBuilder = new QueryBuilder<
         StudentListItem,
@@ -38,13 +79,7 @@ const getAllStudent = async (query: IQueryParams) => {
     >(prisma.student, query, {
         searchableFields: studentSearchableFields,
         filterableFields: studentFilterableFields,
-    });
-
-    const result = await queryBuilder
-        .search()
-        .filter()
-        .where({ isdeleted: false })
-        .select({
+        defaultSelect: {
             id: true,
             birthRegistrationNumber: true,
             fullName: true,
@@ -55,7 +90,14 @@ const getAllStudent = async (query: IQueryParams) => {
                     email: true,
                 },
             },
-        })
+        },
+    });
+
+    const result = await queryBuilder
+        .search()
+        .filter()
+        .where({ isdeleted: false })
+        .fields()
         .paginate()
         .sort()
         .execute();
@@ -64,11 +106,27 @@ const getAllStudent = async (query: IQueryParams) => {
 
     return {
         ...result,
-        data: data.map(({ user, ...student }) => ({
-            ...student,
-            email: user.email,
-        })),
+        data: data.map((student) => {
+            const { user, ...studentData } = student;
+
+            return {
+                ...studentData,
+                ...(user?.email && { email: user.email }),
+            };
+        }),
     };
+
+    // return {
+    //     ...result,
+    //     data: data.map((student) => {
+    //         const { user, ...studentData } = student;
+
+    //         return {
+    //             ...studentData,
+    //             ...(user?.email && { email: user.email }),
+    //         };
+    //     }),
+    // };
 };
 
 const getStudentForUpdate = async (id: string) => {
@@ -228,6 +286,8 @@ const getStudentForUpdate = async (id: string) => {
 
     return formattedStudent;
 };
+
+const getStudentsByClassId = async (query: any, classId: string) => {};
 
 const createStudent = async (
     payload: StudentPayload,

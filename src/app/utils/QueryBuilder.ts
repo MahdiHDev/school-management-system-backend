@@ -328,30 +328,96 @@ export class QueryBuilder<
         return this;
     }
 
+    // fields(): this {
+    //     const fieldsParam = this.queryParams.fields;
+    //     // /doctors?fields=id,name,user => select: { id: true, name: true, user: { select: { name: true } } }
+
+    //     //no nested field selection for now, only direct fields
+    //     if (fieldsParam && typeof fieldsParam === "string") {
+    //         const fieldsArray = fieldsParam
+    //             ?.split(",")
+    //             .map((field) => field.trim());
+    //         this.selectFields = {};
+
+    //         fieldsArray?.forEach((field) => {
+    //             if (this.selectFields) {
+    //                 this.selectFields[field] = true;
+    //             }
+    //         });
+
+    //         this.query.select = this.selectFields as Record<
+    //             string,
+    //             boolean | Record<string, unknown>
+    //         >;
+
+    //         delete this.query.include;
+    //     }
+    //     return this;
+    // }
     fields(): this {
         const fieldsParam = this.queryParams.fields;
-        // /doctors?fields=id,name,user => select: { id: true, name: true, user: { select: { name: true } } }
 
-        //no nested field selection for now, only direct fields
+        // User provided fields
         if (fieldsParam && typeof fieldsParam === "string") {
             const fieldsArray = fieldsParam
-                ?.split(",")
-                .map((field) => field.trim());
-            this.selectFields = {};
+                .split(",")
+                .map((field) => field.trim())
+                .filter(Boolean);
 
-            fieldsArray?.forEach((field) => {
-                if (this.selectFields) {
-                    this.selectFields[field] = true;
+            const select: Record<string, unknown> = {};
+
+            fieldsArray.forEach((field) => {
+                const parts = field.split(".");
+
+                // Direct field
+                if (parts.length === 1) {
+                    select[field] = true;
+                    return;
                 }
+
+                // Nested field
+                let current = select;
+
+                parts.forEach((part, index) => {
+                    if (index === parts.length - 1) {
+                        current[part] = true;
+                    } else {
+                        if (!current[part]) {
+                            current[part] = {
+                                select: {},
+                            };
+                        }
+
+                        current = (
+                            current[part] as {
+                                select: Record<string, unknown>;
+                            }
+                        ).select;
+                    }
+                });
             });
 
-            this.query.select = this.selectFields as Record<
+            this.selectFields = select as Record<string, boolean>;
+            this.query.select = select as Record<
+                string,
+                boolean | Record<string, unknown>
+            >;
+
+            delete this.query.include;
+
+            return this;
+        }
+
+        // No fields parameter → use default fields
+        if (this.config.defaultSelect) {
+            this.query.select = this.config.defaultSelect as Record<
                 string,
                 boolean | Record<string, unknown>
             >;
 
             delete this.query.include;
         }
+
         return this;
     }
 
