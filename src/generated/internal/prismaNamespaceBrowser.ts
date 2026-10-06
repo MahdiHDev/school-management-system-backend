@@ -61,7 +61,8 @@ export const ModelName = {
   Address: 'Address',
   Sequence: 'Sequence',
   GuardianInfo: 'GuardianInfo',
-  Student: 'Student'
+  Student: 'Student',
+  Subject: 'Subject'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -308,6 +309,20 @@ export const StudentScalarFieldEnum = {
 } as const
 
 export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
+
+
+export const SubjectScalarFieldEnum = {
+  id: 'id',
+  subjectName: 'subjectName',
+  maxMarks: 'maxMarks',
+  classId: 'classId',
+  isdeleted: 'isdeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
 
 
 export const SortOrder = {

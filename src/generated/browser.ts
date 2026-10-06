@@ -72,3 +72,8 @@ export type GuardianInfo = Prisma.GuardianInfoModel
  * 
  */
 export type Student = Prisma.StudentModel
+/**
+ * Model Subject
+ * 
+ */
+export type Subject = Prisma.SubjectModel

@@ -82,10 +82,7 @@ const updateStudent = async (req: Request, res: Response) => {
 };
 
 const promoteStudents = async (req: Request, res: Response) => {
-    console.log("🔥 PROMOTE CONTROLLER HIT");
-
     const validatedData = req.body;
-    console.log(validatedData);
 
     const result = await StudentService.promoteStudents(
         validatedData.sourceClassId,

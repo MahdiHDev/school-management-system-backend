@@ -240,6 +240,7 @@ model Class {
 
     employee Employee  @relation(fields: [classTeacher], references: [id], onDelete: Cascade)
     students Student[]
+    subjects Subject[]
 
     @@map("class")
 }
@@ -345,6 +346,19 @@ model Student {
     guardianInfo GuardianInfo?
     class        Class         @relation(fields: [classId], references: [id])
     user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    isdeleted Boolean   @default(false)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+}
+
+model Subject {
+    id          String @id @default(uuid())
+    subjectName String
+    maxMarks    Int
+    classId     String
+    class       Class  @relation(fields: [classId], references: [id], onDelete: Cascade)
 
     isdeleted Boolean   @default(false)
     createdAt DateTime  @default(now())
