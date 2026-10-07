@@ -30,12 +30,11 @@ export const updateSubjectSchema = z.object({
         .string({ error: "Class is required" })
         .trim()
         .min(1, { error: "Class cannot be empty" }),
+
     subjects: z
         .array(
             subjectItemSchema.extend({
-                id: z
-                    .string({ error: "Subject ID is required" })
-                    .uuid({ error: "Invalid subject ID" }),
+                id: z.string().optional(),
             }),
         )
         .min(1, { error: "At least one subject is required" }),

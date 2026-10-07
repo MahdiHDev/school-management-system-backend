@@ -1,9 +1,81 @@
+import { Prisma } from "../../../generated/client";
+import { IQueryParams } from "../../interfaces/query.interface";
 import { prisma } from "../../lib/prisma";
+import { QueryBuilder } from "../../utils/QueryBuilder";
 
 import {
     CreateSubjectPayload,
     UpdateSubjectPayload,
 } from "./subject.validation";
+
+type SubjectListItem = Prisma.ClassGetPayload<{
+    select: {
+        id: true;
+        name: true;
+        subjects: {
+            where: {
+                isdeleted: false;
+            };
+            select: {
+                id: true;
+                subjectName: true;
+                maxMarks: true;
+            };
+        };
+    };
+}>;
+
+const getAllSubjectsByClassId = async (query: IQueryParams) => {
+    const queryBuilder = new QueryBuilder<
+        SubjectListItem,
+        Prisma.ClassWhereInput,
+        Prisma.ClassInclude
+    >(prisma.class, query, {
+        searchableFields: [],
+        filterableFields: [],
+    });
+
+    const result = await queryBuilder
+        .where({
+            isDeleted: false,
+        })
+        .select({
+            id: true,
+            name: true,
+
+            subjects: {
+                where: {
+                    isdeleted: false,
+                },
+                select: {
+                    id: true,
+                    subjectName: true,
+                    maxMarks: true,
+                },
+            },
+        })
+        .paginate()
+        .sort()
+        .execute();
+
+    return {
+        ...result,
+        data: result.data.map((classItem) => ({
+            id: classItem.id,
+            className: classItem.name,
+            totalSubjects: classItem.subjects.length,
+            totalMarks: classItem.subjects.reduce(
+                (total, subject) => total + subject.maxMarks,
+                0,
+            ),
+            subjects: classItem.subjects.map((subject) => ({
+                id: subject.id,
+                subjectName: subject.subjectName,
+                marks: subject.maxMarks,
+            })),
+        })),
+    };
+};
 
 const createSubject = async (payload: CreateSubjectPayload) => {
     const { classId, subjects } = payload;
@@ -79,7 +151,6 @@ const updateSubjects = async (payload: UpdateSubjectPayload) => {
                     },
 
                     create: {
-                        id: subject.id,
                         classId,
                         subjectName: subject.subjectName,
                         maxMarks: subject.marks,
@@ -138,4 +209,5 @@ const updateSubjects = async (payload: UpdateSubjectPayload) => {
 export const SubjectService = {
     createSubject,
     updateSubjects,
+    getAllSubjectsByClassId,
 };

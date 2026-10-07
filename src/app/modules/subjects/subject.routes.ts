@@ -5,6 +5,12 @@ import { subjectController } from "./subject.controller";
 
 const router = Router();
 
+router.get(
+    "/",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    subjectController.getAllSubjectsByClassId,
+);
+
 router.post(
     "/",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
