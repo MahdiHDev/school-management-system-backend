@@ -3,6 +3,7 @@ import { Router } from "express";
 import { AuthRoutes } from "../modules/auth/auth.routes";
 import { ClassesRoutes } from "../modules/classes/classes.routes";
 import { EmployeeRoutes } from "../modules/employees/employees.routes";
+import { GeneralSettingsRoutes } from "../modules/general/general.routes";
 import { StudentRoutes } from "../modules/student/student.routes";
 import { subjectRoutes } from "../modules/subjects/subject.routes";
 
@@ -24,6 +25,10 @@ const moduleRoutes = [
     {
         path: "/student",
         route: StudentRoutes,
+    },
+    {
+        path: "/general",
+        route: GeneralSettingsRoutes,
     },
     {
         path: "/subjects",

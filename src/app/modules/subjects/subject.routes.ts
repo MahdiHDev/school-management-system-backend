@@ -23,4 +23,10 @@ router.patch(
     subjectController.updateSubject,
 );
 
+router.delete(
+    "/:classId",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    subjectController.deleteSubjects,
+);
+
 export const subjectRoutes: Router = router;

@@ -47,8 +47,22 @@ const updateSubject = async (req: Request, res: Response) => {
     });
 };
 
+const deleteSubjects = async (req: Request, res: Response) => {
+    const { classId } = req.params;
+
+    const result = await SubjectService.deleteSubjects(classId as string);
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Subjects deleted successfully",
+        data: result,
+    });
+};
+
 export const subjectController = {
     getAllSubjectsByClassId,
     createSubject,
     updateSubject,
+    deleteSubjects,
 };

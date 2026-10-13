@@ -38,6 +38,11 @@ const getAllSubjectsByClassId = async (query: IQueryParams) => {
     const result = await queryBuilder
         .where({
             isDeleted: false,
+            subjects: {
+                some: {
+                    isdeleted: false,
+                },
+            },
         })
         .select({
             id: true,
@@ -60,20 +65,22 @@ const getAllSubjectsByClassId = async (query: IQueryParams) => {
 
     return {
         ...result,
-        data: result.data.map((classItem) => ({
-            id: classItem.id,
-            className: classItem.name,
-            totalSubjects: classItem.subjects.length,
-            totalMarks: classItem.subjects.reduce(
-                (total, subject) => total + subject.maxMarks,
-                0,
-            ),
-            subjects: classItem.subjects.map((subject) => ({
-                id: subject.id,
-                subjectName: subject.subjectName,
-                marks: subject.maxMarks,
-            })),
-        })),
+        data: result.data
+            .map((classItem) => ({
+                id: classItem.id,
+                className: classItem.name,
+                totalSubjects: classItem.subjects.length,
+                totalMarks: classItem.subjects.reduce(
+                    (total, subject) => total + subject.maxMarks,
+                    0,
+                ),
+                subjects: classItem.subjects.map((subject) => ({
+                    id: subject.id,
+                    subjectName: subject.subjectName,
+                    marks: subject.maxMarks,
+                })),
+            }))
+            .filter((classItem) => classItem.totalSubjects > 0),
     };
 };
 
@@ -206,8 +213,25 @@ const updateSubjects = async (payload: UpdateSubjectPayload) => {
     });
 };
 
+const deleteSubjects = async (classId: string) => {
+    const result = await prisma.subject.updateMany({
+        where: {
+            classId,
+            isdeleted: false,
+        },
+        data: {
+            isdeleted: true,
+        },
+    });
+
+    return {
+        deletedCount: result.count,
+    };
+};
+
 export const SubjectService = {
     createSubject,
     updateSubjects,
     getAllSubjectsByClassId,
+    deleteSubjects,
 };

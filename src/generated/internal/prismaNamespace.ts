@@ -395,7 +395,8 @@ export const ModelName = {
   Sequence: 'Sequence',
   GuardianInfo: 'GuardianInfo',
   Student: 'Student',
-  Subject: 'Subject'
+  Subject: 'Subject',
+  GeneralSettings: 'GeneralSettings'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "admin" | "employee" | "class" | "address" | "sequence" | "guardianInfo" | "student" | "subject"
+    modelProps: "user" | "session" | "account" | "verification" | "admin" | "employee" | "class" | "address" | "sequence" | "guardianInfo" | "student" | "subject" | "generalSettings"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1303,6 +1304,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GeneralSettings: {
+      payload: Prisma.$GeneralSettingsPayload<ExtArgs>
+      fields: Prisma.GeneralSettingsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GeneralSettingsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeneralSettingsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GeneralSettingsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeneralSettingsPayload>
+        }
+        findFirst: {
+          args: Prisma.GeneralSettingsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeneralSettingsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GeneralSettingsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeneralSettingsPayload>
+        }
+        findMany: {
+          args: Prisma.GeneralSettingsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeneralSettingsPayload>[]
+        }
+        create: {
+          args: Prisma.GeneralSettingsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeneralSettingsPayload>
+        }
+        createMany: {
+          args: Prisma.GeneralSettingsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GeneralSettingsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeneralSettingsPayload>[]
+        }
+        delete: {
+          args: Prisma.GeneralSettingsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeneralSettingsPayload>
+        }
+        update: {
+          args: Prisma.GeneralSettingsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeneralSettingsPayload>
+        }
+        deleteMany: {
+          args: Prisma.GeneralSettingsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GeneralSettingsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GeneralSettingsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeneralSettingsPayload>[]
+        }
+        upsert: {
+          args: Prisma.GeneralSettingsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeneralSettingsPayload>
+        }
+        aggregate: {
+          args: Prisma.GeneralSettingsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGeneralSettings>
+        }
+        groupBy: {
+          args: Prisma.GeneralSettingsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GeneralSettingsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GeneralSettingsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GeneralSettingsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1584,6 +1659,29 @@ export const SubjectScalarFieldEnum = {
 } as const
 
 export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
+
+
+export const GeneralSettingsScalarFieldEnum = {
+  id: 'id',
+  schoolName: 'schoolName',
+  schoolPhone: 'schoolPhone',
+  schoolEmail: 'schoolEmail',
+  schoolWebsite: 'schoolWebsite',
+  schoolAddress: 'schoolAddress',
+  country: 'country',
+  instituteLogo: 'instituteLogo',
+  schoolLogoPublicId: 'schoolLogoPublicId',
+  schoolLogoName: 'schoolLogoName',
+  schoolLogoType: 'schoolLogoType',
+  instituteRulesRegulations: 'instituteRulesRegulations',
+  employeeRulesRegulations: 'employeeRulesRegulations',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type GeneralSettingsScalarFieldEnum = (typeof GeneralSettingsScalarFieldEnum)[keyof typeof GeneralSettingsScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1870,6 +1968,7 @@ export type GlobalOmitConfig = {
   guardianInfo?: Prisma.GuardianInfoOmit
   student?: Prisma.StudentOmit
   subject?: Prisma.SubjectOmit
+  generalSettings?: Prisma.GeneralSettingsOmit
 }
 
 /* Types for Logging */

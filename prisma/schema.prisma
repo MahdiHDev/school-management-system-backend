@@ -365,3 +365,26 @@ model Subject {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 }
+
+model GeneralSettings {
+    id            String  @id @default(uuid())
+    schoolName    String
+    schoolPhone   String
+    schoolEmail   String
+    schoolWebsite String?
+    schoolAddress String
+    country       String
+
+    instituteLogo      String?
+    schoolLogoPublicId String?
+    schoolLogoName     String?
+    schoolLogoType     String?
+
+    instituteRulesRegulations String?
+    employeeRulesRegulations  String?
+
+    isDeleted Boolean   @default(false)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+}
