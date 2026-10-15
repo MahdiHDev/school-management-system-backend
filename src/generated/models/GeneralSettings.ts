@@ -36,8 +36,6 @@ export type GeneralSettingsMinAggregateOutputType = {
   schoolLogoPublicId: string | null
   schoolLogoName: string | null
   schoolLogoType: string | null
-  instituteRulesRegulations: string | null
-  employeeRulesRegulations: string | null
   isDeleted: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -56,8 +54,6 @@ export type GeneralSettingsMaxAggregateOutputType = {
   schoolLogoPublicId: string | null
   schoolLogoName: string | null
   schoolLogoType: string | null
-  instituteRulesRegulations: string | null
-  employeeRulesRegulations: string | null
   isDeleted: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -76,8 +72,6 @@ export type GeneralSettingsCountAggregateOutputType = {
   schoolLogoPublicId: number
   schoolLogoName: number
   schoolLogoType: number
-  instituteRulesRegulations: number
-  employeeRulesRegulations: number
   isDeleted: number
   createdAt: number
   updatedAt: number
@@ -98,8 +92,6 @@ export type GeneralSettingsMinAggregateInputType = {
   schoolLogoPublicId?: true
   schoolLogoName?: true
   schoolLogoType?: true
-  instituteRulesRegulations?: true
-  employeeRulesRegulations?: true
   isDeleted?: true
   createdAt?: true
   updatedAt?: true
@@ -118,8 +110,6 @@ export type GeneralSettingsMaxAggregateInputType = {
   schoolLogoPublicId?: true
   schoolLogoName?: true
   schoolLogoType?: true
-  instituteRulesRegulations?: true
-  employeeRulesRegulations?: true
   isDeleted?: true
   createdAt?: true
   updatedAt?: true
@@ -138,8 +128,6 @@ export type GeneralSettingsCountAggregateInputType = {
   schoolLogoPublicId?: true
   schoolLogoName?: true
   schoolLogoType?: true
-  instituteRulesRegulations?: true
-  employeeRulesRegulations?: true
   isDeleted?: true
   createdAt?: true
   updatedAt?: true
@@ -231,8 +219,6 @@ export type GeneralSettingsGroupByOutputType = {
   schoolLogoPublicId: string | null
   schoolLogoName: string | null
   schoolLogoType: string | null
-  instituteRulesRegulations: string | null
-  employeeRulesRegulations: string | null
   isDeleted: boolean
   createdAt: Date
   updatedAt: Date
@@ -272,8 +258,6 @@ export type GeneralSettingsWhereInput = {
   schoolLogoPublicId?: Prisma.StringNullableFilter<"GeneralSettings"> | string | null
   schoolLogoName?: Prisma.StringNullableFilter<"GeneralSettings"> | string | null
   schoolLogoType?: Prisma.StringNullableFilter<"GeneralSettings"> | string | null
-  instituteRulesRegulations?: Prisma.StringNullableFilter<"GeneralSettings"> | string | null
-  employeeRulesRegulations?: Prisma.StringNullableFilter<"GeneralSettings"> | string | null
   isDeleted?: Prisma.BoolFilter<"GeneralSettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"GeneralSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GeneralSettings"> | Date | string
@@ -292,8 +276,6 @@ export type GeneralSettingsOrderByWithRelationInput = {
   schoolLogoPublicId?: Prisma.SortOrderInput | Prisma.SortOrder
   schoolLogoName?: Prisma.SortOrderInput | Prisma.SortOrder
   schoolLogoType?: Prisma.SortOrderInput | Prisma.SortOrder
-  instituteRulesRegulations?: Prisma.SortOrderInput | Prisma.SortOrder
-  employeeRulesRegulations?: Prisma.SortOrderInput | Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -315,8 +297,6 @@ export type GeneralSettingsWhereUniqueInput = Prisma.AtLeast<{
   schoolLogoPublicId?: Prisma.StringNullableFilter<"GeneralSettings"> | string | null
   schoolLogoName?: Prisma.StringNullableFilter<"GeneralSettings"> | string | null
   schoolLogoType?: Prisma.StringNullableFilter<"GeneralSettings"> | string | null
-  instituteRulesRegulations?: Prisma.StringNullableFilter<"GeneralSettings"> | string | null
-  employeeRulesRegulations?: Prisma.StringNullableFilter<"GeneralSettings"> | string | null
   isDeleted?: Prisma.BoolFilter<"GeneralSettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"GeneralSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GeneralSettings"> | Date | string
@@ -335,8 +315,6 @@ export type GeneralSettingsOrderByWithAggregationInput = {
   schoolLogoPublicId?: Prisma.SortOrderInput | Prisma.SortOrder
   schoolLogoName?: Prisma.SortOrderInput | Prisma.SortOrder
   schoolLogoType?: Prisma.SortOrderInput | Prisma.SortOrder
-  instituteRulesRegulations?: Prisma.SortOrderInput | Prisma.SortOrder
-  employeeRulesRegulations?: Prisma.SortOrderInput | Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -361,8 +339,6 @@ export type GeneralSettingsScalarWhereWithAggregatesInput = {
   schoolLogoPublicId?: Prisma.StringNullableWithAggregatesFilter<"GeneralSettings"> | string | null
   schoolLogoName?: Prisma.StringNullableWithAggregatesFilter<"GeneralSettings"> | string | null
   schoolLogoType?: Prisma.StringNullableWithAggregatesFilter<"GeneralSettings"> | string | null
-  instituteRulesRegulations?: Prisma.StringNullableWithAggregatesFilter<"GeneralSettings"> | string | null
-  employeeRulesRegulations?: Prisma.StringNullableWithAggregatesFilter<"GeneralSettings"> | string | null
   isDeleted?: Prisma.BoolWithAggregatesFilter<"GeneralSettings"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"GeneralSettings"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"GeneralSettings"> | Date | string
@@ -381,8 +357,6 @@ export type GeneralSettingsCreateInput = {
   schoolLogoPublicId?: string | null
   schoolLogoName?: string | null
   schoolLogoType?: string | null
-  instituteRulesRegulations?: string | null
-  employeeRulesRegulations?: string | null
   isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -401,8 +375,6 @@ export type GeneralSettingsUncheckedCreateInput = {
   schoolLogoPublicId?: string | null
   schoolLogoName?: string | null
   schoolLogoType?: string | null
-  instituteRulesRegulations?: string | null
-  employeeRulesRegulations?: string | null
   isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -421,8 +393,6 @@ export type GeneralSettingsUpdateInput = {
   schoolLogoPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schoolLogoName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schoolLogoType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instituteRulesRegulations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  employeeRulesRegulations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -441,8 +411,6 @@ export type GeneralSettingsUncheckedUpdateInput = {
   schoolLogoPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schoolLogoName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schoolLogoType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instituteRulesRegulations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  employeeRulesRegulations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -461,8 +429,6 @@ export type GeneralSettingsCreateManyInput = {
   schoolLogoPublicId?: string | null
   schoolLogoName?: string | null
   schoolLogoType?: string | null
-  instituteRulesRegulations?: string | null
-  employeeRulesRegulations?: string | null
   isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -481,8 +447,6 @@ export type GeneralSettingsUpdateManyMutationInput = {
   schoolLogoPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schoolLogoName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schoolLogoType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instituteRulesRegulations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  employeeRulesRegulations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -501,8 +465,6 @@ export type GeneralSettingsUncheckedUpdateManyInput = {
   schoolLogoPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schoolLogoName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   schoolLogoType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  instituteRulesRegulations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  employeeRulesRegulations?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -521,8 +483,6 @@ export type GeneralSettingsCountOrderByAggregateInput = {
   schoolLogoPublicId?: Prisma.SortOrder
   schoolLogoName?: Prisma.SortOrder
   schoolLogoType?: Prisma.SortOrder
-  instituteRulesRegulations?: Prisma.SortOrder
-  employeeRulesRegulations?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -541,8 +501,6 @@ export type GeneralSettingsMaxOrderByAggregateInput = {
   schoolLogoPublicId?: Prisma.SortOrder
   schoolLogoName?: Prisma.SortOrder
   schoolLogoType?: Prisma.SortOrder
-  instituteRulesRegulations?: Prisma.SortOrder
-  employeeRulesRegulations?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -561,8 +519,6 @@ export type GeneralSettingsMinOrderByAggregateInput = {
   schoolLogoPublicId?: Prisma.SortOrder
   schoolLogoName?: Prisma.SortOrder
   schoolLogoType?: Prisma.SortOrder
-  instituteRulesRegulations?: Prisma.SortOrder
-  employeeRulesRegulations?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -583,8 +539,6 @@ export type GeneralSettingsSelect<ExtArgs extends runtime.Types.Extensions.Inter
   schoolLogoPublicId?: boolean
   schoolLogoName?: boolean
   schoolLogoType?: boolean
-  instituteRulesRegulations?: boolean
-  employeeRulesRegulations?: boolean
   isDeleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -603,8 +557,6 @@ export type GeneralSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   schoolLogoPublicId?: boolean
   schoolLogoName?: boolean
   schoolLogoType?: boolean
-  instituteRulesRegulations?: boolean
-  employeeRulesRegulations?: boolean
   isDeleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -623,8 +575,6 @@ export type GeneralSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   schoolLogoPublicId?: boolean
   schoolLogoName?: boolean
   schoolLogoType?: boolean
-  instituteRulesRegulations?: boolean
-  employeeRulesRegulations?: boolean
   isDeleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -643,15 +593,13 @@ export type GeneralSettingsSelectScalar = {
   schoolLogoPublicId?: boolean
   schoolLogoName?: boolean
   schoolLogoType?: boolean
-  instituteRulesRegulations?: boolean
-  employeeRulesRegulations?: boolean
   isDeleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type GeneralSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolName" | "schoolPhone" | "schoolEmail" | "schoolWebsite" | "schoolAddress" | "country" | "instituteLogo" | "schoolLogoPublicId" | "schoolLogoName" | "schoolLogoType" | "instituteRulesRegulations" | "employeeRulesRegulations" | "isDeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["generalSettings"]>
+export type GeneralSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolName" | "schoolPhone" | "schoolEmail" | "schoolWebsite" | "schoolAddress" | "country" | "instituteLogo" | "schoolLogoPublicId" | "schoolLogoName" | "schoolLogoType" | "isDeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["generalSettings"]>
 
 export type $GeneralSettingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "GeneralSettings"
@@ -668,8 +616,6 @@ export type $GeneralSettingsPayload<ExtArgs extends runtime.Types.Extensions.Int
     schoolLogoPublicId: string | null
     schoolLogoName: string | null
     schoolLogoType: string | null
-    instituteRulesRegulations: string | null
-    employeeRulesRegulations: string | null
     isDeleted: boolean
     createdAt: Date
     updatedAt: Date
@@ -1108,8 +1054,6 @@ export interface GeneralSettingsFieldRefs {
   readonly schoolLogoPublicId: Prisma.FieldRef<"GeneralSettings", 'String'>
   readonly schoolLogoName: Prisma.FieldRef<"GeneralSettings", 'String'>
   readonly schoolLogoType: Prisma.FieldRef<"GeneralSettings", 'String'>
-  readonly instituteRulesRegulations: Prisma.FieldRef<"GeneralSettings", 'String'>
-  readonly employeeRulesRegulations: Prisma.FieldRef<"GeneralSettings", 'String'>
   readonly isDeleted: Prisma.FieldRef<"GeneralSettings", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"GeneralSettings", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"GeneralSettings", 'DateTime'>

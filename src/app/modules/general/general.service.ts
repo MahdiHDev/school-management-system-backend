@@ -241,14 +241,59 @@ const updateGeneralSetting = async (
 };
 
 const updateStudentRulesRegulations = async (payload: {
-    rulesAndRegulations: string;
-}) => {};
-const updateSEmployeeRulesRegulations = async (payload: {
-    rulesAndRegulations: string;
-}) => {};
+    studentRules: string;
+}) => {
+    if (!payload.studentRules || payload.studentRules.trim() === "") {
+        throw new AppError(400, "Students rules & regulations are required");
+    }
+
+    const existingRules = await prisma.rulesRegulations.findFirst({
+        where: { type: "STUDENT" },
+    });
+
+    if (existingRules) {
+        return await prisma.rulesRegulations.update({
+            where: { id: existingRules.id },
+            data: { content: payload.studentRules },
+        });
+    } else {
+        return await prisma.rulesRegulations.create({
+            data: {
+                content: payload.studentRules,
+                type: "STUDENT",
+            },
+        });
+    }
+};
+
+const updateEmployeeRulesRegulations = async (payload: {
+    employeeRules: string;
+}) => {
+    if (!payload.employeeRules || payload.employeeRules.trim() === "") {
+        throw new AppError(400, "Employees rules & regulations are required");
+    }
+
+    const existingRules = await prisma.rulesRegulations.findFirst({
+        where: { type: "EMPLOYEE" },
+    });
+
+    if (existingRules) {
+        return await prisma.rulesRegulations.update({
+            where: { id: existingRules.id },
+            data: { content: payload.employeeRules },
+        });
+    } else {
+        return await prisma.rulesRegulations.create({
+            data: {
+                content: payload.employeeRules,
+                type: "EMPLOYEE",
+            },
+        });
+    }
+};
 
 export const GeneralService = {
     updateGeneralSetting,
     updateStudentRulesRegulations,
-    updateSEmployeeRulesRegulations,
+    updateEmployeeRulesRegulations,
 };

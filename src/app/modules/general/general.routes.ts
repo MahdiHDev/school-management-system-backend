@@ -23,6 +23,18 @@ router.patch(
 );
 
 router.patch(
+    "/student-rules-regulations",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    GeneralController.updateStudentRulesRegulations,
+);
+
+router.patch(
+    "/employee-rules-regulations",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    GeneralController.updateEmployeeRulesRegulations,
+);
+
+router.patch(
     "/:id",
     ...generalSettingsMiddleware,
     GeneralController.updateGeneralSetting,

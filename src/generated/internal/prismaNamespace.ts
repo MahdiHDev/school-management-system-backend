@@ -396,7 +396,8 @@ export const ModelName = {
   GuardianInfo: 'GuardianInfo',
   Student: 'Student',
   Subject: 'Subject',
-  GeneralSettings: 'GeneralSettings'
+  GeneralSettings: 'GeneralSettings',
+  RulesRegulations: 'RulesRegulations'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "admin" | "employee" | "class" | "address" | "sequence" | "guardianInfo" | "student" | "subject" | "generalSettings"
+    modelProps: "user" | "session" | "account" | "verification" | "admin" | "employee" | "class" | "address" | "sequence" | "guardianInfo" | "student" | "subject" | "generalSettings" | "rulesRegulations"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1378,6 +1379,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RulesRegulations: {
+      payload: Prisma.$RulesRegulationsPayload<ExtArgs>
+      fields: Prisma.RulesRegulationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RulesRegulationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RulesRegulationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RulesRegulationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RulesRegulationsPayload>
+        }
+        findFirst: {
+          args: Prisma.RulesRegulationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RulesRegulationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RulesRegulationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RulesRegulationsPayload>
+        }
+        findMany: {
+          args: Prisma.RulesRegulationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RulesRegulationsPayload>[]
+        }
+        create: {
+          args: Prisma.RulesRegulationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RulesRegulationsPayload>
+        }
+        createMany: {
+          args: Prisma.RulesRegulationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RulesRegulationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RulesRegulationsPayload>[]
+        }
+        delete: {
+          args: Prisma.RulesRegulationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RulesRegulationsPayload>
+        }
+        update: {
+          args: Prisma.RulesRegulationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RulesRegulationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.RulesRegulationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RulesRegulationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RulesRegulationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RulesRegulationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.RulesRegulationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RulesRegulationsPayload>
+        }
+        aggregate: {
+          args: Prisma.RulesRegulationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRulesRegulations>
+        }
+        groupBy: {
+          args: Prisma.RulesRegulationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RulesRegulationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RulesRegulationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RulesRegulationsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1673,8 +1748,6 @@ export const GeneralSettingsScalarFieldEnum = {
   schoolLogoPublicId: 'schoolLogoPublicId',
   schoolLogoName: 'schoolLogoName',
   schoolLogoType: 'schoolLogoType',
-  instituteRulesRegulations: 'instituteRulesRegulations',
-  employeeRulesRegulations: 'employeeRulesRegulations',
   isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -1682,6 +1755,18 @@ export const GeneralSettingsScalarFieldEnum = {
 } as const
 
 export type GeneralSettingsScalarFieldEnum = (typeof GeneralSettingsScalarFieldEnum)[keyof typeof GeneralSettingsScalarFieldEnum]
+
+
+export const RulesRegulationsScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  type: 'type',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type RulesRegulationsScalarFieldEnum = (typeof RulesRegulationsScalarFieldEnum)[keyof typeof RulesRegulationsScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1846,6 +1931,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
+
+/**
+ * Reference to a field of type 'RegulationType'
+ */
+export type EnumRegulationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RegulationType'>
+    
+
+
+/**
+ * Reference to a field of type 'RegulationType[]'
+ */
+export type ListEnumRegulationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RegulationType[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -1969,6 +2068,7 @@ export type GlobalOmitConfig = {
   student?: Prisma.StudentOmit
   subject?: Prisma.SubjectOmit
   generalSettings?: Prisma.GeneralSettingsOmit
+  rulesRegulations?: Prisma.RulesRegulationsOmit
 }
 
 /* Types for Logging */

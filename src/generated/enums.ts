@@ -87,3 +87,17 @@ export const UserStatus = {
 } as const
 
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
+export const RegulationType = {
+  STUDENT: 'STUDENT',
+  EMPLOYEE: 'EMPLOYEE',
+  ATTENDANCE: 'ATTENDANCE',
+  EXAMINATION: 'EXAMINATION',
+  LEAVE: 'LEAVE',
+  CODE_OF_CONDUCT: 'CODE_OF_CONDUCT',
+  UNIFORM: 'UNIFORM',
+  OTHER: 'OTHER'
+} as const
+
+export type RegulationType = (typeof RegulationType)[keyof typeof RegulationType]

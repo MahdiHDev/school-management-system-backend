@@ -82,3 +82,8 @@ export type Subject = Prisma.SubjectModel
  * 
  */
 export type GeneralSettings = Prisma.GeneralSettingsModel
+/**
+ * Model RulesRegulations
+ * 
+ */
+export type RulesRegulations = Prisma.RulesRegulationsModel

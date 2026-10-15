@@ -75,6 +75,17 @@ enum UserStatus {
     DELETED
 }
 
+enum RegulationType {
+    STUDENT
+    EMPLOYEE
+    ATTENDANCE
+    EXAMINATION
+    LEAVE
+    CODE_OF_CONDUCT
+    UNIFORM
+    OTHER
+}
+
 model User {
     id                 String     @id
     name               String
@@ -380,11 +391,21 @@ model GeneralSettings {
     schoolLogoName     String?
     schoolLogoType     String?
 
-    instituteRulesRegulations String?
-    employeeRulesRegulations  String?
-
     isDeleted Boolean   @default(false)
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
+}
+
+model RulesRegulations {
+    id      String         @id @default(uuid())
+    content String         @db.Text
+    type    RegulationType
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    @@index([type])
+    @@map("rules_regulations")
 }

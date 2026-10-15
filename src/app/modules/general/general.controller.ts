@@ -29,6 +29,38 @@ const updateGeneralSetting = async (req: Request, res: Response) => {
     });
 };
 
+const updateStudentRulesRegulations = async (req: Request, res: Response) => {
+    const { studentRules } = req.body;
+
+    const result = await GeneralService.updateStudentRulesRegulations({
+        studentRules,
+    });
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Student Rules & Regulations Updated Successfully",
+        data: result,
+    });
+};
+
+const updateEmployeeRulesRegulations = async (req: Request, res: Response) => {
+    const { employeeRules } = req.body;
+
+    const result = await GeneralService.updateEmployeeRulesRegulations({
+        employeeRules,
+    });
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Employee Rules & Regulations Updated Successfully",
+        data: result,
+    });
+};
+
 export const GeneralController = {
     updateGeneralSetting,
+    updateStudentRulesRegulations,
+    updateEmployeeRulesRegulations,
 };

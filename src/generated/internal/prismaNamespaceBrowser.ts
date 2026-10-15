@@ -63,7 +63,8 @@ export const ModelName = {
   GuardianInfo: 'GuardianInfo',
   Student: 'Student',
   Subject: 'Subject',
-  GeneralSettings: 'GeneralSettings'
+  GeneralSettings: 'GeneralSettings',
+  RulesRegulations: 'RulesRegulations'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -338,8 +339,6 @@ export const GeneralSettingsScalarFieldEnum = {
   schoolLogoPublicId: 'schoolLogoPublicId',
   schoolLogoName: 'schoolLogoName',
   schoolLogoType: 'schoolLogoType',
-  instituteRulesRegulations: 'instituteRulesRegulations',
-  employeeRulesRegulations: 'employeeRulesRegulations',
   isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -347,6 +346,18 @@ export const GeneralSettingsScalarFieldEnum = {
 } as const
 
 export type GeneralSettingsScalarFieldEnum = (typeof GeneralSettingsScalarFieldEnum)[keyof typeof GeneralSettingsScalarFieldEnum]
+
+
+export const RulesRegulationsScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  type: 'type',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type RulesRegulationsScalarFieldEnum = (typeof RulesRegulationsScalarFieldEnum)[keyof typeof RulesRegulationsScalarFieldEnum]
 
 
 export const SortOrder = {
