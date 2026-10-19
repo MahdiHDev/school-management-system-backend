@@ -64,7 +64,10 @@ export const ModelName = {
   Student: 'Student',
   Subject: 'Subject',
   GeneralSettings: 'GeneralSettings',
-  RulesRegulations: 'RulesRegulations'
+  RulesRegulations: 'RulesRegulations',
+  GradingConfiguration: 'GradingConfiguration',
+  GradeScale: 'GradeScale',
+  FailCriteria: 'FailCriteria'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -358,6 +361,44 @@ export const RulesRegulationsScalarFieldEnum = {
 } as const
 
 export type RulesRegulationsScalarFieldEnum = (typeof RulesRegulationsScalarFieldEnum)[keyof typeof RulesRegulationsScalarFieldEnum]
+
+
+export const GradingConfigurationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GradingConfigurationScalarFieldEnum = (typeof GradingConfigurationScalarFieldEnum)[keyof typeof GradingConfigurationScalarFieldEnum]
+
+
+export const GradeScaleScalarFieldEnum = {
+  id: 'id',
+  grade: 'grade',
+  minMarks: 'minMarks',
+  maxMarks: 'maxMarks',
+  status: 'status',
+  configurationId: 'configurationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GradeScaleScalarFieldEnum = (typeof GradeScaleScalarFieldEnum)[keyof typeof GradeScaleScalarFieldEnum]
+
+
+export const FailCriteriaScalarFieldEnum = {
+  id: 'id',
+  overallPercentage: 'overallPercentage',
+  subjectPercentage: 'subjectPercentage',
+  minFailedSubjects: 'minFailedSubjects',
+  configurationId: 'configurationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FailCriteriaScalarFieldEnum = (typeof FailCriteriaScalarFieldEnum)[keyof typeof FailCriteriaScalarFieldEnum]
 
 
 export const SortOrder = {

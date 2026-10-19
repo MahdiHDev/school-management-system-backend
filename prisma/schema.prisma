@@ -86,6 +86,11 @@ enum RegulationType {
     OTHER
 }
 
+enum GradeStatus {
+    PASS
+    FAIL
+}
+
 model User {
     id                 String     @id
     name               String
@@ -408,4 +413,45 @@ model RulesRegulations {
 
     @@index([type])
     @@map("rules_regulations")
+}
+
+model GradingConfiguration {
+    id        String   @id @default(uuid())
+    name      String   @default("Default Grading")
+    isActive  Boolean  @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    grades       GradeScale[]
+    failCriteria FailCriteria?
+}
+
+model GradeScale {
+    id       String      @id @default(uuid())
+    grade    String
+    minMarks Int
+    maxMarks Int
+    status   GradeStatus @default(PASS)
+
+    configurationId String
+    configuration   GradingConfiguration @relation(fields: [configurationId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([configurationId, grade])
+    @@index([configurationId])
+}
+
+model FailCriteria {
+    id                String @id @default(uuid())
+    overallPercentage Float
+    subjectPercentage Float
+    minFailedSubjects Int
+
+    configurationId String               @unique
+    configuration   GradingConfiguration @relation(fields: [configurationId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }

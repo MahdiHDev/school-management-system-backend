@@ -87,3 +87,18 @@ export type GeneralSettings = Prisma.GeneralSettingsModel
  * 
  */
 export type RulesRegulations = Prisma.RulesRegulationsModel
+/**
+ * Model GradingConfiguration
+ * 
+ */
+export type GradingConfiguration = Prisma.GradingConfigurationModel
+/**
+ * Model GradeScale
+ * 
+ */
+export type GradeScale = Prisma.GradeScaleModel
+/**
+ * Model FailCriteria
+ * 
+ */
+export type FailCriteria = Prisma.FailCriteriaModel

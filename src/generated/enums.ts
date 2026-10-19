@@ -101,3 +101,11 @@ export const RegulationType = {
 } as const
 
 export type RegulationType = (typeof RegulationType)[keyof typeof RegulationType]
+
+
+export const GradeStatus = {
+  PASS: 'PASS',
+  FAIL: 'FAIL'
+} as const
+
+export type GradeStatus = (typeof GradeStatus)[keyof typeof GradeStatus]

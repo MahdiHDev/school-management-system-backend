@@ -4,6 +4,7 @@ import { AuthRoutes } from "../modules/auth/auth.routes";
 import { ClassesRoutes } from "../modules/classes/classes.routes";
 import { EmployeeRoutes } from "../modules/employees/employees.routes";
 import { GeneralSettingsRoutes } from "../modules/general/general.routes";
+import { GradeConfigurationRoutes } from "../modules/grades/grades.routes";
 import { StudentRoutes } from "../modules/student/student.routes";
 import { subjectRoutes } from "../modules/subjects/subject.routes";
 
@@ -27,8 +28,12 @@ const moduleRoutes = [
         route: StudentRoutes,
     },
     {
-        path: "/general",
+        path: "/settings",
         route: GeneralSettingsRoutes,
+    },
+    {
+        path: "/settings/grades",
+        route: GradeConfigurationRoutes,
     },
     {
         path: "/subjects",

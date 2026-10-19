@@ -397,7 +397,10 @@ export const ModelName = {
   Student: 'Student',
   Subject: 'Subject',
   GeneralSettings: 'GeneralSettings',
-  RulesRegulations: 'RulesRegulations'
+  RulesRegulations: 'RulesRegulations',
+  GradingConfiguration: 'GradingConfiguration',
+  GradeScale: 'GradeScale',
+  FailCriteria: 'FailCriteria'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -413,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "admin" | "employee" | "class" | "address" | "sequence" | "guardianInfo" | "student" | "subject" | "generalSettings" | "rulesRegulations"
+    modelProps: "user" | "session" | "account" | "verification" | "admin" | "employee" | "class" | "address" | "sequence" | "guardianInfo" | "student" | "subject" | "generalSettings" | "rulesRegulations" | "gradingConfiguration" | "gradeScale" | "failCriteria"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1453,6 +1456,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GradingConfiguration: {
+      payload: Prisma.$GradingConfigurationPayload<ExtArgs>
+      fields: Prisma.GradingConfigurationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GradingConfigurationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradingConfigurationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GradingConfigurationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradingConfigurationPayload>
+        }
+        findFirst: {
+          args: Prisma.GradingConfigurationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradingConfigurationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GradingConfigurationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradingConfigurationPayload>
+        }
+        findMany: {
+          args: Prisma.GradingConfigurationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradingConfigurationPayload>[]
+        }
+        create: {
+          args: Prisma.GradingConfigurationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradingConfigurationPayload>
+        }
+        createMany: {
+          args: Prisma.GradingConfigurationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GradingConfigurationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradingConfigurationPayload>[]
+        }
+        delete: {
+          args: Prisma.GradingConfigurationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradingConfigurationPayload>
+        }
+        update: {
+          args: Prisma.GradingConfigurationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradingConfigurationPayload>
+        }
+        deleteMany: {
+          args: Prisma.GradingConfigurationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GradingConfigurationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GradingConfigurationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradingConfigurationPayload>[]
+        }
+        upsert: {
+          args: Prisma.GradingConfigurationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradingConfigurationPayload>
+        }
+        aggregate: {
+          args: Prisma.GradingConfigurationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGradingConfiguration>
+        }
+        groupBy: {
+          args: Prisma.GradingConfigurationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GradingConfigurationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GradingConfigurationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GradingConfigurationCountAggregateOutputType> | number
+        }
+      }
+    }
+    GradeScale: {
+      payload: Prisma.$GradeScalePayload<ExtArgs>
+      fields: Prisma.GradeScaleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GradeScaleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradeScalePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GradeScaleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradeScalePayload>
+        }
+        findFirst: {
+          args: Prisma.GradeScaleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradeScalePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GradeScaleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradeScalePayload>
+        }
+        findMany: {
+          args: Prisma.GradeScaleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradeScalePayload>[]
+        }
+        create: {
+          args: Prisma.GradeScaleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradeScalePayload>
+        }
+        createMany: {
+          args: Prisma.GradeScaleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GradeScaleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradeScalePayload>[]
+        }
+        delete: {
+          args: Prisma.GradeScaleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradeScalePayload>
+        }
+        update: {
+          args: Prisma.GradeScaleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradeScalePayload>
+        }
+        deleteMany: {
+          args: Prisma.GradeScaleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GradeScaleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GradeScaleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradeScalePayload>[]
+        }
+        upsert: {
+          args: Prisma.GradeScaleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GradeScalePayload>
+        }
+        aggregate: {
+          args: Prisma.GradeScaleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGradeScale>
+        }
+        groupBy: {
+          args: Prisma.GradeScaleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GradeScaleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GradeScaleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GradeScaleCountAggregateOutputType> | number
+        }
+      }
+    }
+    FailCriteria: {
+      payload: Prisma.$FailCriteriaPayload<ExtArgs>
+      fields: Prisma.FailCriteriaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FailCriteriaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailCriteriaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FailCriteriaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailCriteriaPayload>
+        }
+        findFirst: {
+          args: Prisma.FailCriteriaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailCriteriaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FailCriteriaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailCriteriaPayload>
+        }
+        findMany: {
+          args: Prisma.FailCriteriaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailCriteriaPayload>[]
+        }
+        create: {
+          args: Prisma.FailCriteriaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailCriteriaPayload>
+        }
+        createMany: {
+          args: Prisma.FailCriteriaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FailCriteriaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailCriteriaPayload>[]
+        }
+        delete: {
+          args: Prisma.FailCriteriaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailCriteriaPayload>
+        }
+        update: {
+          args: Prisma.FailCriteriaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailCriteriaPayload>
+        }
+        deleteMany: {
+          args: Prisma.FailCriteriaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FailCriteriaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FailCriteriaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailCriteriaPayload>[]
+        }
+        upsert: {
+          args: Prisma.FailCriteriaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FailCriteriaPayload>
+        }
+        aggregate: {
+          args: Prisma.FailCriteriaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFailCriteria>
+        }
+        groupBy: {
+          args: Prisma.FailCriteriaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FailCriteriaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FailCriteriaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FailCriteriaCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1769,6 +1994,44 @@ export const RulesRegulationsScalarFieldEnum = {
 export type RulesRegulationsScalarFieldEnum = (typeof RulesRegulationsScalarFieldEnum)[keyof typeof RulesRegulationsScalarFieldEnum]
 
 
+export const GradingConfigurationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GradingConfigurationScalarFieldEnum = (typeof GradingConfigurationScalarFieldEnum)[keyof typeof GradingConfigurationScalarFieldEnum]
+
+
+export const GradeScaleScalarFieldEnum = {
+  id: 'id',
+  grade: 'grade',
+  minMarks: 'minMarks',
+  maxMarks: 'maxMarks',
+  status: 'status',
+  configurationId: 'configurationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GradeScaleScalarFieldEnum = (typeof GradeScaleScalarFieldEnum)[keyof typeof GradeScaleScalarFieldEnum]
+
+
+export const FailCriteriaScalarFieldEnum = {
+  id: 'id',
+  overallPercentage: 'overallPercentage',
+  subjectPercentage: 'subjectPercentage',
+  minFailedSubjects: 'minFailedSubjects',
+  configurationId: 'configurationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FailCriteriaScalarFieldEnum = (typeof FailCriteriaScalarFieldEnum)[keyof typeof FailCriteriaScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1945,6 +2208,20 @@ export type EnumRegulationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 export type ListEnumRegulationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RegulationType[]'>
     
 
+
+/**
+ * Reference to a field of type 'GradeStatus'
+ */
+export type EnumGradeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GradeStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'GradeStatus[]'
+ */
+export type ListEnumGradeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GradeStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2069,6 +2346,9 @@ export type GlobalOmitConfig = {
   subject?: Prisma.SubjectOmit
   generalSettings?: Prisma.GeneralSettingsOmit
   rulesRegulations?: Prisma.RulesRegulationsOmit
+  gradingConfiguration?: Prisma.GradingConfigurationOmit
+  gradeScale?: Prisma.GradeScaleOmit
+  failCriteria?: Prisma.FailCriteriaOmit
 }
 
 /* Types for Logging */
