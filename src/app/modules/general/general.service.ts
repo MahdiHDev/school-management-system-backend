@@ -3,7 +3,7 @@ import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
 import { CloudinaryFolders } from "../../config/cloudinary.folders";
 import AppError from "../../errorHelpers/AppError";
 import { prisma } from "../../lib/prisma";
-import { GeneralSettingPayload } from "./general.valdation";
+import { bankInfoPayload, GeneralSettingPayload } from "./general.valdation";
 
 // const updateGeneralSetting = async (
 //     payload: GeneralSettingPayload,
@@ -292,8 +292,55 @@ const updateEmployeeRulesRegulations = async (payload: {
     }
 };
 
+const createbankInfo = async (
+    payload: bankInfoPayload,
+    files: Record<string, UploadFile[]>,
+) => {
+    const { name, address, accountNumber, instruction } = payload;
+    const bankLogoFile = files.instituteLogo?.[0];
+
+    if (!bankLogoFile) {
+        throw new AppError(400, "Missing Authority Sign Image");
+    }
+
+    // Upload a new logo only when provided
+    const instituteLogo = bankLogoFile
+        ? await CloudinaryService.upload(bankLogoFile, {
+              folder: CloudinaryFolders.general.bankLogo,
+          })
+        : null;
+
+    const uploadedPublicIds: string[] = instituteLogo?.public_id
+        ? [instituteLogo.public_id]
+        : [];
+
+    try {
+        const result = prisma.bankInfo.create({
+            data: {
+                bankLogo: "hello",
+                nameOfBank: name,
+                branchAddress: address,
+                accountNumber: accountNumber,
+                ...(instruction && { instruction }),
+            },
+        });
+
+        return result;
+    } catch (error) {
+        // Roll back the newly uploaded image if the operation fails
+        await Promise.all(
+            uploadedPublicIds.map((publicId) =>
+                CloudinaryService.delete(publicId),
+            ),
+        );
+
+        throw error;
+    }
+};
+
 export const GeneralService = {
     updateGeneralSetting,
     updateStudentRulesRegulations,
     updateEmployeeRulesRegulations,
+    createbankInfo,
 };

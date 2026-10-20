@@ -17,6 +17,7 @@ export const CloudinaryFolders = {
     },
     general: {
         instituteLogo: `${ROOT}/general/instituteLogo`,
+        bankLogo: `${ROOT}/general/bankLogo`,
         authoritySign: `${ROOT}/general/authoritySign`,
     },
     // add more as your project grows

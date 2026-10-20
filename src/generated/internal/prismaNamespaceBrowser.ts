@@ -51,6 +51,12 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  GeneralSettings: 'GeneralSettings',
+  RulesRegulations: 'RulesRegulations',
+  GradingConfiguration: 'GradingConfiguration',
+  GradeScale: 'GradeScale',
+  FailCriteria: 'FailCriteria',
+  BankInfo: 'BankInfo',
   User: 'User',
   Session: 'Session',
   Account: 'Account',
@@ -62,12 +68,7 @@ export const ModelName = {
   Sequence: 'Sequence',
   GuardianInfo: 'GuardianInfo',
   Student: 'Student',
-  Subject: 'Subject',
-  GeneralSettings: 'GeneralSettings',
-  RulesRegulations: 'RulesRegulations',
-  GradingConfiguration: 'GradingConfiguration',
-  GradeScale: 'GradeScale',
-  FailCriteria: 'FailCriteria'
+  Subject: 'Subject'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -84,6 +85,91 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const GeneralSettingsScalarFieldEnum = {
+  id: 'id',
+  schoolName: 'schoolName',
+  schoolPhone: 'schoolPhone',
+  schoolEmail: 'schoolEmail',
+  schoolWebsite: 'schoolWebsite',
+  schoolAddress: 'schoolAddress',
+  country: 'country',
+  instituteLogo: 'instituteLogo',
+  schoolLogoPublicId: 'schoolLogoPublicId',
+  schoolLogoName: 'schoolLogoName',
+  schoolLogoType: 'schoolLogoType',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type GeneralSettingsScalarFieldEnum = (typeof GeneralSettingsScalarFieldEnum)[keyof typeof GeneralSettingsScalarFieldEnum]
+
+
+export const RulesRegulationsScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  type: 'type',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type RulesRegulationsScalarFieldEnum = (typeof RulesRegulationsScalarFieldEnum)[keyof typeof RulesRegulationsScalarFieldEnum]
+
+
+export const GradingConfigurationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GradingConfigurationScalarFieldEnum = (typeof GradingConfigurationScalarFieldEnum)[keyof typeof GradingConfigurationScalarFieldEnum]
+
+
+export const GradeScaleScalarFieldEnum = {
+  id: 'id',
+  grade: 'grade',
+  minMarks: 'minMarks',
+  maxMarks: 'maxMarks',
+  status: 'status',
+  configurationId: 'configurationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GradeScaleScalarFieldEnum = (typeof GradeScaleScalarFieldEnum)[keyof typeof GradeScaleScalarFieldEnum]
+
+
+export const FailCriteriaScalarFieldEnum = {
+  id: 'id',
+  overallPercentage: 'overallPercentage',
+  subjectPercentage: 'subjectPercentage',
+  minFailedSubjects: 'minFailedSubjects',
+  configurationId: 'configurationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FailCriteriaScalarFieldEnum = (typeof FailCriteriaScalarFieldEnum)[keyof typeof FailCriteriaScalarFieldEnum]
+
+
+export const BankInfoScalarFieldEnum = {
+  id: 'id',
+  bankLogo: 'bankLogo',
+  nameOfBank: 'nameOfBank',
+  branchAddress: 'branchAddress',
+  accountNumber: 'accountNumber',
+  instruction: 'instruction',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BankInfoScalarFieldEnum = (typeof BankInfoScalarFieldEnum)[keyof typeof BankInfoScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {
@@ -328,77 +414,6 @@ export const SubjectScalarFieldEnum = {
 } as const
 
 export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
-
-
-export const GeneralSettingsScalarFieldEnum = {
-  id: 'id',
-  schoolName: 'schoolName',
-  schoolPhone: 'schoolPhone',
-  schoolEmail: 'schoolEmail',
-  schoolWebsite: 'schoolWebsite',
-  schoolAddress: 'schoolAddress',
-  country: 'country',
-  instituteLogo: 'instituteLogo',
-  schoolLogoPublicId: 'schoolLogoPublicId',
-  schoolLogoName: 'schoolLogoName',
-  schoolLogoType: 'schoolLogoType',
-  isDeleted: 'isDeleted',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
-} as const
-
-export type GeneralSettingsScalarFieldEnum = (typeof GeneralSettingsScalarFieldEnum)[keyof typeof GeneralSettingsScalarFieldEnum]
-
-
-export const RulesRegulationsScalarFieldEnum = {
-  id: 'id',
-  content: 'content',
-  type: 'type',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
-} as const
-
-export type RulesRegulationsScalarFieldEnum = (typeof RulesRegulationsScalarFieldEnum)[keyof typeof RulesRegulationsScalarFieldEnum]
-
-
-export const GradingConfigurationScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  isActive: 'isActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type GradingConfigurationScalarFieldEnum = (typeof GradingConfigurationScalarFieldEnum)[keyof typeof GradingConfigurationScalarFieldEnum]
-
-
-export const GradeScaleScalarFieldEnum = {
-  id: 'id',
-  grade: 'grade',
-  minMarks: 'minMarks',
-  maxMarks: 'maxMarks',
-  status: 'status',
-  configurationId: 'configurationId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type GradeScaleScalarFieldEnum = (typeof GradeScaleScalarFieldEnum)[keyof typeof GradeScaleScalarFieldEnum]
-
-
-export const FailCriteriaScalarFieldEnum = {
-  id: 'id',
-  overallPercentage: 'overallPercentage',
-  subjectPercentage: 'subjectPercentage',
-  minFailedSubjects: 'minFailedSubjects',
-  configurationId: 'configurationId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type FailCriteriaScalarFieldEnum = (typeof FailCriteriaScalarFieldEnum)[keyof typeof FailCriteriaScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -18,6 +18,36 @@ export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
 /**
+ * Model GeneralSettings
+ * 
+ */
+export type GeneralSettings = Prisma.GeneralSettingsModel
+/**
+ * Model RulesRegulations
+ * 
+ */
+export type RulesRegulations = Prisma.RulesRegulationsModel
+/**
+ * Model GradingConfiguration
+ * 
+ */
+export type GradingConfiguration = Prisma.GradingConfigurationModel
+/**
+ * Model GradeScale
+ * 
+ */
+export type GradeScale = Prisma.GradeScaleModel
+/**
+ * Model FailCriteria
+ * 
+ */
+export type FailCriteria = Prisma.FailCriteriaModel
+/**
+ * Model BankInfo
+ * 
+ */
+export type BankInfo = Prisma.BankInfoModel
+/**
  * Model User
  * 
  */
@@ -77,28 +107,3 @@ export type Student = Prisma.StudentModel
  * 
  */
 export type Subject = Prisma.SubjectModel
-/**
- * Model GeneralSettings
- * 
- */
-export type GeneralSettings = Prisma.GeneralSettingsModel
-/**
- * Model RulesRegulations
- * 
- */
-export type RulesRegulations = Prisma.RulesRegulationsModel
-/**
- * Model GradingConfiguration
- * 
- */
-export type GradingConfiguration = Prisma.GradingConfigurationModel
-/**
- * Model GradeScale
- * 
- */
-export type GradeScale = Prisma.GradeScaleModel
-/**
- * Model FailCriteria
- * 
- */
-export type FailCriteria = Prisma.FailCriteriaModel

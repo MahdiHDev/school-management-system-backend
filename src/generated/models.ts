@@ -8,6 +8,12 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/GeneralSettings'
+export type * from './models/RulesRegulations'
+export type * from './models/GradingConfiguration'
+export type * from './models/GradeScale'
+export type * from './models/FailCriteria'
+export type * from './models/BankInfo'
 export type * from './models/User'
 export type * from './models/Session'
 export type * from './models/Account'
@@ -20,9 +26,4 @@ export type * from './models/Sequence'
 export type * from './models/GuardianInfo'
 export type * from './models/Student'
 export type * from './models/Subject'
-export type * from './models/GeneralSettings'
-export type * from './models/RulesRegulations'
-export type * from './models/GradingConfiguration'
-export type * from './models/GradeScale'
-export type * from './models/FailCriteria'
 export type * from './commonInputTypes'

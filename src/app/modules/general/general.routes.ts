@@ -34,6 +34,12 @@ router.patch(
     GeneralController.updateEmployeeRulesRegulations,
 );
 
+router.post(
+    "/bank-information",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    GeneralController.createBankInfo,
+);
+
 router.patch(
     "/:id",
     ...generalSettingsMiddleware,

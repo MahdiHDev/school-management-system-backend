@@ -9,6 +9,36 @@
 * 🟢 You can import this file directly.
 */
 
+export const RegulationType = {
+  STUDENT: 'STUDENT',
+  EMPLOYEE: 'EMPLOYEE',
+  ATTENDANCE: 'ATTENDANCE',
+  EXAMINATION: 'EXAMINATION',
+  LEAVE: 'LEAVE',
+  CODE_OF_CONDUCT: 'CODE_OF_CONDUCT',
+  UNIFORM: 'UNIFORM',
+  OTHER: 'OTHER'
+} as const
+
+export type RegulationType = (typeof RegulationType)[keyof typeof RegulationType]
+
+
+export const GradeStatus = {
+  PASS: 'PASS',
+  FAIL: 'FAIL'
+} as const
+
+export type GradeStatus = (typeof GradeStatus)[keyof typeof GradeStatus]
+
+
+export const FeeParticularScope = {
+  ALL_STUDENTS: 'ALL_STUDENTS',
+  SPECIFIC_CLASS: 'SPECIFIC_CLASS'
+} as const
+
+export type FeeParticularScope = (typeof FeeParticularScope)[keyof typeof FeeParticularScope]
+
+
 export const UserRole = {
   SUPER_ADMIN: 'SUPER_ADMIN',
   ADMIN: 'ADMIN',
@@ -87,25 +117,3 @@ export const UserStatus = {
 } as const
 
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
-
-
-export const RegulationType = {
-  STUDENT: 'STUDENT',
-  EMPLOYEE: 'EMPLOYEE',
-  ATTENDANCE: 'ATTENDANCE',
-  EXAMINATION: 'EXAMINATION',
-  LEAVE: 'LEAVE',
-  CODE_OF_CONDUCT: 'CODE_OF_CONDUCT',
-  UNIFORM: 'UNIFORM',
-  OTHER: 'OTHER'
-} as const
-
-export type RegulationType = (typeof RegulationType)[keyof typeof RegulationType]
-
-
-export const GradeStatus = {
-  PASS: 'PASS',
-  FAIL: 'FAIL'
-} as const
-
-export type GradeStatus = (typeof GradeStatus)[keyof typeof GradeStatus]

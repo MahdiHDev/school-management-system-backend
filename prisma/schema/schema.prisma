@@ -7,7 +7,7 @@
 generator client {
     provider = "prisma-client"
     // output   = "../generated/prisma"
-    output   = "../src/generated"
+    output   = "../../src/generated"
     // moduleFormat = "cjs"
 }
 
@@ -73,22 +73,6 @@ enum UserStatus {
     ACTIVE
     BLOCKED
     DELETED
-}
-
-enum RegulationType {
-    STUDENT
-    EMPLOYEE
-    ATTENDANCE
-    EXAMINATION
-    LEAVE
-    CODE_OF_CONDUCT
-    UNIFORM
-    OTHER
-}
-
-enum GradeStatus {
-    PASS
-    FAIL
 }
 
 model User {
@@ -257,6 +241,7 @@ model Class {
     employee Employee  @relation(fields: [classTeacher], references: [id], onDelete: Cascade)
     students Student[]
     subjects Subject[]
+    // feeParticulars FeeParticular[]
 
     @@map("class")
 }
@@ -380,78 +365,4 @@ model Subject {
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
-}
-
-model GeneralSettings {
-    id            String  @id @default(uuid())
-    schoolName    String
-    schoolPhone   String
-    schoolEmail   String
-    schoolWebsite String?
-    schoolAddress String
-    country       String
-
-    instituteLogo      String?
-    schoolLogoPublicId String?
-    schoolLogoName     String?
-    schoolLogoType     String?
-
-    isDeleted Boolean   @default(false)
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
-}
-
-model RulesRegulations {
-    id      String         @id @default(uuid())
-    content String         @db.Text
-    type    RegulationType
-
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
-
-    @@index([type])
-    @@map("rules_regulations")
-}
-
-model GradingConfiguration {
-    id        String   @id @default(uuid())
-    name      String   @default("Default Grading")
-    isActive  Boolean  @default(true)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    grades       GradeScale[]
-    failCriteria FailCriteria?
-}
-
-model GradeScale {
-    id       String      @id @default(uuid())
-    grade    String
-    minMarks Int
-    maxMarks Int
-    status   GradeStatus @default(PASS)
-
-    configurationId String
-    configuration   GradingConfiguration @relation(fields: [configurationId], references: [id], onDelete: Cascade)
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@unique([configurationId, grade])
-    @@index([configurationId])
-}
-
-model FailCriteria {
-    id                String @id @default(uuid())
-    overallPercentage Float
-    subjectPercentage Float
-    minFailedSubjects Int
-
-    configurationId String               @unique
-    configuration   GradingConfiguration @relation(fields: [configurationId], references: [id], onDelete: Cascade)
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
 }

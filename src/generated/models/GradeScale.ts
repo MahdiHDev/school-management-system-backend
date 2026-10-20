@@ -481,6 +481,14 @@ export type GradeScaleUncheckedUpdateManyWithoutConfigurationNestedInput = {
   deleteMany?: Prisma.GradeScaleScalarWhereInput | Prisma.GradeScaleScalarWhereInput[]
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type EnumGradeStatusFieldUpdateOperationsInput = {
   set?: $Enums.GradeStatus
 }

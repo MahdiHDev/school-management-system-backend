@@ -2,9 +2,10 @@ import { Request, Response } from "express";
 import status from "http-status";
 import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
 import AppError from "../../errorHelpers/AppError";
+import { catchAsync } from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 import { GeneralService } from "./general.service";
-import { generalSettingSchema } from "./general.valdation";
+import { bankInfoSchema, generalSettingSchema } from "./general.valdation";
 
 const updateGeneralSetting = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -59,8 +60,27 @@ const updateEmployeeRulesRegulations = async (req: Request, res: Response) => {
     });
 };
 
+const createBankInfo = catchAsync(async (req: Request, res: Response) => {
+    const payload = bankInfoSchema.parse(JSON.parse(req.body.data));
+    const files = req.files as Record<string, UploadFile[]>;
+
+    if (!files.bankLogo?.length) {
+        throw new AppError(400, "Institute Logo is required");
+    }
+
+    const result = await GeneralService.createbankInfo(payload, files);
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Bank Information Added Successfully",
+        data: result,
+    });
+});
+
 export const GeneralController = {
     updateGeneralSetting,
     updateStudentRulesRegulations,
     updateEmployeeRulesRegulations,
+    createBankInfo,
 };

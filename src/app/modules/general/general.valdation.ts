@@ -52,3 +52,12 @@ export const employeeRulesAndRegulationSchema = z.object({
 export type EmployeeRulesAndRegulationPayload = z.infer<
     typeof employeeRulesAndRegulationSchema
 >;
+
+export const bankInfoSchema = z.object({
+    name: z.string().min(1, "Name of Bank is required"),
+    address: z.string().min(1, "Bank/Branch Address is required"),
+    accountNumber: z.string().min(1, "Account Number is required"),
+    instruction: z.string().optional(),
+});
+
+export type bankInfoPayload = z.infer<typeof bankInfoSchema>;
