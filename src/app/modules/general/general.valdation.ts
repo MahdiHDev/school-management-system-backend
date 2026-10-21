@@ -61,3 +61,12 @@ export const bankInfoSchema = z.object({
 });
 
 export type bankInfoPayload = z.infer<typeof bankInfoSchema>;
+
+export const updateBankInfoSchema = z.object({
+    name: z.string().optional(),
+    address: z.string().optional(),
+    accountNumber: z.string().optional(),
+    instruction: z.string().optional(),
+});
+
+export type updateBankInfoPayload = z.infer<typeof updateBankInfoSchema>;

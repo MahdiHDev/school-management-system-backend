@@ -115,12 +115,18 @@ model FailCriteria {
 
 model BankInfo {
     id            String  @id @default(uuid())
-    bankLogo      String
     nameOfBank    String
     branchAddress String
     accountNumber String
     instruction   String?
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    bankLogo         String
+    bankLogoPublicId String
+    bankLogoName     String
+    bankLogoType     String
+
+    isDeleted Boolean   @default(false)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
 }

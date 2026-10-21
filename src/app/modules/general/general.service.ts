@@ -1,9 +1,17 @@
+import { Prisma } from "../../../generated/client";
 import { CloudinaryService } from "../../../services/cloudinary";
 import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
 import { CloudinaryFolders } from "../../config/cloudinary.folders";
 import AppError from "../../errorHelpers/AppError";
+import { IQueryParams } from "../../interfaces/query.interface";
 import { prisma } from "../../lib/prisma";
-import { bankInfoPayload, GeneralSettingPayload } from "./general.valdation";
+import { QueryBuilder } from "../../utils/QueryBuilder";
+import { bankInfoSearchableFields } from "./general.constant";
+import {
+    bankInfoPayload,
+    GeneralSettingPayload,
+    updateBankInfoPayload,
+} from "./general.valdation";
 
 // const updateGeneralSetting = async (
 //     payload: GeneralSettingPayload,
@@ -292,32 +300,105 @@ const updateEmployeeRulesRegulations = async (payload: {
     }
 };
 
+const getAllBankInfo = async (query: IQueryParams) => {
+    const queryBuilder = new QueryBuilder<Prisma.BankInfoWhereInput>(
+        prisma.bankInfo,
+        query,
+        {
+            searchableFields: bankInfoSearchableFields,
+        },
+    );
+
+    const result = await queryBuilder
+        .search()
+        .where({ isDeleted: false })
+        .paginate()
+        .sort()
+        .select({
+            id: true,
+            nameOfBank: true,
+            // branchAddress: true,
+            accountNumber: true,
+            bankLogo: true,
+            createdAt: true,
+        })
+        .execute();
+
+    return result;
+};
+
+const getBankInfoById = async (id: string) => {
+    const result = await prisma.bankInfo.findFirst({
+        where: {
+            id,
+            isDeleted: false,
+        },
+        select: {
+            id: true,
+            nameOfBank: true,
+            branchAddress: true,
+            accountNumber: true,
+            instruction: true,
+            bankLogo: true,
+            bankLogoName: true,
+            bankLogoType: true,
+            bankLogoPublicId: true,
+            createdAt: true,
+            updatedAt: true,
+        },
+    });
+
+    if (!result) {
+        throw new AppError(404, "Bank information not found");
+    }
+
+    const { bankLogo, bankLogoName, bankLogoType, bankLogoPublicId, ...rest } =
+        result;
+
+    return {
+        ...rest,
+        bankLogo: {
+            bankLogo,
+            bankLogoName,
+            bankLogoType,
+            bankLogoPublicId,
+        },
+    };
+};
+
 const createbankInfo = async (
     payload: bankInfoPayload,
     files: Record<string, UploadFile[]>,
 ) => {
     const { name, address, accountNumber, instruction } = payload;
-    const bankLogoFile = files.instituteLogo?.[0];
+    const bankLogoFile = files.bankLogo?.[0];
 
     if (!bankLogoFile) {
-        throw new AppError(400, "Missing Authority Sign Image");
+        throw new AppError(400, "Missing Bank Logo Image");
     }
 
     // Upload a new logo only when provided
-    const instituteLogo = bankLogoFile
+    const bankLogo = bankLogoFile
         ? await CloudinaryService.upload(bankLogoFile, {
               folder: CloudinaryFolders.general.bankLogo,
           })
         : null;
 
-    const uploadedPublicIds: string[] = instituteLogo?.public_id
-        ? [instituteLogo.public_id]
+    const uploadedPublicIds: string[] = bankLogo?.public_id
+        ? [bankLogo.public_id]
         : [];
+
+    if (!bankLogo) {
+        throw new AppError(400, "Bank Logo upload failed!");
+    }
 
     try {
         const result = prisma.bankInfo.create({
             data: {
-                bankLogo: "hello",
+                bankLogo: bankLogo.secure_url,
+                bankLogoPublicId: bankLogo.public_id,
+                bankLogoName: bankLogo.original_filename,
+                bankLogoType: bankLogoFile.mimetype,
                 nameOfBank: name,
                 branchAddress: address,
                 accountNumber: accountNumber,
@@ -338,9 +419,110 @@ const createbankInfo = async (
     }
 };
 
+const updateBankInfo = async (
+    id: string,
+    payload: updateBankInfoPayload,
+    files?: Record<string, UploadFile[]>,
+) => {
+    const { name, address, accountNumber, instruction } = payload;
+
+    const existingBankInfo = await prisma.bankInfo.findUnique({
+        where: {
+            id,
+        },
+    });
+
+    if (!existingBankInfo) {
+        throw new AppError(404, "Bank information not found");
+    }
+
+    const bankLogoFile = files?.bankLogo?.[0];
+
+    const bankLogo = bankLogoFile
+        ? await CloudinaryService.upload(bankLogoFile, {
+              folder: CloudinaryFolders.general.bankLogo,
+          })
+        : null;
+
+    const uploadedPublicIds: string[] = bankLogo?.public_id
+        ? [bankLogo.public_id]
+        : [];
+
+    try {
+        const updateData: Prisma.BankInfoUpdateInput = {
+            ...(name && {
+                nameOfBank: name,
+            }),
+            ...(address && {
+                branchAddress: address,
+            }),
+            ...(accountNumber && {
+                accountNumber,
+            }),
+            ...(instruction !== undefined && {
+                instruction,
+            }),
+        };
+
+        if (bankLogo && bankLogoFile) {
+            updateData.bankLogo = bankLogo.secure_url;
+            updateData.bankLogoPublicId = bankLogo.public_id;
+            updateData.bankLogoName = bankLogo.original_filename;
+            updateData.bankLogoType = bankLogoFile.mimetype;
+        }
+
+        const result = await prisma.bankInfo.update({
+            where: {
+                id,
+            },
+            data: updateData,
+        });
+
+        // Delete old logo after successful database update
+        if (bankLogo && existingBankInfo.bankLogoPublicId) {
+            await CloudinaryService.delete(existingBankInfo.bankLogoPublicId);
+        }
+
+        return result;
+    } catch (error) {
+        // Delete newly uploaded logo if database update fails
+        await Promise.all(
+            uploadedPublicIds.map((publicId) =>
+                CloudinaryService.delete(publicId),
+            ),
+        );
+
+        throw error;
+    }
+};
+
+const deleteBankInfo = async (id: string) => {
+    const existingBankInfo = await prisma.bankInfo.findUnique({
+        where: { id },
+    });
+
+    if (!existingBankInfo || existingBankInfo.isDeleted) {
+        throw new AppError(404, "Bank information not found");
+    }
+
+    const result = await prisma.bankInfo.update({
+        where: { id },
+        data: {
+            isDeleted: true,
+            deletedAt: new Date(),
+        },
+    });
+
+    return result;
+};
+
 export const GeneralService = {
     updateGeneralSetting,
     updateStudentRulesRegulations,
     updateEmployeeRulesRegulations,
+    getAllBankInfo,
+    getBankInfoById,
     createbankInfo,
+    updateBankInfo,
+    deleteBankInfo,
 };

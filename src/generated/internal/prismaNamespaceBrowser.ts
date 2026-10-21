@@ -160,13 +160,18 @@ export type FailCriteriaScalarFieldEnum = (typeof FailCriteriaScalarFieldEnum)[k
 
 export const BankInfoScalarFieldEnum = {
   id: 'id',
-  bankLogo: 'bankLogo',
   nameOfBank: 'nameOfBank',
   branchAddress: 'branchAddress',
   accountNumber: 'accountNumber',
   instruction: 'instruction',
+  bankLogo: 'bankLogo',
+  bankLogoPublicId: 'bankLogoPublicId',
+  bankLogoName: 'bankLogoName',
+  bankLogoType: 'bankLogoType',
+  isDeleted: 'isDeleted',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type BankInfoScalarFieldEnum = (typeof BankInfoScalarFieldEnum)[keyof typeof BankInfoScalarFieldEnum]

@@ -26,70 +26,100 @@ export type AggregateBankInfo = {
 
 export type BankInfoMinAggregateOutputType = {
   id: string | null
-  bankLogo: string | null
   nameOfBank: string | null
   branchAddress: string | null
   accountNumber: string | null
   instruction: string | null
+  bankLogo: string | null
+  bankLogoPublicId: string | null
+  bankLogoName: string | null
+  bankLogoType: string | null
+  isDeleted: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
 }
 
 export type BankInfoMaxAggregateOutputType = {
   id: string | null
-  bankLogo: string | null
   nameOfBank: string | null
   branchAddress: string | null
   accountNumber: string | null
   instruction: string | null
+  bankLogo: string | null
+  bankLogoPublicId: string | null
+  bankLogoName: string | null
+  bankLogoType: string | null
+  isDeleted: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
 }
 
 export type BankInfoCountAggregateOutputType = {
   id: number
-  bankLogo: number
   nameOfBank: number
   branchAddress: number
   accountNumber: number
   instruction: number
+  bankLogo: number
+  bankLogoPublicId: number
+  bankLogoName: number
+  bankLogoType: number
+  isDeleted: number
   createdAt: number
   updatedAt: number
+  deletedAt: number
   _all: number
 }
 
 
 export type BankInfoMinAggregateInputType = {
   id?: true
-  bankLogo?: true
   nameOfBank?: true
   branchAddress?: true
   accountNumber?: true
   instruction?: true
+  bankLogo?: true
+  bankLogoPublicId?: true
+  bankLogoName?: true
+  bankLogoType?: true
+  isDeleted?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
 }
 
 export type BankInfoMaxAggregateInputType = {
   id?: true
-  bankLogo?: true
   nameOfBank?: true
   branchAddress?: true
   accountNumber?: true
   instruction?: true
+  bankLogo?: true
+  bankLogoPublicId?: true
+  bankLogoName?: true
+  bankLogoType?: true
+  isDeleted?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
 }
 
 export type BankInfoCountAggregateInputType = {
   id?: true
-  bankLogo?: true
   nameOfBank?: true
   branchAddress?: true
   accountNumber?: true
   instruction?: true
+  bankLogo?: true
+  bankLogoPublicId?: true
+  bankLogoName?: true
+  bankLogoType?: true
+  isDeleted?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
   _all?: true
 }
 
@@ -167,13 +197,18 @@ export type BankInfoGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type BankInfoGroupByOutputType = {
   id: string
-  bankLogo: string
   nameOfBank: string
   branchAddress: string
   accountNumber: string
   instruction: string | null
+  bankLogo: string
+  bankLogoPublicId: string
+  bankLogoName: string
+  bankLogoType: string
+  isDeleted: boolean
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date | null
   _count: BankInfoCountAggregateOutputType | null
   _min: BankInfoMinAggregateOutputType | null
   _max: BankInfoMaxAggregateOutputType | null
@@ -199,24 +234,34 @@ export type BankInfoWhereInput = {
   OR?: Prisma.BankInfoWhereInput[]
   NOT?: Prisma.BankInfoWhereInput | Prisma.BankInfoWhereInput[]
   id?: Prisma.StringFilter<"BankInfo"> | string
-  bankLogo?: Prisma.StringFilter<"BankInfo"> | string
   nameOfBank?: Prisma.StringFilter<"BankInfo"> | string
   branchAddress?: Prisma.StringFilter<"BankInfo"> | string
   accountNumber?: Prisma.StringFilter<"BankInfo"> | string
   instruction?: Prisma.StringNullableFilter<"BankInfo"> | string | null
+  bankLogo?: Prisma.StringFilter<"BankInfo"> | string
+  bankLogoPublicId?: Prisma.StringFilter<"BankInfo"> | string
+  bankLogoName?: Prisma.StringFilter<"BankInfo"> | string
+  bankLogoType?: Prisma.StringFilter<"BankInfo"> | string
+  isDeleted?: Prisma.BoolFilter<"BankInfo"> | boolean
   createdAt?: Prisma.DateTimeFilter<"BankInfo"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BankInfo"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"BankInfo"> | Date | string | null
 }
 
 export type BankInfoOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  bankLogo?: Prisma.SortOrder
   nameOfBank?: Prisma.SortOrder
   branchAddress?: Prisma.SortOrder
   accountNumber?: Prisma.SortOrder
   instruction?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankLogo?: Prisma.SortOrder
+  bankLogoPublicId?: Prisma.SortOrder
+  bankLogoName?: Prisma.SortOrder
+  bankLogoType?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type BankInfoWhereUniqueInput = Prisma.AtLeast<{
@@ -224,24 +269,34 @@ export type BankInfoWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.BankInfoWhereInput | Prisma.BankInfoWhereInput[]
   OR?: Prisma.BankInfoWhereInput[]
   NOT?: Prisma.BankInfoWhereInput | Prisma.BankInfoWhereInput[]
-  bankLogo?: Prisma.StringFilter<"BankInfo"> | string
   nameOfBank?: Prisma.StringFilter<"BankInfo"> | string
   branchAddress?: Prisma.StringFilter<"BankInfo"> | string
   accountNumber?: Prisma.StringFilter<"BankInfo"> | string
   instruction?: Prisma.StringNullableFilter<"BankInfo"> | string | null
+  bankLogo?: Prisma.StringFilter<"BankInfo"> | string
+  bankLogoPublicId?: Prisma.StringFilter<"BankInfo"> | string
+  bankLogoName?: Prisma.StringFilter<"BankInfo"> | string
+  bankLogoType?: Prisma.StringFilter<"BankInfo"> | string
+  isDeleted?: Prisma.BoolFilter<"BankInfo"> | boolean
   createdAt?: Prisma.DateTimeFilter<"BankInfo"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BankInfo"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"BankInfo"> | Date | string | null
 }, "id">
 
 export type BankInfoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  bankLogo?: Prisma.SortOrder
   nameOfBank?: Prisma.SortOrder
   branchAddress?: Prisma.SortOrder
   accountNumber?: Prisma.SortOrder
   instruction?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankLogo?: Prisma.SortOrder
+  bankLogoPublicId?: Prisma.SortOrder
+  bankLogoName?: Prisma.SortOrder
+  bankLogoType?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.BankInfoCountOrderByAggregateInput
   _max?: Prisma.BankInfoMaxOrderByAggregateInput
   _min?: Prisma.BankInfoMinOrderByAggregateInput
@@ -252,185 +307,265 @@ export type BankInfoScalarWhereWithAggregatesInput = {
   OR?: Prisma.BankInfoScalarWhereWithAggregatesInput[]
   NOT?: Prisma.BankInfoScalarWhereWithAggregatesInput | Prisma.BankInfoScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"BankInfo"> | string
-  bankLogo?: Prisma.StringWithAggregatesFilter<"BankInfo"> | string
   nameOfBank?: Prisma.StringWithAggregatesFilter<"BankInfo"> | string
   branchAddress?: Prisma.StringWithAggregatesFilter<"BankInfo"> | string
   accountNumber?: Prisma.StringWithAggregatesFilter<"BankInfo"> | string
   instruction?: Prisma.StringNullableWithAggregatesFilter<"BankInfo"> | string | null
+  bankLogo?: Prisma.StringWithAggregatesFilter<"BankInfo"> | string
+  bankLogoPublicId?: Prisma.StringWithAggregatesFilter<"BankInfo"> | string
+  bankLogoName?: Prisma.StringWithAggregatesFilter<"BankInfo"> | string
+  bankLogoType?: Prisma.StringWithAggregatesFilter<"BankInfo"> | string
+  isDeleted?: Prisma.BoolWithAggregatesFilter<"BankInfo"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"BankInfo"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"BankInfo"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"BankInfo"> | Date | string | null
 }
 
 export type BankInfoCreateInput = {
   id?: string
-  bankLogo: string
   nameOfBank: string
   branchAddress: string
   accountNumber: string
   instruction?: string | null
+  bankLogo: string
+  bankLogoPublicId: string
+  bankLogoName: string
+  bankLogoType: string
+  isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type BankInfoUncheckedCreateInput = {
   id?: string
-  bankLogo: string
   nameOfBank: string
   branchAddress: string
   accountNumber: string
   instruction?: string | null
+  bankLogo: string
+  bankLogoPublicId: string
+  bankLogoName: string
+  bankLogoType: string
+  isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type BankInfoUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  bankLogo?: Prisma.StringFieldUpdateOperationsInput | string
   nameOfBank?: Prisma.StringFieldUpdateOperationsInput | string
   branchAddress?: Prisma.StringFieldUpdateOperationsInput | string
   accountNumber?: Prisma.StringFieldUpdateOperationsInput | string
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankLogo?: Prisma.StringFieldUpdateOperationsInput | string
+  bankLogoPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankLogoName?: Prisma.StringFieldUpdateOperationsInput | string
+  bankLogoType?: Prisma.StringFieldUpdateOperationsInput | string
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type BankInfoUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  bankLogo?: Prisma.StringFieldUpdateOperationsInput | string
   nameOfBank?: Prisma.StringFieldUpdateOperationsInput | string
   branchAddress?: Prisma.StringFieldUpdateOperationsInput | string
   accountNumber?: Prisma.StringFieldUpdateOperationsInput | string
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankLogo?: Prisma.StringFieldUpdateOperationsInput | string
+  bankLogoPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankLogoName?: Prisma.StringFieldUpdateOperationsInput | string
+  bankLogoType?: Prisma.StringFieldUpdateOperationsInput | string
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type BankInfoCreateManyInput = {
   id?: string
-  bankLogo: string
   nameOfBank: string
   branchAddress: string
   accountNumber: string
   instruction?: string | null
+  bankLogo: string
+  bankLogoPublicId: string
+  bankLogoName: string
+  bankLogoType: string
+  isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type BankInfoUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  bankLogo?: Prisma.StringFieldUpdateOperationsInput | string
   nameOfBank?: Prisma.StringFieldUpdateOperationsInput | string
   branchAddress?: Prisma.StringFieldUpdateOperationsInput | string
   accountNumber?: Prisma.StringFieldUpdateOperationsInput | string
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankLogo?: Prisma.StringFieldUpdateOperationsInput | string
+  bankLogoPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankLogoName?: Prisma.StringFieldUpdateOperationsInput | string
+  bankLogoType?: Prisma.StringFieldUpdateOperationsInput | string
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type BankInfoUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  bankLogo?: Prisma.StringFieldUpdateOperationsInput | string
   nameOfBank?: Prisma.StringFieldUpdateOperationsInput | string
   branchAddress?: Prisma.StringFieldUpdateOperationsInput | string
   accountNumber?: Prisma.StringFieldUpdateOperationsInput | string
   instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankLogo?: Prisma.StringFieldUpdateOperationsInput | string
+  bankLogoPublicId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankLogoName?: Prisma.StringFieldUpdateOperationsInput | string
+  bankLogoType?: Prisma.StringFieldUpdateOperationsInput | string
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type BankInfoCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  bankLogo?: Prisma.SortOrder
   nameOfBank?: Prisma.SortOrder
   branchAddress?: Prisma.SortOrder
   accountNumber?: Prisma.SortOrder
   instruction?: Prisma.SortOrder
+  bankLogo?: Prisma.SortOrder
+  bankLogoPublicId?: Prisma.SortOrder
+  bankLogoName?: Prisma.SortOrder
+  bankLogoType?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type BankInfoMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  bankLogo?: Prisma.SortOrder
   nameOfBank?: Prisma.SortOrder
   branchAddress?: Prisma.SortOrder
   accountNumber?: Prisma.SortOrder
   instruction?: Prisma.SortOrder
+  bankLogo?: Prisma.SortOrder
+  bankLogoPublicId?: Prisma.SortOrder
+  bankLogoName?: Prisma.SortOrder
+  bankLogoType?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type BankInfoMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  bankLogo?: Prisma.SortOrder
   nameOfBank?: Prisma.SortOrder
   branchAddress?: Prisma.SortOrder
   accountNumber?: Prisma.SortOrder
   instruction?: Prisma.SortOrder
+  bankLogo?: Prisma.SortOrder
+  bankLogoPublicId?: Prisma.SortOrder
+  bankLogoName?: Prisma.SortOrder
+  bankLogoType?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 
 
 export type BankInfoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  bankLogo?: boolean
   nameOfBank?: boolean
   branchAddress?: boolean
   accountNumber?: boolean
   instruction?: boolean
+  bankLogo?: boolean
+  bankLogoPublicId?: boolean
+  bankLogoName?: boolean
+  bankLogoType?: boolean
+  isDeleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
 }, ExtArgs["result"]["bankInfo"]>
 
 export type BankInfoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  bankLogo?: boolean
   nameOfBank?: boolean
   branchAddress?: boolean
   accountNumber?: boolean
   instruction?: boolean
+  bankLogo?: boolean
+  bankLogoPublicId?: boolean
+  bankLogoName?: boolean
+  bankLogoType?: boolean
+  isDeleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
 }, ExtArgs["result"]["bankInfo"]>
 
 export type BankInfoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  bankLogo?: boolean
   nameOfBank?: boolean
   branchAddress?: boolean
   accountNumber?: boolean
   instruction?: boolean
+  bankLogo?: boolean
+  bankLogoPublicId?: boolean
+  bankLogoName?: boolean
+  bankLogoType?: boolean
+  isDeleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
 }, ExtArgs["result"]["bankInfo"]>
 
 export type BankInfoSelectScalar = {
   id?: boolean
-  bankLogo?: boolean
   nameOfBank?: boolean
   branchAddress?: boolean
   accountNumber?: boolean
   instruction?: boolean
+  bankLogo?: boolean
+  bankLogoPublicId?: boolean
+  bankLogoName?: boolean
+  bankLogoType?: boolean
+  isDeleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
 }
 
-export type BankInfoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "bankLogo" | "nameOfBank" | "branchAddress" | "accountNumber" | "instruction" | "createdAt" | "updatedAt", ExtArgs["result"]["bankInfo"]>
+export type BankInfoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nameOfBank" | "branchAddress" | "accountNumber" | "instruction" | "bankLogo" | "bankLogoPublicId" | "bankLogoName" | "bankLogoType" | "isDeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["bankInfo"]>
 
 export type $BankInfoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "BankInfo"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    bankLogo: string
     nameOfBank: string
     branchAddress: string
     accountNumber: string
     instruction: string | null
+    bankLogo: string
+    bankLogoPublicId: string
+    bankLogoName: string
+    bankLogoType: string
+    isDeleted: boolean
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
   }, ExtArgs["result"]["bankInfo"]>
   composites: {}
 }
@@ -855,13 +990,18 @@ export interface Prisma__BankInfoClient<T, Null = never, ExtArgs extends runtime
  */
 export interface BankInfoFieldRefs {
   readonly id: Prisma.FieldRef<"BankInfo", 'String'>
-  readonly bankLogo: Prisma.FieldRef<"BankInfo", 'String'>
   readonly nameOfBank: Prisma.FieldRef<"BankInfo", 'String'>
   readonly branchAddress: Prisma.FieldRef<"BankInfo", 'String'>
   readonly accountNumber: Prisma.FieldRef<"BankInfo", 'String'>
   readonly instruction: Prisma.FieldRef<"BankInfo", 'String'>
+  readonly bankLogo: Prisma.FieldRef<"BankInfo", 'String'>
+  readonly bankLogoPublicId: Prisma.FieldRef<"BankInfo", 'String'>
+  readonly bankLogoName: Prisma.FieldRef<"BankInfo", 'String'>
+  readonly bankLogoType: Prisma.FieldRef<"BankInfo", 'String'>
+  readonly isDeleted: Prisma.FieldRef<"BankInfo", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"BankInfo", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"BankInfo", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"BankInfo", 'DateTime'>
 }
     
 

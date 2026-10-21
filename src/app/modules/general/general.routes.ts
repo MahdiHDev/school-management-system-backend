@@ -16,6 +16,12 @@ const generalSettingsMiddleware = [
     ]),
 ];
 
+router.get(
+    "/bank-informations",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    GeneralController.getAllBankInfo,
+);
+
 router.patch(
     "/",
     ...generalSettingsMiddleware,
@@ -37,6 +43,30 @@ router.patch(
 router.post(
     "/bank-information",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    upload.fields([
+        {
+            name: "bankLogo",
+            maxCount: 1,
+        },
+    ]),
+    GeneralController.createBankInfo,
+);
+
+router.get(
+    "/bank-information/:id",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    GeneralController.getBankInfoById,
+);
+
+router.post(
+    "/bank-information/:id",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    upload.fields([
+        {
+            name: "bankLogo",
+            maxCount: 1,
+        },
+    ]),
     GeneralController.createBankInfo,
 );
 
