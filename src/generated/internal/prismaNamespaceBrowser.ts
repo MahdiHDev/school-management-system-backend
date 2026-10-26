@@ -57,6 +57,8 @@ export const ModelName = {
   GradeScale: 'GradeScale',
   FailCriteria: 'FailCriteria',
   BankInfo: 'BankInfo',
+  AttendanceSession: 'AttendanceSession',
+  AttendanceRecord: 'AttendanceRecord',
   User: 'User',
   Session: 'Session',
   Account: 'Account',
@@ -175,6 +177,29 @@ export const BankInfoScalarFieldEnum = {
 } as const
 
 export type BankInfoScalarFieldEnum = (typeof BankInfoScalarFieldEnum)[keyof typeof BankInfoScalarFieldEnum]
+
+
+export const AttendanceSessionScalarFieldEnum = {
+  id: 'id',
+  classId: 'classId',
+  date: 'date',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceSessionScalarFieldEnum = (typeof AttendanceSessionScalarFieldEnum)[keyof typeof AttendanceSessionScalarFieldEnum]
+
+
+export const AttendanceRecordScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  studentId: 'studentId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceRecordScalarFieldEnum = (typeof AttendanceRecordScalarFieldEnum)[keyof typeof AttendanceRecordScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {

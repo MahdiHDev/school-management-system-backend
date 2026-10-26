@@ -238,10 +238,11 @@ model Class {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
-    employee Employee  @relation(fields: [classTeacher], references: [id], onDelete: Cascade)
-    students Student[]
-    subjects Subject[]
+    employee           Employee            @relation(fields: [classTeacher], references: [id], onDelete: Cascade)
+    students           Student[]
+    subjects           Subject[]
     // feeParticulars FeeParticular[]
+    attendanceSessions AttendanceSession[]
 
     @@map("class")
 }
@@ -347,6 +348,8 @@ model Student {
     guardianInfo GuardianInfo?
     class        Class         @relation(fields: [classId], references: [id])
     user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    attendanceRecords AttendanceRecord[]
 
     isdeleted Boolean   @default(false)
     createdAt DateTime  @default(now())

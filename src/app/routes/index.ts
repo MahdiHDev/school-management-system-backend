@@ -1,5 +1,6 @@
 import type { Router as ExpressRouter } from "express";
 import { Router } from "express";
+import { AttendanceRoutes } from "../modules/attendance/attendance.routes";
 import { AuthRoutes } from "../modules/auth/auth.routes";
 import { ClassesRoutes } from "../modules/classes/classes.routes";
 import { EmployeeRoutes } from "../modules/employees/employees.routes";
@@ -34,6 +35,10 @@ const moduleRoutes = [
     {
         path: "/settings/grades",
         route: GradeConfigurationRoutes,
+    },
+    {
+        path: "/attendance",
+        route: AttendanceRoutes,
     },
     {
         path: "/subjects",

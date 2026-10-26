@@ -39,6 +39,15 @@ export const FeeParticularScope = {
 export type FeeParticularScope = (typeof FeeParticularScope)[keyof typeof FeeParticularScope]
 
 
+export const AttendanceStatus = {
+  PRESENT: 'PRESENT',
+  ABSENT: 'ABSENT',
+  LATE: 'LATE'
+} as const
+
+export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus]
+
+
 export const UserRole = {
   SUPER_ADMIN: 'SUPER_ADMIN',
   ADMIN: 'ADMIN',

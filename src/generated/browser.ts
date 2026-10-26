@@ -48,6 +48,16 @@ export type FailCriteria = Prisma.FailCriteriaModel
  */
 export type BankInfo = Prisma.BankInfoModel
 /**
+ * Model AttendanceSession
+ * 
+ */
+export type AttendanceSession = Prisma.AttendanceSessionModel
+/**
+ * Model AttendanceRecord
+ * 
+ */
+export type AttendanceRecord = Prisma.AttendanceRecordModel
+/**
  * Model User
  * 
  */
