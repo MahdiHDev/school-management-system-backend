@@ -17,6 +17,12 @@ const generalSettingsMiddleware = [
 ];
 
 router.get(
+    "/general-setting",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    GeneralController.getGeneralSetting,
+);
+
+router.get(
     "/bank-informations",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
     GeneralController.getAllBankInfo,

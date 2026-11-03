@@ -59,6 +59,8 @@ export const ModelName = {
   BankInfo: 'BankInfo',
   AttendanceSession: 'AttendanceSession',
   AttendanceRecord: 'AttendanceRecord',
+  EmployeeAttendanceSession: 'EmployeeAttendanceSession',
+  EmployeeAttendanceRecord: 'EmployeeAttendanceRecord',
   User: 'User',
   Session: 'Session',
   Account: 'Account',
@@ -91,16 +93,16 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const GeneralSettingsScalarFieldEnum = {
   id: 'id',
-  schoolName: 'schoolName',
-  schoolPhone: 'schoolPhone',
-  schoolEmail: 'schoolEmail',
-  schoolWebsite: 'schoolWebsite',
-  schoolAddress: 'schoolAddress',
-  country: 'country',
+  instituteName: 'instituteName',
+  institutePhoneNumber: 'institutePhoneNumber',
+  instituteEmail: 'instituteEmail',
+  instituteWebsite: 'instituteWebsite',
+  instituteAddress: 'instituteAddress',
+  instituteCountry: 'instituteCountry',
   instituteLogo: 'instituteLogo',
-  schoolLogoPublicId: 'schoolLogoPublicId',
-  schoolLogoName: 'schoolLogoName',
-  schoolLogoType: 'schoolLogoType',
+  instituteLogoPublicId: 'instituteLogoPublicId',
+  instituteLogoName: 'instituteLogoName',
+  instituteLogoType: 'instituteLogoType',
   isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -200,6 +202,28 @@ export const AttendanceRecordScalarFieldEnum = {
 } as const
 
 export type AttendanceRecordScalarFieldEnum = (typeof AttendanceRecordScalarFieldEnum)[keyof typeof AttendanceRecordScalarFieldEnum]
+
+
+export const EmployeeAttendanceSessionScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmployeeAttendanceSessionScalarFieldEnum = (typeof EmployeeAttendanceSessionScalarFieldEnum)[keyof typeof EmployeeAttendanceSessionScalarFieldEnum]
+
+
+export const EmployeeAttendanceRecordScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  employeeId: 'employeeId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmployeeAttendanceRecordScalarFieldEnum = (typeof EmployeeAttendanceRecordScalarFieldEnum)[keyof typeof EmployeeAttendanceRecordScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {

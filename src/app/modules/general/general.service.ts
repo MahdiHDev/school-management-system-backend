@@ -117,6 +117,49 @@ import {
 //     }
 // };
 
+const getGeneralSetting = async () => {
+    const result = await prisma.generalSettings.findFirst({
+        where: { isDeleted: false },
+        select: {
+            id: true,
+            instituteName: true,
+            institutePhoneNumber: true,
+            instituteEmail: true,
+            instituteWebsite: true,
+            instituteAddress: true,
+            instituteCountry: true,
+            instituteLogo: true,
+            instituteLogoPublicId: true,
+            instituteLogoName: true,
+            instituteLogoType: true,
+            createdAt: true,
+            updatedAt: true,
+        },
+    });
+
+    if (!result) {
+        throw new AppError(404, "General settings not found");
+    }
+
+    const {
+        instituteLogo,
+        instituteLogoPublicId,
+        instituteLogoName,
+        instituteLogoType,
+        ...rest
+    } = result;
+
+    return {
+        ...rest,
+        instituteLogo: {
+            instituteLogo,
+            instituteLogoPublicId,
+            instituteLogoName,
+            instituteLogoType,
+        },
+    };
+};
+
 const updateGeneralSetting = async (
     payload: GeneralSettingPayload,
     files: Record<string, UploadFile[]>,
@@ -137,29 +180,29 @@ const updateGeneralSetting = async (
 
     try {
         const settingData = {
-            ...(payload.schoolName !== undefined && {
-                schoolName: payload.schoolName,
+            ...(payload.instituteName !== undefined && {
+                instituteName: payload.instituteName,
             }),
-            ...(payload.schoolPhone !== undefined && {
-                schoolPhone: payload.schoolPhone,
+            ...(payload.institutePhoneNumber !== undefined && {
+                institutePhoneNumber: payload.institutePhoneNumber,
             }),
-            ...(payload.schoolEmail !== undefined && {
-                schoolEmail: payload.schoolEmail,
+            ...(payload.instituteEmail !== undefined && {
+                instituteEmail: payload.instituteEmail,
             }),
-            ...(payload.schoolWebsite !== undefined && {
-                schoolWebsite: payload.schoolWebsite,
+            ...(payload.instituteWebsite !== undefined && {
+                instituteWebsite: payload.instituteWebsite,
             }),
-            ...(payload.schoolAddress !== undefined && {
-                schoolAddress: payload.schoolAddress,
+            ...(payload.instituteAddress !== undefined && {
+                instituteAddress: payload.instituteAddress,
             }),
-            ...(payload.country !== undefined && {
-                country: payload.country,
+            ...(payload.instituteCountry !== undefined && {
+                instituteCountry: payload.instituteCountry,
             }),
             ...(instituteLogo && {
                 instituteLogo: instituteLogo.secure_url,
-                schoolLogoPublicId: instituteLogo.public_id,
-                schoolLogoName: instituteLogoFile!.originalname,
-                schoolLogoType: instituteLogoFile!.mimetype,
+                instituteLogoPublicId: instituteLogo.public_id,
+                instituteLogoName: instituteLogoFile!.originalname,
+                instituteLogoType: instituteLogoFile!.mimetype,
             }),
         };
 
@@ -173,7 +216,10 @@ const updateGeneralSetting = async (
                     isDeleted: false,
                 },
                 select: {
-                    schoolLogoPublicId: true,
+                    instituteLogo: true,
+                    instituteLogoPublicId: true,
+                    instituteLogoName: true,
+                    instituteLogoType: true,
                 },
             });
 
@@ -189,11 +235,12 @@ const updateGeneralSetting = async (
             // Delete the old image only after a successful database update
             if (
                 instituteLogo &&
-                existingSetting.schoolLogoPublicId &&
-                existingSetting.schoolLogoPublicId !== instituteLogo.public_id
+                existingSetting.instituteLogoPublicId &&
+                existingSetting.instituteLogoPublicId !==
+                    instituteLogo.public_id
             ) {
                 await CloudinaryService.delete(
-                    existingSetting.schoolLogoPublicId,
+                    existingSetting.instituteLogoPublicId,
                 );
             }
         } else {
@@ -205,11 +252,14 @@ const updateGeneralSetting = async (
             }
 
             const requiredFields = [
-                { field: "schoolName", value: payload.schoolName },
-                { field: "schoolPhone", value: payload.schoolPhone },
-                { field: "schoolEmail", value: payload.schoolEmail },
-                { field: "schoolAddress", value: payload.schoolAddress },
-                { field: "country", value: payload.country },
+                { field: "instituteName", value: payload.instituteName },
+                {
+                    field: "institutePhoneNumber",
+                    value: payload.institutePhoneNumber,
+                },
+                { field: "instituteEmail", value: payload.instituteEmail },
+                { field: "instituteAddress", value: payload.instituteAddress },
+                { field: "instituteCountry", value: payload.instituteCountry },
             ];
 
             const missingFields = requiredFields
@@ -226,11 +276,11 @@ const updateGeneralSetting = async (
             result = await prisma.generalSettings.create({
                 data: {
                     ...settingData,
-                    schoolName: payload.schoolName!,
-                    schoolPhone: payload.schoolPhone!,
-                    schoolEmail: payload.schoolEmail!,
-                    schoolAddress: payload.schoolAddress!,
-                    country: payload.country!,
+                    instituteName: payload.instituteName!,
+                    institutePhoneNumber: payload.institutePhoneNumber!,
+                    instituteEmail: payload.instituteEmail!,
+                    instituteAddress: payload.instituteAddress!,
+                    instituteCountry: payload.instituteCountry!,
                 },
             });
         }
@@ -517,6 +567,7 @@ const deleteBankInfo = async (id: string) => {
 };
 
 export const GeneralService = {
+    getGeneralSetting,
     updateGeneralSetting,
     updateStudentRulesRegulations,
     updateEmployeeRulesRegulations,

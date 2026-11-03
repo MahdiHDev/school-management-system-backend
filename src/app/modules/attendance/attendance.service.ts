@@ -1,11 +1,19 @@
 import status from "http-status";
-import { AttendanceStatus } from "../../../generated/enums";
+import {
+    AttendanceStatus,
+    EmployeeAttendanceStatus,
+} from "../../../generated/enums";
 import AppError from "../../errorHelpers/AppError";
 import { prisma } from "../../lib/prisma";
-import { CreateAttendancePayload } from "./attendance.validation";
+import {
+    CreateAttendancePayload,
+    GetEmployeeAttendanceQuery,
+    SaveEmployeeAttendancePayload,
+} from "./attendance.validation";
 
 const getAttendanceStudents = async (classId: string, date: string) => {
     const attendanceDate = new Date(`${date}T00:00:00.000Z`);
+    let isTaken = false;
 
     const existingClass = await prisma.class.findFirst({
         where: {
@@ -34,7 +42,7 @@ const getAttendanceStudents = async (classId: string, date: string) => {
         },
     });
 
-    console.log("attendenceSesssion", attendanceSession);
+    isTaken = !!attendanceSession;
 
     // temporary
     const sessions = await prisma.attendanceSession.findMany({
@@ -89,23 +97,97 @@ const getAttendanceStudents = async (classId: string, date: string) => {
     );
 
     const formattedStudents = students.map((student) => {
-        const { birthRegistrationNumber, ...studentData } = student;
+        const { birthRegistrationNumber, fullName, ...studentData } = student;
 
         return {
             ...studentData,
             studentId: birthRegistrationNumber,
-            attendanceStatus: attendanceMap.get(student.id) ?? null,
+            name: fullName,
+            status: attendanceMap.get(student.id) ?? null,
         };
     });
 
     return {
-        date: date,
-        class: existingClass,
+        date: date.split("-").reverse().join("/"),
+        classId: existingClass.id,
+        isTaken,
         students: formattedStudents,
     };
 };
 
-const saveAttesavndance = async (payload: CreateAttendancePayload) => {
+const getEmployeeAttendance = async (payload: GetEmployeeAttendanceQuery) => {
+    const { date } = payload;
+    let isTaken = false;
+
+    // Convert YYYY-MM-DD into UTC midnight
+    const attendanceDate = new Date(`${date}T00:00:00.000Z`);
+
+    // Find attendance session for the selected date
+    const attendanceSession = await prisma.employeeAttendanceSession.findUnique(
+        {
+            where: {
+                date: attendanceDate,
+            },
+            select: {
+                id: true,
+            },
+        },
+    );
+
+    // Get all active employees
+    const employees = await prisma.employee.findMany({
+        where: {
+            isdeleted: false,
+        },
+        select: {
+            id: true,
+            employeeId: true,
+            fullName: true,
+            employeeRole: true,
+        },
+        orderBy: {
+            employeeId: "asc",
+        },
+    });
+
+    // Get attendance records if a session exists
+    let attendanceRecords: {
+        employeeId: string;
+        status: EmployeeAttendanceStatus;
+    }[] = [];
+
+    if (attendanceSession) {
+        attendanceRecords = await prisma.employeeAttendanceRecord.findMany({
+            where: {
+                sessionId: attendanceSession.id,
+            },
+            select: {
+                employeeId: true,
+                status: true,
+            },
+        });
+    }
+    isTaken = !!attendanceSession;
+
+    // Create a map for quick attendance lookup
+    const attendanceMap = new Map(
+        attendanceRecords.map((record) => [record.employeeId, record.status]),
+    );
+
+    // Attach attendance status to each employee
+    const formattedEmployees = employees.map((employee) => ({
+        ...employee,
+        status: attendanceMap.get(employee.id) ?? null,
+    }));
+
+    return {
+        date: date.split("-").reverse().join("/"),
+        isTaken,
+        employees: formattedEmployees,
+    };
+};
+
+const saveAttendance = async (payload: CreateAttendancePayload) => {
     const { classId, date, records } = payload;
 
     if (!records.length) {
@@ -246,7 +328,129 @@ const saveAttesavndance = async (payload: CreateAttendancePayload) => {
     return result;
 };
 
+const saveEmployeeAttendance = async (
+    payload: SaveEmployeeAttendancePayload,
+) => {
+    const { date, records } = payload;
+
+    // Convert YYYY-MM-DD to Date
+    const attendanceDate = new Date(`${date}T00:00:00.000Z`);
+
+    // Get all active employees
+    const employees = await prisma.employee.findMany({
+        where: {
+            isdeleted: false,
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    const employeeIds = new Set(employees.map((employee) => employee.id));
+
+    // Validate employee IDs
+    const invalidEmployees = records.filter(
+        (record) => !employeeIds.has(record.employeeId),
+    );
+
+    if (invalidEmployees.length > 0) {
+        throw new AppError(
+            status.BAD_REQUEST,
+            "One or more employees do not exist or are inactive",
+        );
+    }
+
+    // Prevent duplicate employee IDs
+    const uniqueEmployeeIds = new Set(
+        records.map((record) => record.employeeId),
+    );
+
+    if (uniqueEmployeeIds.size !== records.length) {
+        throw new AppError(
+            status.BAD_REQUEST,
+            "Duplicate employee attendance records are not allowed",
+        );
+    }
+
+    const result = await prisma.$transaction(async (tx) => {
+        // Find existing attendance session
+        const existingSession = await tx.employeeAttendanceSession.findUnique({
+            where: {
+                date: attendanceDate,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        // CREATE
+        if (!existingSession) {
+            return tx.employeeAttendanceSession.create({
+                data: {
+                    date: attendanceDate,
+
+                    records: {
+                        create: records.map((record) => ({
+                            employeeId: record.employeeId,
+                            status: record.status,
+                        })),
+                    },
+                },
+
+                include: {
+                    records: {
+                        select: {
+                            id: true,
+                            employeeId: true,
+                            status: true,
+                        },
+                    },
+                },
+            });
+        }
+
+        // UPDATE
+        await tx.employeeAttendanceRecord.deleteMany({
+            where: {
+                sessionId: existingSession.id,
+            },
+        });
+
+        return tx.employeeAttendanceSession.update({
+            where: {
+                id: existingSession.id,
+            },
+
+            data: {
+                records: {
+                    create: records.map((record) => ({
+                        employeeId: record.employeeId,
+                        status: record.status,
+                    })),
+                },
+            },
+
+            include: {
+                records: {
+                    select: {
+                        id: true,
+                        employeeId: true,
+                        status: true,
+                    },
+                },
+            },
+        });
+    });
+
+    return {
+        ...result,
+        date: date.split("-").reverse().join("/"),
+    };
+};
+
 export const AttendanceService = {
+    getEmployeeAttendance,
     getAttendanceStudents,
-    saveAttesavndance,
+    saveAttendance,
+    saveEmployeeAttendance,
 };

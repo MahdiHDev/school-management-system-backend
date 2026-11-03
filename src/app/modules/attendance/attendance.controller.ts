@@ -6,6 +6,8 @@ import { AttendanceService } from "./attendance.service";
 import {
     createAttendanceSchema,
     getAttendanceStudentsSchema,
+    getEmployeeAttendanceSchema,
+    saveEmployeeAttendanceSchema,
 } from "./attendance.validation";
 
 const getAttendanceStudents = catchAsync(
@@ -26,10 +28,24 @@ const getAttendanceStudents = catchAsync(
     },
 );
 
-const saveAttendence = catchAsync(async (req: Request, res: Response) => {
+const getEmployeeAttendance = catchAsync(async (req, res) => {
+    const validatedQuery = getEmployeeAttendanceSchema.parse(req.query);
+
+    const result =
+        await AttendanceService.getEmployeeAttendance(validatedQuery);
+
+    sendResponse(res, {
+        success: true,
+        httpStatusCode: status.OK,
+        message: "Employee attendance retrieved successfully",
+        data: result,
+    });
+});
+
+const saveAttendance = catchAsync(async (req: Request, res: Response) => {
     const payload = createAttendanceSchema.parse(req.body);
 
-    const result = await AttendanceService.saveAttesavndance(payload);
+    const result = await AttendanceService.saveAttendance(payload);
 
     sendResponse(res, {
         httpStatusCode: status.OK,
@@ -39,4 +55,23 @@ const saveAttendence = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-export const AttendanceController = { getAttendanceStudents, saveAttendence };
+const saveEmployeeAttendance = catchAsync(async (req, res) => {
+    const validatedData = saveEmployeeAttendanceSchema.parse(req.body);
+
+    const result =
+        await AttendanceService.saveEmployeeAttendance(validatedData);
+
+    sendResponse(res, {
+        success: true,
+        httpStatusCode: status.CREATED,
+        message: "Employee attendance saved successfully",
+        data: result,
+    });
+});
+
+export const AttendanceController = {
+    getAttendanceStudents,
+    getEmployeeAttendance,
+    saveAttendance,
+    saveEmployeeAttendance,
+};

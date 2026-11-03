@@ -22,18 +22,18 @@ enum FeeParticularScope {
 
 // tables
 model GeneralSettings {
-    id            String  @id @default(uuid())
-    schoolName    String
-    schoolPhone   String
-    schoolEmail   String
-    schoolWebsite String?
-    schoolAddress String
-    country       String
+    id                   String  @id @default(uuid())
+    instituteName        String
+    institutePhoneNumber String
+    instituteEmail       String
+    instituteWebsite     String?
+    instituteAddress     String
+    instituteCountry     String
 
-    instituteLogo      String?
-    schoolLogoPublicId String?
-    schoolLogoName     String?
-    schoolLogoType     String?
+    instituteLogo         String?
+    instituteLogoPublicId String?
+    instituteLogoName     String?
+    instituteLogoType     String?
 
     isDeleted Boolean   @default(false)
     createdAt DateTime  @default(now())

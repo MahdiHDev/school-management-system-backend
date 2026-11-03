@@ -1,7 +1,7 @@
 enum AttendanceStatus {
     PRESENT
     ABSENT
-    LATE
+    LEAVE
 }
 
 model AttendanceSession {
@@ -37,4 +37,45 @@ model AttendanceRecord {
     @@index([sessionId])
     @@index([studentId])
     @@map("attendance_records")
+}
+
+enum EmployeeAttendanceStatus {
+    PRESENT
+    ABSENT
+    LATE
+    HALF_DAY
+    LEAVE
+}
+
+model EmployeeAttendanceSession {
+    id   String   @id @default(uuid())
+    date DateTime @db.Date
+
+    records EmployeeAttendanceRecord[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([date])
+    @@index([date])
+    @@map("employee_attendance_sessions")
+}
+
+model EmployeeAttendanceRecord {
+    id         String                   @id @default(uuid())
+    sessionId  String
+    employeeId String
+    status     EmployeeAttendanceStatus
+
+    session EmployeeAttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+    employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([sessionId, employeeId])
+    @@index([sessionId])
+    @@index([employeeId])
+    @@map("employee_attendance_records")
 }

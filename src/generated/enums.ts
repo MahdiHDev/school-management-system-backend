@@ -42,10 +42,21 @@ export type FeeParticularScope = (typeof FeeParticularScope)[keyof typeof FeePar
 export const AttendanceStatus = {
   PRESENT: 'PRESENT',
   ABSENT: 'ABSENT',
-  LATE: 'LATE'
+  LEAVE: 'LEAVE'
 } as const
 
 export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus]
+
+
+export const EmployeeAttendanceStatus = {
+  PRESENT: 'PRESENT',
+  ABSENT: 'ABSENT',
+  LATE: 'LATE',
+  HALF_DAY: 'HALF_DAY',
+  LEAVE: 'LEAVE'
+} as const
+
+export type EmployeeAttendanceStatus = (typeof EmployeeAttendanceStatus)[keyof typeof EmployeeAttendanceStatus]
 
 
 export const UserRole = {

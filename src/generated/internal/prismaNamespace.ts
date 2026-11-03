@@ -392,6 +392,8 @@ export const ModelName = {
   BankInfo: 'BankInfo',
   AttendanceSession: 'AttendanceSession',
   AttendanceRecord: 'AttendanceRecord',
+  EmployeeAttendanceSession: 'EmployeeAttendanceSession',
+  EmployeeAttendanceRecord: 'EmployeeAttendanceRecord',
   User: 'User',
   Session: 'Session',
   Account: 'Account',
@@ -419,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "generalSettings" | "rulesRegulations" | "gradingConfiguration" | "gradeScale" | "failCriteria" | "bankInfo" | "attendanceSession" | "attendanceRecord" | "user" | "session" | "account" | "verification" | "admin" | "employee" | "class" | "address" | "sequence" | "guardianInfo" | "student" | "subject"
+    modelProps: "generalSettings" | "rulesRegulations" | "gradingConfiguration" | "gradeScale" | "failCriteria" | "bankInfo" | "attendanceSession" | "attendanceRecord" | "employeeAttendanceSession" | "employeeAttendanceRecord" | "user" | "session" | "account" | "verification" | "admin" | "employee" | "class" | "address" | "sequence" | "guardianInfo" | "student" | "subject"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1012,6 +1014,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AttendanceRecordCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AttendanceRecordCountAggregateOutputType> | number
+        }
+      }
+    }
+    EmployeeAttendanceSession: {
+      payload: Prisma.$EmployeeAttendanceSessionPayload<ExtArgs>
+      fields: Prisma.EmployeeAttendanceSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmployeeAttendanceSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmployeeAttendanceSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.EmployeeAttendanceSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmployeeAttendanceSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceSessionPayload>
+        }
+        findMany: {
+          args: Prisma.EmployeeAttendanceSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceSessionPayload>[]
+        }
+        create: {
+          args: Prisma.EmployeeAttendanceSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceSessionPayload>
+        }
+        createMany: {
+          args: Prisma.EmployeeAttendanceSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmployeeAttendanceSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.EmployeeAttendanceSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceSessionPayload>
+        }
+        update: {
+          args: Prisma.EmployeeAttendanceSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmployeeAttendanceSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmployeeAttendanceSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmployeeAttendanceSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.EmployeeAttendanceSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.EmployeeAttendanceSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmployeeAttendanceSession>
+        }
+        groupBy: {
+          args: Prisma.EmployeeAttendanceSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeeAttendanceSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmployeeAttendanceSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeeAttendanceSessionCountAggregateOutputType> | number
+        }
+      }
+    }
+    EmployeeAttendanceRecord: {
+      payload: Prisma.$EmployeeAttendanceRecordPayload<ExtArgs>
+      fields: Prisma.EmployeeAttendanceRecordFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmployeeAttendanceRecordFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceRecordPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmployeeAttendanceRecordFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceRecordPayload>
+        }
+        findFirst: {
+          args: Prisma.EmployeeAttendanceRecordFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceRecordPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmployeeAttendanceRecordFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceRecordPayload>
+        }
+        findMany: {
+          args: Prisma.EmployeeAttendanceRecordFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceRecordPayload>[]
+        }
+        create: {
+          args: Prisma.EmployeeAttendanceRecordCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceRecordPayload>
+        }
+        createMany: {
+          args: Prisma.EmployeeAttendanceRecordCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmployeeAttendanceRecordCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceRecordPayload>[]
+        }
+        delete: {
+          args: Prisma.EmployeeAttendanceRecordDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceRecordPayload>
+        }
+        update: {
+          args: Prisma.EmployeeAttendanceRecordUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceRecordPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmployeeAttendanceRecordDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmployeeAttendanceRecordUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmployeeAttendanceRecordUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceRecordPayload>[]
+        }
+        upsert: {
+          args: Prisma.EmployeeAttendanceRecordUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeAttendanceRecordPayload>
+        }
+        aggregate: {
+          args: Prisma.EmployeeAttendanceRecordAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmployeeAttendanceRecord>
+        }
+        groupBy: {
+          args: Prisma.EmployeeAttendanceRecordGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeeAttendanceRecordGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmployeeAttendanceRecordCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeeAttendanceRecordCountAggregateOutputType> | number
         }
       }
     }
@@ -1944,16 +2094,16 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const GeneralSettingsScalarFieldEnum = {
   id: 'id',
-  schoolName: 'schoolName',
-  schoolPhone: 'schoolPhone',
-  schoolEmail: 'schoolEmail',
-  schoolWebsite: 'schoolWebsite',
-  schoolAddress: 'schoolAddress',
-  country: 'country',
+  instituteName: 'instituteName',
+  institutePhoneNumber: 'institutePhoneNumber',
+  instituteEmail: 'instituteEmail',
+  instituteWebsite: 'instituteWebsite',
+  instituteAddress: 'instituteAddress',
+  instituteCountry: 'instituteCountry',
   instituteLogo: 'instituteLogo',
-  schoolLogoPublicId: 'schoolLogoPublicId',
-  schoolLogoName: 'schoolLogoName',
-  schoolLogoType: 'schoolLogoType',
+  instituteLogoPublicId: 'instituteLogoPublicId',
+  instituteLogoName: 'instituteLogoName',
+  instituteLogoType: 'instituteLogoType',
   isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -2053,6 +2203,28 @@ export const AttendanceRecordScalarFieldEnum = {
 } as const
 
 export type AttendanceRecordScalarFieldEnum = (typeof AttendanceRecordScalarFieldEnum)[keyof typeof AttendanceRecordScalarFieldEnum]
+
+
+export const EmployeeAttendanceSessionScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmployeeAttendanceSessionScalarFieldEnum = (typeof EmployeeAttendanceSessionScalarFieldEnum)[keyof typeof EmployeeAttendanceSessionScalarFieldEnum]
+
+
+export const EmployeeAttendanceRecordScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  employeeId: 'employeeId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmployeeAttendanceRecordScalarFieldEnum = (typeof EmployeeAttendanceRecordScalarFieldEnum)[keyof typeof EmployeeAttendanceRecordScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {
@@ -2435,6 +2607,20 @@ export type ListEnumAttendanceStatusFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'EmployeeAttendanceStatus'
+ */
+export type EnumEmployeeAttendanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmployeeAttendanceStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'EmployeeAttendanceStatus[]'
+ */
+export type ListEnumEmployeeAttendanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmployeeAttendanceStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'UserRole'
  */
 export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
@@ -2621,6 +2807,8 @@ export type GlobalOmitConfig = {
   bankInfo?: Prisma.BankInfoOmit
   attendanceSession?: Prisma.AttendanceSessionOmit
   attendanceRecord?: Prisma.AttendanceRecordOmit
+  employeeAttendanceSession?: Prisma.EmployeeAttendanceSessionOmit
+  employeeAttendanceRecord?: Prisma.EmployeeAttendanceRecordOmit
   user?: Prisma.UserOmit
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit

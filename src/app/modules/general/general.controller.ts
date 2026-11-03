@@ -12,6 +12,17 @@ import {
     updateBankInfoSchema,
 } from "./general.valdation";
 
+const getGeneralSetting = async (req: Request, res: Response) => {
+    const result = await GeneralService.getGeneralSetting();
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "General Setting fetched successfully",
+        data: result,
+    });
+};
+
 const updateGeneralSetting = async (req: Request, res: Response) => {
     const { id } = req.params;
     const payload = generalSettingSchema.parse(JSON.parse(req.body.data));
@@ -143,6 +154,7 @@ const deleteBankInfo = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const GeneralController = {
+    getGeneralSetting,
     updateGeneralSetting,
     updateStudentRulesRegulations,
     updateEmployeeRulesRegulations,

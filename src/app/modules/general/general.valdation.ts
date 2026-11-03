@@ -3,24 +3,19 @@ import { z } from "zod";
 export const generalSettingSchema = z.object({
     id: z.string().optional(),
 
-    schoolName: z.string().optional(),
-    schoolPhone: z.string().optional(),
-    schoolEmail: z.string().optional(),
+    instituteName: z.string().optional(),
+    institutePhoneNumber: z.string().optional(),
+    instituteEmail: z.string().optional(),
 
-    schoolWebsite: z
+    instituteWebsite: z
         .string()
         .trim()
-        .url("Invalid school website URL")
+        .url("Invalid institute website URL")
         .optional()
         .or(z.literal("")),
 
-    schoolAddress: z.string().optional(),
-    country: z.string().trim().optional(),
-
-    instituteLogo: z.string().optional(),
-    schoolLogoPublicId: z.string().optional(),
-    schoolLogoName: z.string().optional(),
-    schoolLogoType: z.string().optional(),
+    instituteAddress: z.string().optional(),
+    instituteCountry: z.string().trim().optional(),
 });
 
 export const updateGeneralSettingSchema = z.object({

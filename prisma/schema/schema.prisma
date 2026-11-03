@@ -212,8 +212,9 @@ model Employee {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
-    address Address?
-    classes Class[]
+    address           Address?
+    classes           Class[]
+    attendanceRecords EmployeeAttendanceRecord[]
 
     @@map("employee")
 }

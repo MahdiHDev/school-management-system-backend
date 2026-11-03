@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { AttendanceStatus } from "../../../generated/enums";
+import {
+    AttendanceStatus,
+    EmployeeAttendanceStatus,
+} from "../../../generated/enums";
 
 export const getAttendanceStudentsSchema = z.object({
     classId: z.string().trim().min(1, "Class ID is required"),
@@ -60,3 +63,63 @@ export const createAttendanceSchema = z.object({
 });
 
 export type CreateAttendancePayload = z.infer<typeof createAttendanceSchema>;
+
+export const saveEmployeeAttendanceSchema = z.object({
+    date: z
+        .string()
+        .regex(/^\d{2}\/\d{2}\/\d{4}$/, "Date must be in DD/MM/YYYY format")
+        .refine((value) => {
+            const [day, month, year] = value.split("/").map(Number);
+
+            const parsedDate = new Date(Date.UTC(year!, month! - 1, day!));
+
+            return (
+                parsedDate.getUTCFullYear() === year &&
+                parsedDate.getUTCMonth() === month! - 1 &&
+                parsedDate.getUTCDate() === day
+            );
+        }, "Invalid date")
+        .transform((value) => {
+            const [day, month, year] = value.split("/");
+
+            return `${year}-${month}-${day}`;
+        }),
+
+    records: z
+        .array(
+            z.object({
+                employeeId: z.string().trim().min(1, "Employee ID is required"),
+                status: z.nativeEnum(EmployeeAttendanceStatus),
+            }),
+        )
+        .min(1, "Attendance records are required"),
+});
+
+export type SaveEmployeeAttendancePayload = z.infer<
+    typeof saveEmployeeAttendanceSchema
+>;
+
+export const getEmployeeAttendanceSchema = z.object({
+    date: z
+        .string()
+        .regex(/^\d{2}\/\d{2}\/\d{4}$/, "Date must be in DD/MM/YYYY format")
+        .refine((value) => {
+            const [day, month, year] = value.split("/").map(Number);
+
+            const parsedDate = new Date(Date.UTC(year!, month! - 1, day!));
+
+            return (
+                parsedDate.getUTCFullYear() === year &&
+                parsedDate.getUTCMonth() === month! - 1 &&
+                parsedDate.getUTCDate() === day
+            );
+        }, "Invalid date")
+        .transform((value) => {
+            const [day, month, year] = value.split("/");
+            return `${year}-${month}-${day}`;
+        }),
+});
+
+export type GetEmployeeAttendanceQuery = z.infer<
+    typeof getEmployeeAttendanceSchema
+>;

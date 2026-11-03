@@ -11,10 +11,22 @@ router.get(
     AttendanceController.getAttendanceStudents,
 );
 
-router.post(
+router.get(
+    "/employee",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    AttendanceController.getEmployeeAttendance,
+);
+
+router.patch(
     "/",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-    AttendanceController.saveAttendence,
+    AttendanceController.saveAttendance,
+);
+
+router.patch(
+    "/employee",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    AttendanceController.saveEmployeeAttendance,
 );
 
 export const AttendanceRoutes: Router = router;

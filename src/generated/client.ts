@@ -82,6 +82,16 @@ export type AttendanceSession = Prisma.AttendanceSessionModel
  */
 export type AttendanceRecord = Prisma.AttendanceRecordModel
 /**
+ * Model EmployeeAttendanceSession
+ * 
+ */
+export type EmployeeAttendanceSession = Prisma.EmployeeAttendanceSessionModel
+/**
+ * Model EmployeeAttendanceRecord
+ * 
+ */
+export type EmployeeAttendanceRecord = Prisma.EmployeeAttendanceRecordModel
+/**
  * Model User
  * 
  */
