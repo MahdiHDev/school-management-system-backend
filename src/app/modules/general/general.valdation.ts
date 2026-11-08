@@ -7,12 +7,7 @@ export const generalSettingSchema = z.object({
     institutePhoneNumber: z.string().optional(),
     instituteEmail: z.string().optional(),
 
-    instituteWebsite: z
-        .string()
-        .trim()
-        .url("Invalid institute website URL")
-        .optional()
-        .or(z.literal("")),
+    instituteWebsite: z.string().trim().optional(),
 
     instituteAddress: z.string().optional(),
     instituteCountry: z.string().trim().optional(),

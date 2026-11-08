@@ -28,8 +28,14 @@ router.get(
     GeneralController.getAllBankInfo,
 );
 
+router.get(
+    "/rules-regulations",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    GeneralController.getRulesRegulations,
+);
+
 router.patch(
-    "/",
+    "/general-setting",
     ...generalSettingsMiddleware,
     GeneralController.updateGeneralSetting,
 );
@@ -77,7 +83,7 @@ router.post(
 );
 
 router.patch(
-    "/:id",
+    "/general-setting/:id",
     ...generalSettingsMiddleware,
     GeneralController.updateGeneralSetting,
 );

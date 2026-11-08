@@ -152,10 +152,9 @@ const getGeneralSetting = async () => {
     return {
         ...rest,
         instituteLogo: {
-            instituteLogo,
-            instituteLogoPublicId,
-            instituteLogoName,
-            instituteLogoType,
+            uri: instituteLogo,
+            name: instituteLogoName,
+            type: instituteLogoType,
         },
     };
 };
@@ -348,6 +347,21 @@ const updateEmployeeRulesRegulations = async (payload: {
             },
         });
     }
+};
+
+const getRulesRegulations = async () => {
+    const rules = await prisma.rulesRegulations.findMany({
+        where: {
+            type: { in: ["STUDENT", "EMPLOYEE"] },
+        },
+    });
+
+    return {
+        studentRules:
+            rules.find((rule) => rule.type === "STUDENT")?.content ?? null,
+        employeeRules:
+            rules.find((rule) => rule.type === "EMPLOYEE")?.content ?? null,
+    };
 };
 
 const getAllBankInfo = async (query: IQueryParams) => {
@@ -571,6 +585,7 @@ export const GeneralService = {
     updateGeneralSetting,
     updateStudentRulesRegulations,
     updateEmployeeRulesRegulations,
+    getRulesRegulations,
     getAllBankInfo,
     getBankInfoById,
     createbankInfo,

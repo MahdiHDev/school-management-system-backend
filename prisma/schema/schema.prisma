@@ -215,6 +215,7 @@ model Employee {
     address           Address?
     classes           Class[]
     attendanceRecords EmployeeAttendanceRecord[]
+    salaryPayments    SalaryPayment[]
 
     @@map("employee")
 }

@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  SalaryPayment: 'SalaryPayment',
   GeneralSettings: 'GeneralSettings',
   RulesRegulations: 'RulesRegulations',
   GradingConfiguration: 'GradingConfiguration',
@@ -89,6 +90,21 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const SalaryPaymentScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  salaryMonth: 'salaryMonth',
+  paymentDate: 'paymentDate',
+  fixedSalary: 'fixedSalary',
+  bonus: 'bonus',
+  deduction: 'deduction',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SalaryPaymentScalarFieldEnum = (typeof SalaryPaymentScalarFieldEnum)[keyof typeof SalaryPaymentScalarFieldEnum]
 
 
 export const GeneralSettingsScalarFieldEnum = {

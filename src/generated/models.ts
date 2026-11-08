@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/SalaryPayment'
 export type * from './models/GeneralSettings'
 export type * from './models/RulesRegulations'
 export type * from './models/GradingConfiguration'

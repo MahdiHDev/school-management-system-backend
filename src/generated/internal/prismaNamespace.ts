@@ -384,6 +384,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  SalaryPayment: 'SalaryPayment',
   GeneralSettings: 'GeneralSettings',
   RulesRegulations: 'RulesRegulations',
   GradingConfiguration: 'GradingConfiguration',
@@ -421,10 +422,84 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "generalSettings" | "rulesRegulations" | "gradingConfiguration" | "gradeScale" | "failCriteria" | "bankInfo" | "attendanceSession" | "attendanceRecord" | "employeeAttendanceSession" | "employeeAttendanceRecord" | "user" | "session" | "account" | "verification" | "admin" | "employee" | "class" | "address" | "sequence" | "guardianInfo" | "student" | "subject"
+    modelProps: "salaryPayment" | "generalSettings" | "rulesRegulations" | "gradingConfiguration" | "gradeScale" | "failCriteria" | "bankInfo" | "attendanceSession" | "attendanceRecord" | "employeeAttendanceSession" | "employeeAttendanceRecord" | "user" | "session" | "account" | "verification" | "admin" | "employee" | "class" | "address" | "sequence" | "guardianInfo" | "student" | "subject"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    SalaryPayment: {
+      payload: Prisma.$SalaryPaymentPayload<ExtArgs>
+      fields: Prisma.SalaryPaymentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SalaryPaymentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SalaryPaymentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SalaryPaymentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SalaryPaymentPayload>
+        }
+        findFirst: {
+          args: Prisma.SalaryPaymentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SalaryPaymentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SalaryPaymentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SalaryPaymentPayload>
+        }
+        findMany: {
+          args: Prisma.SalaryPaymentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SalaryPaymentPayload>[]
+        }
+        create: {
+          args: Prisma.SalaryPaymentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SalaryPaymentPayload>
+        }
+        createMany: {
+          args: Prisma.SalaryPaymentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SalaryPaymentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SalaryPaymentPayload>[]
+        }
+        delete: {
+          args: Prisma.SalaryPaymentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SalaryPaymentPayload>
+        }
+        update: {
+          args: Prisma.SalaryPaymentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SalaryPaymentPayload>
+        }
+        deleteMany: {
+          args: Prisma.SalaryPaymentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SalaryPaymentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SalaryPaymentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SalaryPaymentPayload>[]
+        }
+        upsert: {
+          args: Prisma.SalaryPaymentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SalaryPaymentPayload>
+        }
+        aggregate: {
+          args: Prisma.SalaryPaymentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSalaryPayment>
+        }
+        groupBy: {
+          args: Prisma.SalaryPaymentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SalaryPaymentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SalaryPaymentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SalaryPaymentCountAggregateOutputType> | number
+        }
+      }
+    }
     GeneralSettings: {
       payload: Prisma.$GeneralSettingsPayload<ExtArgs>
       fields: Prisma.GeneralSettingsFieldRefs
@@ -2092,6 +2167,21 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const SalaryPaymentScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  salaryMonth: 'salaryMonth',
+  paymentDate: 'paymentDate',
+  fixedSalary: 'fixedSalary',
+  bonus: 'bonus',
+  deduction: 'deduction',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SalaryPaymentScalarFieldEnum = (typeof SalaryPaymentScalarFieldEnum)[keyof typeof SalaryPaymentScalarFieldEnum]
+
+
 export const GeneralSettingsScalarFieldEnum = {
   id: 'id',
   instituteName: 'instituteName',
@@ -2516,13 +2606,6 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -2533,6 +2616,27 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -2799,6 +2903,7 @@ export type PrismaClientOptions = ({
   queryPlanCacheMaxSize?: number
 }
 export type GlobalOmitConfig = {
+  salaryPayment?: Prisma.SalaryPaymentOmit
   generalSettings?: Prisma.GeneralSettingsOmit
   rulesRegulations?: Prisma.RulesRegulationsOmit
   gradingConfiguration?: Prisma.GradingConfigurationOmit

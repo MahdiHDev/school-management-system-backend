@@ -12,7 +12,7 @@ import {
     updateBankInfoSchema,
 } from "./general.valdation";
 
-const getGeneralSetting = async (req: Request, res: Response) => {
+const getGeneralSetting = catchAsync(async (_req: Request, res: Response) => {
     const result = await GeneralService.getGeneralSetting();
 
     sendResponse(res, {
@@ -21,16 +21,23 @@ const getGeneralSetting = async (req: Request, res: Response) => {
         message: "General Setting fetched successfully",
         data: result,
     });
-};
+});
 
-const updateGeneralSetting = async (req: Request, res: Response) => {
+const getRulesRegulations = catchAsync(async (req: Request, res: Response) => {
+    const result = await GeneralService.getRulesRegulations();
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Rules & Regulations fetched successfully",
+        data: result,
+    });
+});
+
+const updateGeneralSetting = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const payload = generalSettingSchema.parse(JSON.parse(req.body.data));
     const files = req.files as Record<string, UploadFile[]>;
-
-    if (!files.instituteLogo?.length) {
-        throw new AppError(400, "Institute Logo is required");
-    }
 
     const result = await GeneralService.updateGeneralSetting(
         payload,
@@ -44,9 +51,9 @@ const updateGeneralSetting = async (req: Request, res: Response) => {
         message: "General Setting Updated Successfully",
         data: result,
     });
-};
+});
 
-const updateStudentRulesRegulations = async (req: Request, res: Response) => {
+const updateStudentRulesRegulations = catchAsync(async (req: Request, res: Response) => {
     const { studentRules } = req.body;
 
     const result = await GeneralService.updateStudentRulesRegulations({
@@ -59,9 +66,9 @@ const updateStudentRulesRegulations = async (req: Request, res: Response) => {
         message: "Student Rules & Regulations Updated Successfully",
         data: result,
     });
-};
+});
 
-const updateEmployeeRulesRegulations = async (req: Request, res: Response) => {
+const updateEmployeeRulesRegulations = catchAsync(async (req: Request, res: Response) => {
     const { employeeRules } = req.body;
 
     const result = await GeneralService.updateEmployeeRulesRegulations({
@@ -74,7 +81,7 @@ const updateEmployeeRulesRegulations = async (req: Request, res: Response) => {
         message: "Employee Rules & Regulations Updated Successfully",
         data: result,
     });
-};
+});
 
 const getAllBankInfo = catchAsync(async (req: Request, res: Response) => {
     const query = req.query;
@@ -155,6 +162,7 @@ const deleteBankInfo = catchAsync(async (req: Request, res: Response) => {
 
 export const GeneralController = {
     getGeneralSetting,
+    getRulesRegulations,
     updateGeneralSetting,
     updateStudentRulesRegulations,
     updateEmployeeRulesRegulations,

@@ -6,6 +6,7 @@ import { ClassesRoutes } from "../modules/classes/classes.routes";
 import { EmployeeRoutes } from "../modules/employees/employees.routes";
 import { GeneralSettingsRoutes } from "../modules/general/general.routes";
 import { GradeConfigurationRoutes } from "../modules/grades/grades.routes";
+import { salaryRoutes } from "../modules/salary/salary.routes";
 import { StudentRoutes } from "../modules/student/student.routes";
 import { subjectRoutes } from "../modules/subjects/subject.routes";
 
@@ -39,6 +40,10 @@ const moduleRoutes = [
     {
         path: "/attendance",
         route: AttendanceRoutes,
+    },
+    {
+        path: "/salary",
+        route: salaryRoutes,
     },
     {
         path: "/subjects",

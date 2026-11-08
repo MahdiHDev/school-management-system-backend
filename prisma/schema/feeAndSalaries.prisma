@@ -1,0 +1,27 @@
+model SalaryPayment {
+    id         String @id @default(uuid())
+    employeeId String
+
+    // Salary period
+    salaryMonth String
+
+    // Payment information
+    paymentDate DateTime @db.Date
+
+    // Salary breakdown
+    fixedSalary Decimal @db.Decimal(10, 2)
+    bonus       Decimal @default(0) @db.Decimal(10, 2)
+    deduction   Decimal @default(0) @db.Decimal(10, 2)
+
+    // Employee relation
+    employee Employee @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // One salary payment per employee per month
+    @@unique([employeeId, salaryMonth])
+    @@index([salaryMonth])
+    @@index([employeeId])
+    @@map("salary_payments")
+}
