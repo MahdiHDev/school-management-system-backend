@@ -35,6 +35,27 @@ const getGradeData = async () => {
     );
 };
 
+const getFailCriteria = async () => {
+    const result = await prisma.failCriteria.findFirst({
+        where: {
+            isActive: true,
+        },
+        select: {
+            overallPercentage: true,
+            subjectPercentage: true,
+            minFailedSubjects: true,
+        },
+    });
+
+    const formattedData = {
+        overall: result?.overallPercentage,
+        subject: result?.subjectPercentage,
+        number: result?.minFailedSubjects,
+    };
+
+    return formattedData;
+};
+
 const updateGradingConfiguration = async (
     payload: IGradingConfigurationPayload,
 ) => {
@@ -220,6 +241,7 @@ const updateFailCriteria = async (payload: failCriteriaPayload) => {
 
 export const gradingConfigurationService = {
     getGradeData,
+    getFailCriteria,
     updateGradingConfiguration,
     updateFailCriteria,
 };

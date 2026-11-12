@@ -11,6 +11,12 @@ router.get(
     gradesController.getGradeData,
 );
 
+router.get(
+    "/fail-criteria",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    gradesController.getFailCriteriaData,
+);
+
 router.put(
     "/",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),

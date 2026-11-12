@@ -19,6 +19,17 @@ const getGradeData = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getFailCriteriaData = catchAsync(async (req: Request, res: Response) => {
+    const result = await gradingConfigurationService.getFailCriteria();
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Fail Criteria fetche successfully",
+        data: result,
+    });
+});
+
 const updateGradingConfiguration = catchAsync(
     async (req: Request, res: Response) => {
         const payload = gradingConfigurationSchema.parse(req.body);
@@ -56,6 +67,7 @@ const updateFailCriteria = catchAsync(async (req: Request, res: Response) => {
 
 export const gradesController = {
     getGradeData,
+    getFailCriteriaData,
     updateGradingConfiguration,
     updateFailCriteria,
 };

@@ -43,6 +43,7 @@ export type FailCriteriaMinAggregateOutputType = {
   overallPercentage: number | null
   subjectPercentage: number | null
   minFailedSubjects: number | null
+  isActive: boolean | null
   configurationId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -53,6 +54,7 @@ export type FailCriteriaMaxAggregateOutputType = {
   overallPercentage: number | null
   subjectPercentage: number | null
   minFailedSubjects: number | null
+  isActive: boolean | null
   configurationId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -63,6 +65,7 @@ export type FailCriteriaCountAggregateOutputType = {
   overallPercentage: number
   subjectPercentage: number
   minFailedSubjects: number
+  isActive: number
   configurationId: number
   createdAt: number
   updatedAt: number
@@ -87,6 +90,7 @@ export type FailCriteriaMinAggregateInputType = {
   overallPercentage?: true
   subjectPercentage?: true
   minFailedSubjects?: true
+  isActive?: true
   configurationId?: true
   createdAt?: true
   updatedAt?: true
@@ -97,6 +101,7 @@ export type FailCriteriaMaxAggregateInputType = {
   overallPercentage?: true
   subjectPercentage?: true
   minFailedSubjects?: true
+  isActive?: true
   configurationId?: true
   createdAt?: true
   updatedAt?: true
@@ -107,6 +112,7 @@ export type FailCriteriaCountAggregateInputType = {
   overallPercentage?: true
   subjectPercentage?: true
   minFailedSubjects?: true
+  isActive?: true
   configurationId?: true
   createdAt?: true
   updatedAt?: true
@@ -204,6 +210,7 @@ export type FailCriteriaGroupByOutputType = {
   overallPercentage: number
   subjectPercentage: number
   minFailedSubjects: number
+  isActive: boolean
   configurationId: string
   createdAt: Date
   updatedAt: Date
@@ -237,6 +244,7 @@ export type FailCriteriaWhereInput = {
   overallPercentage?: Prisma.FloatFilter<"FailCriteria"> | number
   subjectPercentage?: Prisma.FloatFilter<"FailCriteria"> | number
   minFailedSubjects?: Prisma.IntFilter<"FailCriteria"> | number
+  isActive?: Prisma.BoolFilter<"FailCriteria"> | boolean
   configurationId?: Prisma.StringFilter<"FailCriteria"> | string
   createdAt?: Prisma.DateTimeFilter<"FailCriteria"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FailCriteria"> | Date | string
@@ -248,6 +256,7 @@ export type FailCriteriaOrderByWithRelationInput = {
   overallPercentage?: Prisma.SortOrder
   subjectPercentage?: Prisma.SortOrder
   minFailedSubjects?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   configurationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -263,6 +272,7 @@ export type FailCriteriaWhereUniqueInput = Prisma.AtLeast<{
   overallPercentage?: Prisma.FloatFilter<"FailCriteria"> | number
   subjectPercentage?: Prisma.FloatFilter<"FailCriteria"> | number
   minFailedSubjects?: Prisma.IntFilter<"FailCriteria"> | number
+  isActive?: Prisma.BoolFilter<"FailCriteria"> | boolean
   createdAt?: Prisma.DateTimeFilter<"FailCriteria"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FailCriteria"> | Date | string
   configuration?: Prisma.XOR<Prisma.GradingConfigurationScalarRelationFilter, Prisma.GradingConfigurationWhereInput>
@@ -273,6 +283,7 @@ export type FailCriteriaOrderByWithAggregationInput = {
   overallPercentage?: Prisma.SortOrder
   subjectPercentage?: Prisma.SortOrder
   minFailedSubjects?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   configurationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -291,6 +302,7 @@ export type FailCriteriaScalarWhereWithAggregatesInput = {
   overallPercentage?: Prisma.FloatWithAggregatesFilter<"FailCriteria"> | number
   subjectPercentage?: Prisma.FloatWithAggregatesFilter<"FailCriteria"> | number
   minFailedSubjects?: Prisma.IntWithAggregatesFilter<"FailCriteria"> | number
+  isActive?: Prisma.BoolWithAggregatesFilter<"FailCriteria"> | boolean
   configurationId?: Prisma.StringWithAggregatesFilter<"FailCriteria"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FailCriteria"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FailCriteria"> | Date | string
@@ -301,6 +313,7 @@ export type FailCriteriaCreateInput = {
   overallPercentage: number
   subjectPercentage: number
   minFailedSubjects: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   configuration: Prisma.GradingConfigurationCreateNestedOneWithoutFailCriteriaInput
@@ -311,6 +324,7 @@ export type FailCriteriaUncheckedCreateInput = {
   overallPercentage: number
   subjectPercentage: number
   minFailedSubjects: number
+  isActive?: boolean
   configurationId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -321,6 +335,7 @@ export type FailCriteriaUpdateInput = {
   overallPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   subjectPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   minFailedSubjects?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   configuration?: Prisma.GradingConfigurationUpdateOneRequiredWithoutFailCriteriaNestedInput
@@ -331,6 +346,7 @@ export type FailCriteriaUncheckedUpdateInput = {
   overallPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   subjectPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   minFailedSubjects?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   configurationId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -341,6 +357,7 @@ export type FailCriteriaCreateManyInput = {
   overallPercentage: number
   subjectPercentage: number
   minFailedSubjects: number
+  isActive?: boolean
   configurationId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -351,6 +368,7 @@ export type FailCriteriaUpdateManyMutationInput = {
   overallPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   subjectPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   minFailedSubjects?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -360,6 +378,7 @@ export type FailCriteriaUncheckedUpdateManyInput = {
   overallPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   subjectPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   minFailedSubjects?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   configurationId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -375,6 +394,7 @@ export type FailCriteriaCountOrderByAggregateInput = {
   overallPercentage?: Prisma.SortOrder
   subjectPercentage?: Prisma.SortOrder
   minFailedSubjects?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   configurationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -391,6 +411,7 @@ export type FailCriteriaMaxOrderByAggregateInput = {
   overallPercentage?: Prisma.SortOrder
   subjectPercentage?: Prisma.SortOrder
   minFailedSubjects?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   configurationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -401,6 +422,7 @@ export type FailCriteriaMinOrderByAggregateInput = {
   overallPercentage?: Prisma.SortOrder
   subjectPercentage?: Prisma.SortOrder
   minFailedSubjects?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   configurationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -457,6 +479,7 @@ export type FailCriteriaCreateWithoutConfigurationInput = {
   overallPercentage: number
   subjectPercentage: number
   minFailedSubjects: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -466,6 +489,7 @@ export type FailCriteriaUncheckedCreateWithoutConfigurationInput = {
   overallPercentage: number
   subjectPercentage: number
   minFailedSubjects: number
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -491,6 +515,7 @@ export type FailCriteriaUpdateWithoutConfigurationInput = {
   overallPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   subjectPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   minFailedSubjects?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -500,6 +525,7 @@ export type FailCriteriaUncheckedUpdateWithoutConfigurationInput = {
   overallPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   subjectPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   minFailedSubjects?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -511,6 +537,7 @@ export type FailCriteriaSelect<ExtArgs extends runtime.Types.Extensions.Internal
   overallPercentage?: boolean
   subjectPercentage?: boolean
   minFailedSubjects?: boolean
+  isActive?: boolean
   configurationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -522,6 +549,7 @@ export type FailCriteriaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   overallPercentage?: boolean
   subjectPercentage?: boolean
   minFailedSubjects?: boolean
+  isActive?: boolean
   configurationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -533,6 +561,7 @@ export type FailCriteriaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   overallPercentage?: boolean
   subjectPercentage?: boolean
   minFailedSubjects?: boolean
+  isActive?: boolean
   configurationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -544,12 +573,13 @@ export type FailCriteriaSelectScalar = {
   overallPercentage?: boolean
   subjectPercentage?: boolean
   minFailedSubjects?: boolean
+  isActive?: boolean
   configurationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FailCriteriaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "overallPercentage" | "subjectPercentage" | "minFailedSubjects" | "configurationId" | "createdAt" | "updatedAt", ExtArgs["result"]["failCriteria"]>
+export type FailCriteriaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "overallPercentage" | "subjectPercentage" | "minFailedSubjects" | "isActive" | "configurationId" | "createdAt" | "updatedAt", ExtArgs["result"]["failCriteria"]>
 export type FailCriteriaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   configuration?: boolean | Prisma.GradingConfigurationDefaultArgs<ExtArgs>
 }
@@ -570,6 +600,7 @@ export type $FailCriteriaPayload<ExtArgs extends runtime.Types.Extensions.Intern
     overallPercentage: number
     subjectPercentage: number
     minFailedSubjects: number
+    isActive: boolean
     configurationId: string
     createdAt: Date
     updatedAt: Date
@@ -1001,6 +1032,7 @@ export interface FailCriteriaFieldRefs {
   readonly overallPercentage: Prisma.FieldRef<"FailCriteria", 'Float'>
   readonly subjectPercentage: Prisma.FieldRef<"FailCriteria", 'Float'>
   readonly minFailedSubjects: Prisma.FieldRef<"FailCriteria", 'Int'>
+  readonly isActive: Prisma.FieldRef<"FailCriteria", 'Boolean'>
   readonly configurationId: Prisma.FieldRef<"FailCriteria", 'String'>
   readonly createdAt: Prisma.FieldRef<"FailCriteria", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FailCriteria", 'DateTime'>

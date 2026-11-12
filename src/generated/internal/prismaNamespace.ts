@@ -2245,6 +2245,7 @@ export const FailCriteriaScalarFieldEnum = {
   overallPercentage: 'overallPercentage',
   subjectPercentage: 'subjectPercentage',
   minFailedSubjects: 'minFailedSubjects',
+  isActive: 'isActive',
   configurationId: 'configurationId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

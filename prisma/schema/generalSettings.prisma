@@ -83,10 +83,11 @@ model GradeScale {
 }
 
 model FailCriteria {
-    id                String @id @default(uuid())
+    id                String  @id @default(uuid())
     overallPercentage Float
     subjectPercentage Float
     minFailedSubjects Int
+    isActive          Boolean @default(true)
 
     configurationId String               @unique
     configuration   GradingConfiguration @relation(fields: [configurationId], references: [id], onDelete: Cascade)

@@ -480,13 +480,12 @@ const createStudent = async (
         try {
             await sendEmail({
                 to: payload.email,
-                subject: "Your Student Account Login Credentials",
+                subject: "Welcome to GreenFair Kindergarten - Student Account",
                 templateName: "student-credentials",
                 templateData: {
                     name: payload.fullName,
                     email: payload.email,
                     password: tempPassword,
-                    schoolName: "GreenFair Kindergarten",
                     loginUrl: `${envVars.FRONTEND_URL}/login`,
                 },
             });
