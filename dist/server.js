@@ -17,7 +17,7 @@ import qs from "qs";
 // src/app/lib/auth.ts
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { bearer } from "better-auth/plugins";
+import { admin as adminPlugin, bearer } from "better-auth/plugins";
 import { emailOTP } from "better-auth/plugins/email-otp";
 
 // src/generated/enums.ts
@@ -209,6 +209,32 @@ var sendEmail = async ({
       "Failed to send email"
     );
   }
+};
+
+// src/app/lib/permissions.ts
+import { createAccessControl } from "better-auth/plugins/access";
+import {
+  adminAc,
+  defaultStatements,
+  userAc
+} from "better-auth/plugins/admin/access";
+var statement = {
+  ...defaultStatements
+};
+var ac = createAccessControl(statement);
+var superAdmin = ac.newRole({
+  ...adminAc.statements
+});
+var admin = ac.newRole({
+  ...adminAc.statements
+});
+var student = ac.newRole({
+  ...userAc.statements
+});
+var roles = {
+  SUPER_ADMIN: superAdmin,
+  ADMIN: admin,
+  STUDENT: student
 };
 
 // src/app/lib/prisma.ts
@@ -737,6 +763,11 @@ var auth = betterAuth({
     }
   },
   plugins: [
+    adminPlugin({
+      ac,
+      roles,
+      defaultRole: "STUDENT"
+    }),
     bearer(),
     emailOTP({
       overrideDefaultEmailVerification: true,
@@ -1313,13 +1344,13 @@ var getAttendanceStudents = async (classId, date) => {
   const attendanceMap = new Map(
     attendanceRecords.map((record) => [record.studentId, record.status])
   );
-  const formattedStudents = students.map((student) => {
-    const { birthRegistrationNumber, fullName, ...studentData } = student;
+  const formattedStudents = students.map((student2) => {
+    const { birthRegistrationNumber, fullName, ...studentData } = student2;
     return {
       ...studentData,
       studentId: birthRegistrationNumber,
       name: fullName,
-      status: attendanceMap.get(student.id) ?? null
+      status: attendanceMap.get(student2.id) ?? null
     };
   });
   return {
@@ -1415,7 +1446,7 @@ var saveAttendance = async (payload) => {
       id: true
     }
   });
-  const studentIds = new Set(students.map((student) => student.id));
+  const studentIds = new Set(students.map((student2) => student2.id));
   const invalidStudents = records.filter(
     (record) => !studentIds.has(record.studentId)
   );
@@ -4362,16 +4393,29 @@ import status18 from "http-status";
 // src/app/modules/grades/grades.service.ts
 import status17 from "http-status";
 var getGradeData = async () => {
-  const result = prisma.gradingConfiguration.findFirst({
+  const result = await prisma.gradingConfiguration.findFirst({
     where: {
       isActive: true
     },
-    include: {
-      grades: true,
-      failCriteria: true
+    select: {
+      grades: {
+        orderBy: {
+          minMarks: "desc"
+        },
+        select: {
+          id: true,
+          grade: true,
+          minMarks: true,
+          maxMarks: true,
+          status: true
+        }
+      }
     }
   });
-  return result;
+  return result?.grades.map((grade) => ({
+    ...grade,
+    status: grade.status === "PASS" ? "Pass" : "Fail"
+  })) ?? [];
 };
 var updateGradingConfiguration = async (payload) => {
   const { name, grades } = payload;
@@ -4428,6 +4472,7 @@ var updateGradingConfiguration = async (payload) => {
         }
       });
       for (const grade of grades) {
+        const gradeStatus = grade.status.toUpperCase();
         if (grade.id) {
           const existingGrade = existingGrades.find(
             (item) => item.id === grade.id
@@ -4441,7 +4486,7 @@ var updateGradingConfiguration = async (payload) => {
                 grade: grade.grade,
                 minMarks: grade.minMarks,
                 maxMarks: grade.maxMarks,
-                status: grade.status
+                status: gradeStatus
               }
             });
           }
@@ -4451,7 +4496,7 @@ var updateGradingConfiguration = async (payload) => {
               grade: grade.grade,
               minMarks: grade.minMarks,
               maxMarks: grade.maxMarks,
-              status: grade.status,
+              status: gradeStatus,
               configurationId: configuration.id
             }
           });
@@ -4527,7 +4572,7 @@ var gradeScaleSchema = z6.object({
   grade: z6.string().min(1),
   minMarks: z6.number().int().min(0).max(100),
   maxMarks: z6.number().int().min(0).max(100),
-  status: z6.enum(["PASS", "FAIL"])
+  status: z6.enum(["Pass", "Fail", "PASS", "FAIL"])
 });
 var gradingConfigurationSchema = z6.object({
   name: z6.string().optional(),
@@ -4748,6 +4793,14 @@ import status20 from "http-status";
 // src/app/modules/student/student.service.ts
 import status19 from "http-status";
 
+// src/app/utils/generatePassword.ts
+import { randomBytes } from "crypto";
+var generateTempPassword = (length = 12) => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$!";
+  const bytes = randomBytes(length);
+  return Array.from(bytes, (byte) => chars[byte % chars.length]).join("");
+};
+
 // src/app/modules/student/student.constant.ts
 var studentSearchableFields = [
   "fullName",
@@ -4778,8 +4831,8 @@ var getAllStudent = async (query) => {
   const data = result.data;
   return {
     ...result,
-    data: data.map((student) => {
-      const { user, ...studentData } = student;
+    data: data.map((student2) => {
+      const { user, ...studentData } = student2;
       return {
         ...studentData,
         ...user?.email && { email: user.email }
@@ -4788,7 +4841,7 @@ var getAllStudent = async (query) => {
   };
 };
 var getStudentForUpdate = async (id) => {
-  const student = await prisma.student.findUnique({
+  const student2 = await prisma.student.findUnique({
     where: {
       id,
       isdeleted: false
@@ -4855,10 +4908,10 @@ var getStudentForUpdate = async (id) => {
       }
     }
   });
-  if (!student) {
+  if (!student2) {
     throw new AppError_default(status19.NOT_FOUND, "Student Not found");
   }
-  if (!student?.address) {
+  if (!student2?.address) {
     throw new AppError_default(status19.NOT_FOUND, "Student address not found");
   }
   const {
@@ -4874,7 +4927,7 @@ var getStudentForUpdate = async (id) => {
     previousInstituteName,
     user: { email },
     ...studenData
-  } = student;
+  } = student2;
   const {
     nameOfLocalGuardian,
     relationShipOfStudent,
@@ -4889,37 +4942,37 @@ var getStudentForUpdate = async (id) => {
     guardianMobile: GuardianMobileNumber,
     previousInstitute: previousInstituteName,
     picture: {
-      uri: student.picture,
+      uri: student2.picture,
       name: pictureName,
       type: pictureType
     },
     authoritySign: {
-      uri: student.authoritySign,
+      uri: student2.authoritySign,
       name: authoritySignName,
       type: authoritySignType
     },
     studentSign: {
-      uri: student.studentSign,
+      uri: student2.studentSign,
       name: studentsignName,
       type: studentSignType
     },
     guardianSign: {
-      uri: student.guardianSign,
+      uri: student2.guardianSign,
       name: guardianSignName,
       type: guardianSignType
     },
     address: {
       present: {
-        village: student.address.presentAddressVillage,
-        postOffice: student.address.presentAddressPostOffice,
-        postCode: student.address.presentAddressPostCode,
-        district: student.address.presentAddressDistrict
+        village: student2.address.presentAddressVillage,
+        postOffice: student2.address.presentAddressPostOffice,
+        postCode: student2.address.presentAddressPostCode,
+        district: student2.address.presentAddressDistrict
       },
       permanent: {
-        village: student.address.permanentAddressVillage,
-        postOffice: student.address.permanentAddressPostOffice,
-        postCode: student.address.permanentAddressPostCode,
-        district: student.address.permanentAddressDistrict
+        village: student2.address.permanentAddressVillage,
+        postOffice: student2.address.permanentAddressPostOffice,
+        postCode: student2.address.permanentAddressPostCode,
+        district: student2.address.permanentAddressDistrict
       }
     },
     email
@@ -4973,25 +5026,26 @@ var createStudent = async (payload, files) => {
     studentSign?.public_id,
     guardianSign?.public_id
   ].filter((id) => !!id);
-  const tempPassword = "Temp@12345";
+  const tempPassword = generateTempPassword();
   let userId = null;
   try {
-    const authUser = await auth.api.signUpEmail({
+    const authUser = await auth.api.createUser({
       body: {
-        email: payload.email,
+        email: payload.email.toLowerCase(),
         password: tempPassword,
-        role: UserRole.STUDENT,
         name: payload.fullName,
-        image: picture?.secure_url,
-        needPasswordChange: true
+        role: UserRole.STUDENT,
+        data: {
+          image: picture?.secure_url,
+          emailVerified: true
+        }
       }
     });
     userId = authUser.user.id;
-    const student = await prisma.$transaction(async (tx) => {
+    const student2 = await prisma.$transaction(async (tx) => {
       await tx.user.update({
         where: { id: userId },
         data: {
-          emailVerified: true,
           needPasswordChange: true
         }
       });
@@ -5068,7 +5122,7 @@ var createStudent = async (payload, files) => {
         }
       });
     });
-    return student;
+    return student2;
   } catch (error) {
     console.log("Transaction error : ", error);
     if (userId) {
@@ -5090,7 +5144,7 @@ var createStudent = async (payload, files) => {
   }
 };
 var updateStudent = async (id, payload, files) => {
-  const student = await prisma.student.findUnique({
+  const student2 = await prisma.student.findUnique({
     where: { id },
     include: {
       user: true,
@@ -5098,7 +5152,7 @@ var updateStudent = async (id, payload, files) => {
       address: true
     }
   });
-  if (!student) {
+  if (!student2) {
     throw new AppError_default(status19.NOT_FOUND, "Student not found");
   }
   const pictureFile = files.picture?.[0];
@@ -5129,7 +5183,7 @@ var updateStudent = async (id, payload, files) => {
     const updatedStudent = await prisma.$transaction(async (tx) => {
       await tx.user.update({
         where: {
-          id: student.userId
+          id: student2.userId
         },
         data: {
           ...payload.fullName !== void 0 && {
@@ -5142,7 +5196,7 @@ var updateStudent = async (id, payload, files) => {
       });
       const updatedStudent2 = await tx.student.update({
         where: {
-          id: student.id
+          id: student2.id
         },
         data: {
           ...payload.fullName !== void 0 && {
@@ -5221,10 +5275,10 @@ var updateStudent = async (id, payload, files) => {
           }
         }
       });
-      if (student.guardianInfo) {
+      if (student2.guardianInfo) {
         await tx.guardianInfo.update({
           where: {
-            studentId: student.id
+            studentId: student2.id
           },
           data: {
             ...payload.fatherName !== void 0 && {
@@ -5266,10 +5320,10 @@ var updateStudent = async (id, payload, files) => {
           }
         });
       }
-      if (student.address && payload.address) {
+      if (student2.address && payload.address) {
         await tx.address.update({
           where: {
-            id: student.address.id
+            id: student2.address.id
           },
           data: {
             ...payload.address.permanent?.village !== void 0 && {
@@ -5302,10 +5356,10 @@ var updateStudent = async (id, payload, files) => {
       return updatedStudent2;
     });
     const oldPublicIds = [
-      picture && student.picturePublicId,
-      authoritySign && student.authoritySignPublicId,
-      studentSign && student.studentSignPublicId,
-      guardianSign && student.guardianSignPublicId
+      picture && student2.picturePublicId,
+      authoritySign && student2.authoritySignPublicId,
+      studentSign && student2.studentSignPublicId,
+      guardianSign && student2.guardianSignPublicId
     ].filter((id2) => Boolean(id2));
     await Promise.all(
       oldPublicIds.map(
@@ -5410,7 +5464,7 @@ var promoteStudents = async (sourceClassId, targetClassId, studentIds) => {
   });
 };
 var deleteStudent = async (id) => {
-  const student = await prisma.student.findUnique({
+  const student2 = await prisma.student.findUnique({
     where: { id },
     select: {
       id: true,
@@ -5421,7 +5475,7 @@ var deleteStudent = async (id) => {
       authoritySignPublicId: true
     }
   });
-  if (!student) {
+  if (!student2) {
     throw new AppError_default(status19.NOT_FOUND, "Student Profile not found");
   }
   await prisma.$transaction(async (tx) => {
@@ -5433,7 +5487,7 @@ var deleteStudent = async (id) => {
       }
     });
     await tx.user.update({
-      where: { id: student.userId },
+      where: { id: student2.userId },
       data: {
         isDeleted: true,
         deletedAt: /* @__PURE__ */ new Date(),
@@ -5441,14 +5495,14 @@ var deleteStudent = async (id) => {
       }
     });
     await tx.session.deleteMany({
-      where: { userId: student.userId }
+      where: { userId: student2.userId }
     });
   });
   await Promise.allSettled([
-    student.picturePublicId ? cloudinary_service_default.delete(student.picturePublicId) : Promise.resolve(),
-    student.authoritySignPublicId ? cloudinary_service_default.delete(student.authoritySignPublicId) : Promise.resolve(),
-    student.studentSignPublicId ? cloudinary_service_default.delete(student.studentSignPublicId) : Promise.resolve(),
-    student.guardianSignPublicId ? cloudinary_service_default.delete(student.guardianSignPublicId) : Promise.resolve()
+    student2.picturePublicId ? cloudinary_service_default.delete(student2.picturePublicId) : Promise.resolve(),
+    student2.authoritySignPublicId ? cloudinary_service_default.delete(student2.authoritySignPublicId) : Promise.resolve(),
+    student2.studentSignPublicId ? cloudinary_service_default.delete(student2.studentSignPublicId) : Promise.resolve(),
+    student2.guardianSignPublicId ? cloudinary_service_default.delete(student2.guardianSignPublicId) : Promise.resolve()
   ]);
   return { message: "Student Profile deleted successfully" };
 };
@@ -5566,12 +5620,12 @@ var getAllStudent2 = async (req, res) => {
 };
 var getStudentForUpdate2 = async (req, res) => {
   const { id } = req.params;
-  const student = await StudentService.getStudentForUpdate(id);
+  const student2 = await StudentService.getStudentForUpdate(id);
   sendResponse(res, {
     httpStatusCode: status20.OK,
     success: true,
     message: "Student For Update fetched successfully",
-    data: student
+    data: student2
   });
 };
 var createStudent2 = async (req, res) => {
@@ -5589,19 +5643,19 @@ var createStudent2 = async (req, res) => {
   if (!files.guardianSign?.length) {
     throw new AppError_default(400, "Guardian Sign is required");
   }
-  const student = await StudentService.createStudent(payload, files);
+  const student2 = await StudentService.createStudent(payload, files);
   sendResponse(res, {
     httpStatusCode: status20.CREATED,
     success: true,
     message: "Student profile created successfully",
-    data: student
+    data: student2
   });
 };
 var updateStudent2 = async (req, res) => {
   const { id } = req.params;
   const payload = updateStudentSchema.parse(JSON.parse(req.body.data));
   const files = req.files;
-  const student = await StudentService.updateStudent(
+  const student2 = await StudentService.updateStudent(
     id,
     payload,
     files
@@ -5610,7 +5664,7 @@ var updateStudent2 = async (req, res) => {
     httpStatusCode: status20.OK,
     success: true,
     message: "Student Updated Successfully",
-    data: student
+    data: student2
   });
 };
 var promoteStudents2 = async (req, res) => {
@@ -6082,7 +6136,7 @@ var seedSuperAdmin = async () => {
         }
       });
     });
-    const superAdmin = await prisma.admin.findFirst({
+    const superAdmin2 = await prisma.admin.findFirst({
       where: {
         email: envVars.SUPER_ADMIN_EMAIL
       },
@@ -6090,7 +6144,7 @@ var seedSuperAdmin = async () => {
         user: true
       }
     });
-    console.log("Super Admin Created", superAdmin);
+    console.log("Super Admin Created", superAdmin2);
   } catch (error) {
     console.error("Error seeding super admin: ", error);
     await prisma.user.delete({

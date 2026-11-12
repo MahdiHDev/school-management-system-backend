@@ -86,13 +86,18 @@ model User {
     deletedAt          DateTime?
     emailVerified      Boolean    @default(false)
     image              String?
-    createdAt          DateTime   @default(now())
-    updatedAt          DateTime   @updatedAt
-    sessions           Session[]
-    accounts           Account[]
-    employee           Employee?
-    admin              Admin?
-    students           Student[]
+
+    banned     Boolean   @default(false)
+    banReason  String?
+    banExpires DateTime?
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    sessions  Session[]
+    accounts  Account[]
+    employee  Employee?
+    admin     Admin?
+    students  Student[]
 
     @@unique([email])
     @@map("user")
@@ -299,7 +304,7 @@ model GuardianInfo {
     relationShipOfStudent String
     GuardianMobileNumber  String
 
-    student Student @relation(fields: [studentId], references: [id])
+    student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
     isdeleted Boolean   @default(false)
     createdAt DateTime  @default(now())

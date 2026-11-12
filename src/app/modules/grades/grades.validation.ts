@@ -5,7 +5,7 @@ const gradeScaleSchema = z.object({
     grade: z.string().min(1),
     minMarks: z.number().int().min(0).max(100),
     maxMarks: z.number().int().min(0).max(100),
-    status: z.enum(["PASS", "FAIL"]),
+    status: z.enum(["Pass", "Fail", "PASS", "FAIL"]),
 });
 
 export const gradingConfigurationSchema = z.object({

@@ -1,11 +1,12 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 // import { Role, UserStatus } from "../../generated/prisma/enums";
-import { bearer } from "better-auth/plugins";
+import { admin as adminPlugin, bearer } from "better-auth/plugins";
 import { emailOTP } from "better-auth/plugins/email-otp";
 import { UserRole, UserStatus } from "../../generated/enums";
 import { envVars } from "../config/env";
 import { sendEmail } from "../utils/email";
+import { ac, roles } from "./permissions";
 import { prisma } from "./prisma";
 // If your Prisma file is located elsewhere, you can change the path
 
@@ -62,6 +63,11 @@ export const auth: any = betterAuth({
     },
 
     plugins: [
+        adminPlugin({
+            ac,
+            roles,
+            defaultRole: "STUDENT",
+        }),
         bearer(),
 
         emailOTP({

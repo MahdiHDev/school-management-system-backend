@@ -7,17 +7,32 @@ import {
 } from "./grades.validation";
 
 const getGradeData = async () => {
-    const result = prisma.gradingConfiguration.findFirst({
+    const result = await prisma.gradingConfiguration.findFirst({
         where: {
             isActive: true,
         },
-        include: {
-            grades: true,
-            failCriteria: true,
+        select: {
+            grades: {
+                orderBy: {
+                    minMarks: "desc",
+                },
+                select: {
+                    id: true,
+                    grade: true,
+                    minMarks: true,
+                    maxMarks: true,
+                    status: true,
+                },
+            },
         },
     });
 
-    return result;
+    return (
+        result?.grades.map((grade) => ({
+            ...grade,
+            status: grade.status === "PASS" ? "Pass" : "Fail",
+        })) ?? []
+    );
 };
 
 const updateGradingConfiguration = async (
@@ -96,8 +111,11 @@ const updateGradingConfiguration = async (
 
             // Create / update grades
             for (const grade of grades) {
+                const gradeStatus = grade.status.toUpperCase() as
+                    | "PASS"
+                    | "FAIL";
+
                 if (grade.id) {
-                    // Make sure this grade belongs to this configuration
                     const existingGrade = existingGrades.find(
                         (item) => item.id === grade.id,
                     );
@@ -111,18 +129,17 @@ const updateGradingConfiguration = async (
                                 grade: grade.grade,
                                 minMarks: grade.minMarks,
                                 maxMarks: grade.maxMarks,
-                                status: grade.status,
+                                status: gradeStatus,
                             },
                         });
                     }
                 } else {
-                    // New grade
                     await tx.gradeScale.create({
                         data: {
                             grade: grade.grade,
                             minMarks: grade.minMarks,
                             maxMarks: grade.maxMarks,
-                            status: grade.status,
+                            status: gradeStatus,
                             configurationId: configuration.id,
                         },
                     });

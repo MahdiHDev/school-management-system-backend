@@ -4,10 +4,13 @@ import { UserRole, UserStatus } from "../../../generated/enums";
 import { CloudinaryService } from "../../../services/cloudinary";
 import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
 import { CloudinaryFolders } from "../../config/cloudinary.folders";
+import { envVars } from "../../config/env";
 import AppError from "../../errorHelpers/AppError";
 import { IQueryParams } from "../../interfaces/query.interface";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
+import { sendEmail } from "../../utils/email";
+import { generateTempPassword } from "../../utils/generatePassword";
 import { QueryBuilder } from "../../utils/QueryBuilder";
 import {
     studentFilterableFields,
@@ -287,7 +290,7 @@ const getStudentForUpdate = async (id: string) => {
     return formattedStudent;
 };
 
-const getStudentsByClassId = async (query: any, classId: string) => {};
+// const getStudentsByClassId = async (query: any, classId: string) => {};
 
 const createStudent = async (
     payload: StudentPayload,
@@ -352,20 +355,24 @@ const createStudent = async (
         guardianSign?.public_id,
     ].filter((id): id is string => !!id);
 
-    const tempPassword = "Temp@12345";
+    const tempPassword = generateTempPassword();
     let userId: string | null = null;
 
     try {
-        const authUser = await auth.api.signUpEmail({
+        const authUser = await auth.api.createUser({
             body: {
-                email: payload.email,
+                email: payload.email.toLowerCase(),
                 password: tempPassword,
-                role: UserRole.STUDENT,
                 name: payload.fullName,
-                image: picture?.secure_url,
-                needPasswordChange: true,
+                role: UserRole.STUDENT,
+                data: {
+                    image: picture?.secure_url,
+                    emailVerified: true,
+                },
             },
         });
+
+        console.log("TempPassword : ", tempPassword);
 
         userId = authUser.user.id;
 
@@ -373,7 +380,6 @@ const createStudent = async (
             await tx.user.update({
                 where: { id: userId! },
                 data: {
-                    emailVerified: true,
                     needPasswordChange: true,
                 },
             });
@@ -467,6 +473,27 @@ const createStudent = async (
                 },
             });
         });
+
+        // Send login credentials
+        let emailSent = true;
+
+        try {
+            await sendEmail({
+                to: payload.email,
+                subject: "Your Student Account Login Credentials",
+                templateName: "student-credentials",
+                templateData: {
+                    name: payload.fullName,
+                    email: payload.email,
+                    password: tempPassword,
+                    schoolName: "GreenFair Kindergarten",
+                    loginUrl: `${envVars.FRONTEND_URL}/login`,
+                },
+            });
+        } catch (emailError) {
+            emailSent = false;
+            console.error("Failed to send student credentials:", emailError);
+        }
 
         return student;
     } catch (error: any) {
