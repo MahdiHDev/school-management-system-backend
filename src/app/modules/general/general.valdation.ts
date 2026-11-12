@@ -44,19 +44,19 @@ export type EmployeeRulesAndRegulationPayload = z.infer<
 >;
 
 export const bankInfoSchema = z.object({
-    name: z.string().min(1, "Name of Bank is required"),
-    address: z.string().min(1, "Bank/Branch Address is required"),
+    bankName: z.string().min(1, "Name of Bank is required"),
+    bankAddress: z.string().min(1, "Bank/Branch Address is required"),
     accountNumber: z.string().min(1, "Account Number is required"),
-    instruction: z.string().optional(),
+    instructions: z.string().optional(),
 });
 
 export type bankInfoPayload = z.infer<typeof bankInfoSchema>;
 
 export const updateBankInfoSchema = z.object({
-    name: z.string().optional(),
-    address: z.string().optional(),
+    bankName: z.string().optional(),
+    bankAddress: z.string().optional(),
     accountNumber: z.string().optional(),
-    instruction: z.string().optional(),
+    instructions: z.string().optional(),
 });
 
 export type updateBankInfoPayload = z.infer<typeof updateBankInfoSchema>;

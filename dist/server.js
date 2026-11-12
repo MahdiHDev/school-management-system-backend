@@ -3991,7 +3991,15 @@ var getAllBankInfo = async (query) => {
     bankLogo: true,
     createdAt: true
   }).execute();
-  return result;
+  return {
+    ...result,
+    data: result.data.map((item) => ({
+      id: item.id,
+      bankName: item.nameOfBank,
+      accountNumber: item.accountNumber,
+      bankLogo: item.bankLogo
+    }))
+  };
 };
 var getBankInfoById = async (id) => {
   const result = await prisma.bankInfo.findFirst({
@@ -4008,17 +4016,27 @@ var getBankInfoById = async (id) => {
       bankLogo: true,
       bankLogoName: true,
       bankLogoType: true,
-      bankLogoPublicId: true,
-      createdAt: true,
-      updatedAt: true
+      bankLogoPublicId: true
     }
   });
   if (!result) {
     throw new AppError_default(404, "Bank information not found");
   }
-  const { bankLogo, bankLogoName, bankLogoType, bankLogoPublicId, ...rest } = result;
+  const {
+    bankLogo,
+    bankLogoName,
+    bankLogoType,
+    bankLogoPublicId,
+    nameOfBank,
+    accountNumber,
+    instruction,
+    ...rest
+  } = result;
   return {
     ...rest,
+    bankName: nameOfBank,
+    accountNumber,
+    instructions: instruction,
     bankLogo: {
       bankLogo,
       bankLogoName,
@@ -4028,7 +4046,7 @@ var getBankInfoById = async (id) => {
   };
 };
 var createbankInfo = async (payload, files) => {
-  const { name, address, accountNumber, instruction } = payload;
+  const { bankName, bankAddress, accountNumber, instructions } = payload;
   const bankLogoFile = files.bankLogo?.[0];
   if (!bankLogoFile) {
     throw new AppError_default(400, "Missing Bank Logo Image");
@@ -4047,10 +4065,10 @@ var createbankInfo = async (payload, files) => {
         bankLogoPublicId: bankLogo.public_id,
         bankLogoName: bankLogo.original_filename,
         bankLogoType: bankLogoFile.mimetype,
-        nameOfBank: name,
-        branchAddress: address,
+        nameOfBank: bankName,
+        branchAddress: bankAddress,
         accountNumber,
-        ...instruction && { instruction }
+        ...instructions && { instructions }
       }
     });
     return result;
@@ -4064,7 +4082,7 @@ var createbankInfo = async (payload, files) => {
   }
 };
 var updateBankInfo = async (id, payload, files) => {
-  const { name, address, accountNumber, instruction } = payload;
+  const { bankName, bankAddress, accountNumber, instructions } = payload;
   const existingBankInfo = await prisma.bankInfo.findUnique({
     where: {
       id
@@ -4080,17 +4098,17 @@ var updateBankInfo = async (id, payload, files) => {
   const uploadedPublicIds = bankLogo?.public_id ? [bankLogo.public_id] : [];
   try {
     const updateData = {
-      ...name && {
-        nameOfBank: name
+      ...bankName && {
+        nameOfBank: bankName
       },
-      ...address && {
-        branchAddress: address
+      ...bankAddress && {
+        branchAddress: bankAddress
       },
       ...accountNumber && {
         accountNumber
       },
-      ...instruction !== void 0 && {
-        instruction
+      ...instructions !== void 0 && {
+        instructions
       }
     };
     if (bankLogo && bankLogoFile) {
@@ -4168,16 +4186,16 @@ var employeeRulesAndRegulationSchema = z5.object({
   employeeRules: z5.string().min(1, "Employees rules & regulations are required")
 });
 var bankInfoSchema = z5.object({
-  name: z5.string().min(1, "Name of Bank is required"),
-  address: z5.string().min(1, "Bank/Branch Address is required"),
+  bankName: z5.string().min(1, "Name of Bank is required"),
+  bankAddress: z5.string().min(1, "Bank/Branch Address is required"),
   accountNumber: z5.string().min(1, "Account Number is required"),
-  instruction: z5.string().optional()
+  instructions: z5.string().optional()
 });
 var updateBankInfoSchema = z5.object({
-  name: z5.string().optional(),
-  address: z5.string().optional(),
+  bankName: z5.string().optional(),
+  bankAddress: z5.string().optional(),
   accountNumber: z5.string().optional(),
-  instruction: z5.string().optional()
+  instructions: z5.string().optional()
 });
 
 // src/app/modules/general/general.controller.ts

@@ -388,7 +388,15 @@ const getAllBankInfo = async (query: IQueryParams) => {
         })
         .execute();
 
-    return result;
+    return {
+        ...result,
+        data: result.data.map((item) => ({
+            id: item.id,
+            bankName: item.nameOfBank,
+            accountNumber: item.accountNumber,
+            bankLogo: item.bankLogo,
+        })),
+    };
 };
 
 const getBankInfoById = async (id: string) => {
@@ -407,8 +415,6 @@ const getBankInfoById = async (id: string) => {
             bankLogoName: true,
             bankLogoType: true,
             bankLogoPublicId: true,
-            createdAt: true,
-            updatedAt: true,
         },
     });
 
@@ -416,11 +422,22 @@ const getBankInfoById = async (id: string) => {
         throw new AppError(404, "Bank information not found");
     }
 
-    const { bankLogo, bankLogoName, bankLogoType, bankLogoPublicId, ...rest } =
-        result;
+    const {
+        bankLogo,
+        bankLogoName,
+        bankLogoType,
+        bankLogoPublicId,
+        nameOfBank,
+        accountNumber,
+        instruction,
+        ...rest
+    } = result;
 
     return {
         ...rest,
+        bankName: nameOfBank,
+        accountNumber: accountNumber,
+        instructions: instruction,
         bankLogo: {
             bankLogo,
             bankLogoName,
@@ -434,7 +451,7 @@ const createbankInfo = async (
     payload: bankInfoPayload,
     files: Record<string, UploadFile[]>,
 ) => {
-    const { name, address, accountNumber, instruction } = payload;
+    const { bankName, bankAddress, accountNumber, instructions } = payload;
     const bankLogoFile = files.bankLogo?.[0];
 
     if (!bankLogoFile) {
@@ -463,10 +480,10 @@ const createbankInfo = async (
                 bankLogoPublicId: bankLogo.public_id,
                 bankLogoName: bankLogo.original_filename,
                 bankLogoType: bankLogoFile.mimetype,
-                nameOfBank: name,
-                branchAddress: address,
+                nameOfBank: bankName,
+                branchAddress: bankAddress,
                 accountNumber: accountNumber,
-                ...(instruction && { instruction }),
+                ...(instructions && { instructions }),
             },
         });
 
@@ -488,7 +505,7 @@ const updateBankInfo = async (
     payload: updateBankInfoPayload,
     files?: Record<string, UploadFile[]>,
 ) => {
-    const { name, address, accountNumber, instruction } = payload;
+    const { bankName, bankAddress, accountNumber, instructions } = payload;
 
     const existingBankInfo = await prisma.bankInfo.findUnique({
         where: {
@@ -514,17 +531,17 @@ const updateBankInfo = async (
 
     try {
         const updateData: Prisma.BankInfoUpdateInput = {
-            ...(name && {
-                nameOfBank: name,
+            ...(bankName && {
+                nameOfBank: bankName,
             }),
-            ...(address && {
-                branchAddress: address,
+            ...(bankAddress && {
+                branchAddress: bankAddress,
             }),
             ...(accountNumber && {
                 accountNumber,
             }),
-            ...(instruction !== undefined && {
-                instruction,
+            ...(instructions !== undefined && {
+                instructions,
             }),
         };
 
