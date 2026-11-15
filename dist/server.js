@@ -3997,7 +3997,8 @@ var getAllBankInfo = async (query) => {
       id: item.id,
       bankName: item.nameOfBank,
       accountNumber: item.accountNumber,
-      bankLogo: item.bankLogo
+      bankLogo: item.bankLogo,
+      instructions: item.instruction
     }))
   };
 };
@@ -4068,7 +4069,7 @@ var createbankInfo = async (payload, files) => {
         nameOfBank: bankName,
         branchAddress: bankAddress,
         accountNumber,
-        ...instructions && { instructions }
+        ...instructions && { instruction: instructions }
       }
     });
     return result;
@@ -4108,7 +4109,7 @@ var updateBankInfo = async (id, payload, files) => {
         accountNumber
       },
       ...instructions !== void 0 && {
-        instructions
+        instruction: instructions
       }
     };
     if (bankLogo && bankLogoFile) {
@@ -4388,7 +4389,7 @@ router5.get(
   checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   GeneralController.getBankInfoById
 );
-router5.post(
+router5.patch(
   "/bank-information/:id",
   checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   upload.fields([
@@ -4397,7 +4398,7 @@ router5.post(
       maxCount: 1
     }
   ]),
-  GeneralController.createBankInfo
+  GeneralController.updateBankInfo
 );
 router5.patch(
   "/general-setting/:id",

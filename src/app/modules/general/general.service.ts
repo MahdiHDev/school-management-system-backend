@@ -395,6 +395,7 @@ const getAllBankInfo = async (query: IQueryParams) => {
             bankName: item.nameOfBank,
             accountNumber: item.accountNumber,
             bankLogo: item.bankLogo,
+            instructions: item.instruction,
         })),
     };
 };
@@ -483,7 +484,7 @@ const createbankInfo = async (
                 nameOfBank: bankName,
                 branchAddress: bankAddress,
                 accountNumber: accountNumber,
-                ...(instructions && { instructions }),
+                ...(instructions && { instruction: instructions }),
             },
         });
 
@@ -541,7 +542,7 @@ const updateBankInfo = async (
                 accountNumber,
             }),
             ...(instructions !== undefined && {
-                instructions,
+                instruction: instructions,
             }),
         };
 

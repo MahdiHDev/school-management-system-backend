@@ -70,7 +70,7 @@ router.get(
     GeneralController.getBankInfoById,
 );
 
-router.post(
+router.patch(
     "/bank-information/:id",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
     upload.fields([
@@ -79,7 +79,7 @@ router.post(
             maxCount: 1,
         },
     ]),
-    GeneralController.createBankInfo,
+    GeneralController.updateBankInfo,
 );
 
 router.patch(
