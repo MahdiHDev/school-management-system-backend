@@ -1,6 +1,7 @@
 import { Prisma } from "../../../generated/client";
 import { CloudinaryService } from "../../../services/cloudinary";
 import { UploadFile } from "../../../services/cloudinary/cloudinary.interface";
+import cloudinaryService from "../../../services/cloudinary/cloudinary.service";
 import { CloudinaryFolders } from "../../config/cloudinary.folders";
 import AppError from "../../errorHelpers/AppError";
 import { IQueryParams } from "../../interfaces/query.interface";
@@ -431,6 +432,7 @@ const getBankInfoById = async (id: string) => {
         nameOfBank,
         accountNumber,
         instruction,
+        branchAddress,
         ...rest
     } = result;
 
@@ -439,11 +441,11 @@ const getBankInfoById = async (id: string) => {
         bankName: nameOfBank,
         accountNumber: accountNumber,
         instructions: instruction,
+        bankAddress: branchAddress,
         bankLogo: {
-            bankLogo,
-            bankLogoName,
-            bankLogoType,
-            bankLogoPublicId,
+            uri: bankLogo,
+            name: bankLogoName,
+            type: bankLogoType,
         },
     };
 };
@@ -587,13 +589,11 @@ const deleteBankInfo = async (id: string) => {
         throw new AppError(404, "Bank information not found");
     }
 
-    const result = await prisma.bankInfo.update({
+    const result = await prisma.bankInfo.delete({
         where: { id },
-        data: {
-            isDeleted: true,
-            deletedAt: new Date(),
-        },
     });
+
+    cloudinaryService.delete(existingBankInfo.bankLogoPublicId);
 
     return result;
 };

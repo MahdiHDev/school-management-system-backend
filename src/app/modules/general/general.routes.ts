@@ -82,6 +82,12 @@ router.patch(
     GeneralController.updateBankInfo,
 );
 
+router.delete(
+    "/bank-information/:id",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    GeneralController.deleteBankInfo,
+);
+
 router.patch(
     "/general-setting/:id",
     ...generalSettingsMiddleware,

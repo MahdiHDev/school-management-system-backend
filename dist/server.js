@@ -4031,6 +4031,7 @@ var getBankInfoById = async (id) => {
     nameOfBank,
     accountNumber,
     instruction,
+    branchAddress,
     ...rest
   } = result;
   return {
@@ -4038,11 +4039,11 @@ var getBankInfoById = async (id) => {
     bankName: nameOfBank,
     accountNumber,
     instructions: instruction,
+    bankAddress: branchAddress,
     bankLogo: {
-      bankLogo,
-      bankLogoName,
-      bankLogoType,
-      bankLogoPublicId
+      uri: bankLogo,
+      name: bankLogoName,
+      type: bankLogoType
     }
   };
 };
@@ -4144,13 +4145,10 @@ var deleteBankInfo = async (id) => {
   if (!existingBankInfo || existingBankInfo.isDeleted) {
     throw new AppError_default(404, "Bank information not found");
   }
-  const result = await prisma.bankInfo.update({
-    where: { id },
-    data: {
-      isDeleted: true,
-      deletedAt: /* @__PURE__ */ new Date()
-    }
+  const result = await prisma.bankInfo.delete({
+    where: { id }
   });
+  cloudinary_service_default.delete(existingBankInfo.bankLogoPublicId);
   return result;
 };
 var GeneralService = {
@@ -4399,6 +4397,11 @@ router5.patch(
     }
   ]),
   GeneralController.updateBankInfo
+);
+router5.delete(
+  "/bank-information/:id",
+  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  GeneralController.deleteBankInfo
 );
 router5.patch(
   "/general-setting/:id",
