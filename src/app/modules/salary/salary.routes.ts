@@ -5,6 +5,12 @@ import { SalaryController } from "./salary.controller";
 
 const router = Router();
 
+router.get(
+    "/employees",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    SalaryController.getEmployeeforSalary,
+);
+
 router.post(
     "/",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),

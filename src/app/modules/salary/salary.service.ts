@@ -3,6 +3,56 @@ import AppError from "../../errorHelpers/AppError";
 import { prisma } from "../../lib/prisma";
 import { CreateSalaryPayload } from "./salary.validation";
 
+import { IQueryParams } from "../../interfaces/query.interface";
+import { QueryBuilder } from "../../utils/QueryBuilder";
+
+type SalaryEmployeeListItem = Prisma.EmployeeGetPayload<{
+    select: {
+        id: true;
+        employeeId: true;
+        fullName: true;
+        picture: true;
+        monthlySalary: true;
+    };
+}>;
+
+const getEmployeeforSalary = async (query: IQueryParams) => {
+    const queryBuilder = new QueryBuilder<
+        SalaryEmployeeListItem,
+        Prisma.EmployeeWhereInput,
+        Prisma.EmployeeInclude
+    >(prisma.employee, query, {
+        searchableFields: ["fullName", "employeeId"],
+        filterableFields: ["employeeRole"],
+    });
+
+    const result = await queryBuilder
+        .search()
+        .filter()
+        .where({ isdeleted: false })
+        .select({
+            id: true,
+            employeeId: true,
+            fullName: true,
+            picture: true,
+            monthlySalary: true,
+        })
+        .paginate()
+        .sort()
+        .execute();
+
+    return {
+        ...result,
+        data: result.data.map((employee) => ({
+            id: employee.id,
+            employeeId: employee.employeeId,
+            name: employee.fullName,
+            image: employee.picture,
+            salary: employee.monthlySalary,
+        })),
+    };
+};
+
 const createSalary = async (payload: CreateSalaryPayload) => {
     const { employeeId, salaryMonth, paymentDate, bonus, deduction } = payload;
 
@@ -105,5 +155,6 @@ const createSalary = async (payload: CreateSalaryPayload) => {
 };
 
 export const SalaryService = {
+    getEmployeeforSalary,
     createSalary,
 };
