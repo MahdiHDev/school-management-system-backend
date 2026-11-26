@@ -4716,7 +4716,43 @@ var GradeConfigurationRoutes = router6;
 // src/app/modules/salary/salary.routes.ts
 import { Router as Router7 } from "express";
 
+// src/app/modules/salary/salary.controller.ts
+import status19 from "http-status";
+
+// src/app/modules/salary/salary.helper.ts
+var formatSalaryMonth = (salaryMonth) => {
+  const [month, year] = salaryMonth.split("/");
+  const monthName = new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    timeZone: "UTC"
+  }).format(new Date(Date.UTC(Number(year), Number(month) - 1)));
+  return `${monthName}, ${year}`;
+};
+
 // src/app/modules/salary/salary.service.ts
+var getEmployeeforSalary = async (query) => {
+  const queryBuilder = new QueryBuilder(prisma.employee, query, {
+    searchableFields: ["fullName", "employeeId"],
+    filterableFields: ["employeeRole"]
+  });
+  const result = await queryBuilder.search().filter().where({ isdeleted: false }).select({
+    id: true,
+    employeeId: true,
+    fullName: true,
+    picture: true,
+    monthlySalary: true
+  }).paginate().sort().execute();
+  return {
+    ...result,
+    data: result.data.map((employee) => ({
+      id: employee.id,
+      employeeId: employee.employeeId,
+      name: employee.fullName,
+      image: employee.picture,
+      salary: employee.monthlySalary
+    }))
+  };
+};
 var createSalary = async (payload) => {
   const { employeeId, salaryMonth, paymentDate, bonus, deduction } = payload;
   const employee = await prisma.employee.findFirst({
@@ -4755,7 +4791,7 @@ var createSalary = async (payload) => {
   if (existingSalary) {
     throw new AppError_default(
       409,
-      `Salary has already been paid for ${salaryMonth}`
+      `Salary has already been paid for ${formatSalaryMonth(salaryMonth)}`
     );
   }
   const [day, month, year] = paymentDate.split("/").map(Number);
@@ -4773,17 +4809,22 @@ var createSalary = async (payload) => {
       include: {
         employee: {
           select: {
-            id: true,
             fullName: true,
             employeeId: true,
-            employeeRole: true
+            employeeRole: true,
+            picture: true
           }
         }
       }
     });
     return {
-      ...result,
+      name: result.employee.fullName,
+      employeeId: result.employee.employeeId,
+      employeeRole: result.employee.employeeRole,
+      imaage: result.employee.picture,
+      salaryMonth: formatSalaryMonth(result.salaryMonth),
       totalAmount,
+      bonus,
       netPaid
     };
   } catch (error) {
@@ -4796,8 +4837,43 @@ var createSalary = async (payload) => {
     throw error;
   }
 };
+var getLastSalary = async (employeeId) => {
+  const salary = await prisma.salaryPayment.findFirst({
+    where: { employeeId },
+    orderBy: [{ paymentDate: "desc" }, { createdAt: "desc" }],
+    include: {
+      employee: {
+        select: {
+          fullName: true,
+          employeeId: true,
+          employeeRole: true,
+          picture: true
+        }
+      }
+    }
+  });
+  if (!salary) {
+    throw new AppError_default(404, "Salary payment not found");
+  }
+  const fixedSalary = Number(salary.fixedSalary);
+  const bonus = Number(salary.bonus);
+  const deduction = Number(salary.deduction);
+  const totalAmount = fixedSalary + bonus;
+  return {
+    name: salary.employee.fullName,
+    employeeId: salary.employee.employeeId,
+    employeeRole: salary.employee.employeeRole,
+    imaage: salary.employee.picture,
+    salaryMonth: formatSalaryMonth(salary.salaryMonth),
+    totalAmount,
+    bonus,
+    netPaid: totalAmount - deduction
+  };
+};
 var SalaryService = {
-  createSalary
+  getEmployeeforSalary,
+  createSalary,
+  getLastSalary
 };
 
 // src/app/modules/salary/salary.validation.ts
@@ -4821,6 +4897,29 @@ var createSalarySchema = z7.object({
 });
 
 // src/app/modules/salary/salary.controller.ts
+var getEmployeeforSalary2 = catchAsync(async (req, res) => {
+  const query = req.query;
+  const result = await SalaryService.getEmployeeforSalary(
+    query
+  );
+  sendResponse(res, {
+    httpStatusCode: status19.OK,
+    success: true,
+    message: "Employees fetched successfully",
+    data: result.data,
+    meta: result.meta
+  });
+});
+var getLastSalary2 = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const salary = await SalaryService.getLastSalary(id);
+  sendResponse(res, {
+    httpStatusCode: status19.OK,
+    success: true,
+    message: "Last salary fetched successfully",
+    data: salary
+  });
+});
 var createSalary2 = catchAsync(async (req, res) => {
   const payload = createSalarySchema.parse(req.body);
   const salary = await SalaryService.createSalary(payload);
@@ -4832,11 +4931,23 @@ var createSalary2 = catchAsync(async (req, res) => {
   });
 });
 var SalaryController = {
-  createSalary: createSalary2
+  getEmployeeforSalary: getEmployeeforSalary2,
+  createSalary: createSalary2,
+  getLastSalary: getLastSalary2
 };
 
 // src/app/modules/salary/salary.routes.ts
 var router7 = Router7();
+router7.get(
+  "/employees",
+  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  SalaryController.getEmployeeforSalary
+);
+router7.get(
+  "/last/:employeeId",
+  checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  SalaryController.getLastSalary
+);
 router7.post(
   "/",
   checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
@@ -4848,10 +4959,10 @@ var salaryRoutes = router7;
 import { Router as Router8 } from "express";
 
 // src/app/modules/student/student.controller.ts
-import status20 from "http-status";
+import status21 from "http-status";
 
 // src/app/modules/student/student.service.ts
-import status19 from "http-status";
+import status20 from "http-status";
 
 // src/app/utils/generatePassword.ts
 import { randomBytes } from "crypto";
@@ -4969,10 +5080,10 @@ var getStudentForUpdate = async (id) => {
     }
   });
   if (!student2) {
-    throw new AppError_default(status19.NOT_FOUND, "Student Not found");
+    throw new AppError_default(status20.NOT_FOUND, "Student Not found");
   }
   if (!student2?.address) {
-    throw new AppError_default(status19.NOT_FOUND, "Student address not found");
+    throw new AppError_default(status20.NOT_FOUND, "Student address not found");
   }
   const {
     pictureName,
@@ -5046,7 +5157,7 @@ var createStudent = async (payload, files) => {
   });
   if (existingUser) {
     throw new AppError_default(
-      status19.CONFLICT,
+      status20.CONFLICT,
       "An account with this email already exists"
     );
   }
@@ -5231,7 +5342,7 @@ var updateStudent = async (id, payload, files) => {
     }
   });
   if (!student2) {
-    throw new AppError_default(status19.NOT_FOUND, "Student not found");
+    throw new AppError_default(status20.NOT_FOUND, "Student not found");
   }
   const pictureFile = files.picture?.[0];
   const authoritySignFile = files.authoritySign?.[0];
@@ -5467,14 +5578,14 @@ var updateStudent = async (id, payload, files) => {
 var promoteStudents = async (sourceClassId, targetClassId, studentIds) => {
   if (sourceClassId === targetClassId) {
     throw new AppError_default(
-      status19.BAD_REQUEST,
+      status20.BAD_REQUEST,
       "Source and target classes cannot be the same"
     );
   }
   const uniqueStudentIds = [...new Set(studentIds)];
   if (uniqueStudentIds.length === 0) {
     throw new AppError_default(
-      status19.BAD_REQUEST,
+      status20.BAD_REQUEST,
       "Please select at least one student"
     );
   }
@@ -5493,7 +5604,7 @@ var promoteStudents = async (sourceClassId, targetClassId, studentIds) => {
     });
     if (classes.length !== 2) {
       throw new AppError_default(
-        status19.NOT_FOUND,
+        status20.NOT_FOUND,
         "Source or target class not found"
       );
     }
@@ -5511,7 +5622,7 @@ var promoteStudents = async (sourceClassId, targetClassId, studentIds) => {
     });
     if (students.length !== uniqueStudentIds.length) {
       throw new AppError_default(
-        status19.BAD_REQUEST,
+        status20.BAD_REQUEST,
         "Some students do not belong to the source class or are inactive"
       );
     }
@@ -5529,7 +5640,7 @@ var promoteStudents = async (sourceClassId, targetClassId, studentIds) => {
     });
     if (result.count !== uniqueStudentIds.length) {
       throw new AppError_default(
-        status19.CONFLICT,
+        status20.CONFLICT,
         "Some students could not be promoted. Please retry"
       );
     }
@@ -5554,7 +5665,7 @@ var deleteStudent = async (id) => {
     }
   });
   if (!student2) {
-    throw new AppError_default(status19.NOT_FOUND, "Student Profile not found");
+    throw new AppError_default(status20.NOT_FOUND, "Student Profile not found");
   }
   await prisma.$transaction(async (tx) => {
     await tx.student.update({
@@ -5689,7 +5800,7 @@ var getAllStudent2 = async (req, res) => {
   const query = req.query;
   const result = await StudentService.getAllStudent(query);
   sendResponse(res, {
-    httpStatusCode: status20.OK,
+    httpStatusCode: status21.OK,
     success: true,
     message: "Students Fetched Successfully",
     data: result.data,
@@ -5700,7 +5811,7 @@ var getStudentForUpdate2 = async (req, res) => {
   const { id } = req.params;
   const student2 = await StudentService.getStudentForUpdate(id);
   sendResponse(res, {
-    httpStatusCode: status20.OK,
+    httpStatusCode: status21.OK,
     success: true,
     message: "Student For Update fetched successfully",
     data: student2
@@ -5723,7 +5834,7 @@ var createStudent2 = async (req, res) => {
   }
   const student2 = await StudentService.createStudent(payload, files);
   sendResponse(res, {
-    httpStatusCode: status20.CREATED,
+    httpStatusCode: status21.CREATED,
     success: true,
     message: "Student profile created successfully",
     data: student2
@@ -5739,7 +5850,7 @@ var updateStudent2 = async (req, res) => {
     files
   );
   sendResponse(res, {
-    httpStatusCode: status20.OK,
+    httpStatusCode: status21.OK,
     success: true,
     message: "Student Updated Successfully",
     data: student2
@@ -5753,7 +5864,7 @@ var promoteStudents2 = async (req, res) => {
     validatedData.studentIds
   );
   sendResponse(res, {
-    httpStatusCode: status20.OK,
+    httpStatusCode: status21.OK,
     success: true,
     message: result.message,
     data: result
@@ -5763,7 +5874,7 @@ var deleteStudent2 = async (req, res) => {
   const { id } = req.params;
   const result = await StudentService.deleteStudent(id);
   sendResponse(res, {
-    httpStatusCode: status20.OK,
+    httpStatusCode: status21.OK,
     success: true,
     message: result.message || "Student Profile Deleted Successfully"
   });
@@ -5851,7 +5962,7 @@ var StudentRoutes = router8;
 import { Router as Router9 } from "express";
 
 // src/app/modules/subjects/subject.controller.ts
-import status21 from "http-status";
+import status22 from "http-status";
 
 // src/app/modules/subjects/subject.service.ts
 var getAllSubjectsByClassId = async (query) => {
@@ -6035,7 +6146,7 @@ var getAllSubjectsByClassId2 = async (req, res) => {
     query
   );
   sendResponse(res, {
-    httpStatusCode: status21.OK,
+    httpStatusCode: status22.OK,
     success: true,
     message: "Subjects Fetched Successfully",
     data: result.data,
@@ -6046,7 +6157,7 @@ var createSubject2 = async (req, res) => {
   const payload = createSubjectSchema.parse(req.body);
   const subject = await SubjectService.createSubject(payload);
   sendResponse(res, {
-    httpStatusCode: status21.CREATED,
+    httpStatusCode: status22.CREATED,
     success: true,
     message: "Subject created successfully",
     data: subject
@@ -6056,7 +6167,7 @@ var updateSubject = async (req, res) => {
   const payload = updateSubjectSchema.parse(req.body);
   const subject = await SubjectService.updateSubjects(payload);
   sendResponse(res, {
-    httpStatusCode: status21.OK,
+    httpStatusCode: status22.OK,
     success: true,
     message: "Subjects updated successfully",
     data: subject
@@ -6066,7 +6177,7 @@ var deleteSubjects2 = async (req, res) => {
   const { classId } = req.params;
   const result = await SubjectService.deleteSubjects(classId);
   sendResponse(res, {
-    httpStatusCode: status21.OK,
+    httpStatusCode: status22.OK,
     success: true,
     message: "Subjects deleted successfully",
     data: result

@@ -22,6 +22,19 @@ const getEmployeeforSalary = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getLastSalary = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const salary = await SalaryService.getLastSalary(id as string);
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Last salary fetched successfully",
+        data: salary,
+    });
+});
+
 const createSalary = catchAsync(async (req: Request, res: Response) => {
     const payload = createSalarySchema.parse(req.body);
 
@@ -38,4 +51,5 @@ const createSalary = catchAsync(async (req: Request, res: Response) => {
 export const SalaryController = {
     getEmployeeforSalary,
     createSalary,
+    getLastSalary,
 };

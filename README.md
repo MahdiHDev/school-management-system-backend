@@ -255,7 +255,12 @@ All salary endpoints require `ADMIN` or `SUPER_ADMIN`.
 
 | Method | Path | Description |
 | --- | --- | --- |
+| `GET` | `/salary/last/:employeeId` | Fetch an employee's most recent salary payment |
 | `POST` | `/salary` | Create an employee salary record |
+
+The last-salary endpoint uses the employee's internal ID and returns the payment with the latest `paymentDate` (using creation time to break ties). It returns `404` if no salary payment exists for that employee.
+
+Both salary creation and last-salary responses return `data` with only `name`, `employeeId`, `EmployeeRole`, `imaage`, `salaryMonth`, `totalAmount`, `bonus`, and `netPaid`.
 
 ### Settings
 
@@ -491,7 +496,7 @@ Create a salary record with `POST /salary`:
 }
 ```
 
-`salaryMonth` uses `MM/YYYY`; `paymentDate` uses `DD/MM/YYYY`. `bonus` and `deduction` are non-negative numbers and default to `0`.
+`salaryMonth` uses `MM/YYYY` in the request and is returned as a readable month and year (for example, `April, 2026`); `paymentDate` uses `DD/MM/YYYY`. `bonus` and `deduction` are non-negative numbers and default to `0`.
 
 ### Settings and grading
 

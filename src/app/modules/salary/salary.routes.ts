@@ -11,6 +11,12 @@ router.get(
     SalaryController.getEmployeeforSalary,
 );
 
+router.get(
+    "/last/:employeeId",
+    checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+    SalaryController.getLastSalary,
+);
+
 router.post(
     "/",
     checkAuth(UserRole.ADMIN, UserRole.SUPER_ADMIN),

@@ -5,6 +5,7 @@ import { CreateSalaryPayload } from "./salary.validation";
 
 import { IQueryParams } from "../../interfaces/query.interface";
 import { QueryBuilder } from "../../utils/QueryBuilder";
+import { formatSalaryMonth } from "./salary.helper";
 
 type SalaryEmployeeListItem = Prisma.EmployeeGetPayload<{
     select: {
@@ -102,7 +103,7 @@ const createSalary = async (payload: CreateSalaryPayload) => {
     if (existingSalary) {
         throw new AppError(
             409,
-            `Salary has already been paid for ${salaryMonth}`,
+            `Salary has already been paid for ${formatSalaryMonth(salaryMonth)}`,
         );
     }
 
@@ -125,18 +126,23 @@ const createSalary = async (payload: CreateSalaryPayload) => {
             include: {
                 employee: {
                     select: {
-                        id: true,
                         fullName: true,
                         employeeId: true,
                         employeeRole: true,
+                        picture: true,
                     },
                 },
             },
         });
 
         return {
-            ...result,
+            name: result.employee.fullName,
+            employeeId: result.employee.employeeId,
+            employeeRole: result.employee.employeeRole,
+            imaage: result.employee.picture,
+            salaryMonth: formatSalaryMonth(result.salaryMonth),
             totalAmount,
+            bonus,
             netPaid,
         };
     } catch (error) {
@@ -154,7 +160,45 @@ const createSalary = async (payload: CreateSalaryPayload) => {
     }
 };
 
+const getLastSalary = async (employeeId: string) => {
+    const salary = await prisma.salaryPayment.findFirst({
+        where: { employeeId },
+        orderBy: [{ paymentDate: "desc" }, { createdAt: "desc" }],
+        include: {
+            employee: {
+                select: {
+                    fullName: true,
+                    employeeId: true,
+                    employeeRole: true,
+                    picture: true,
+                },
+            },
+        },
+    });
+
+    if (!salary) {
+        throw new AppError(404, "Salary payment not found");
+    }
+
+    const fixedSalary = Number(salary.fixedSalary);
+    const bonus = Number(salary.bonus);
+    const deduction = Number(salary.deduction);
+    const totalAmount = fixedSalary + bonus;
+
+    return {
+        name: salary.employee.fullName,
+        employeeId: salary.employee.employeeId,
+        employeeRole: salary.employee.employeeRole,
+        imaage: salary.employee.picture,
+        salaryMonth: formatSalaryMonth(salary.salaryMonth),
+        totalAmount,
+        bonus,
+        netPaid: totalAmount - deduction,
+    };
+};
+
 export const SalaryService = {
     getEmployeeforSalary,
     createSalary,
+    getLastSalary,
 };
